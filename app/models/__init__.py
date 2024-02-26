@@ -12,6 +12,10 @@ creator_type_table = db.Table('creator_types',
     db.Column('typeId', db.Integer, db.ForeignKey(add_prefix_for_prod('types.typeId')), primary_key=True)
 )
 
+opp_media_table = db.Table('opp_media',
+    db.Column('oppId', db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.oppId')), primary_key=True),
+    db.Column('mediaId', db.Integer, db.ForeignKey(add_prefix_for_prod('media.mediaId')), primary_key=True)
+)
 
 # Models
 from .user import User
@@ -19,3 +23,5 @@ from .creator import Creator
 from .genre import Genre
 from .type import Type
 from .company import Company
+from .opportunity import Opportunity
+from .media import Media
