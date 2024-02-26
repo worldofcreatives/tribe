@@ -17,6 +17,12 @@ opp_media_table = db.Table('opp_media',
     db.Column('mediaId', db.Integer, db.ForeignKey(add_prefix_for_prod('media.mediaId')), primary_key=True)
 )
 
+sub_media_table = db.Table('sub_media',
+    db.Column('subId', db.Integer, db.ForeignKey(add_prefix_for_prod('submissions.subId')), primary_key=True),
+    db.Column('mediaId', db.Integer, db.ForeignKey(add_prefix_for_prod('media.mediaId')), primary_key=True)
+)
+
+
 # Models
 from .user import User
 from .creator import Creator
@@ -25,3 +31,4 @@ from .type import Type
 from .company import Company
 from .opportunity import Opportunity
 from .media import Media
+from .submission import Submission
