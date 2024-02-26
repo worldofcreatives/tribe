@@ -10,9 +10,6 @@ class Genre(db.Model):
     name = db.Column(db.String(255), unique=True, nullable=False)
 
     def to_dict(self):
-        """
-        Serialize the Genre object to a dictionary.
-        """
         return {
             'genreId': self.genreId,
             'name': self.name,
