@@ -22,6 +22,11 @@ sub_media_table = db.Table('sub_media',
     db.Column('mediaId', db.Integer, db.ForeignKey(add_prefix_for_prod('media.mediaId')), primary_key=True)
 )
 
+feedback_media_table = db.Table('feedback_media',
+    db.Column('feedbackId', db.Integer, db.ForeignKey(add_prefix_for_prod('feedback.feedbackId')), primary_key=True),
+    db.Column('mediaId', db.Integer, db.ForeignKey(add_prefix_for_prod('media.mediaId')), primary_key=True)
+)
+
 
 # Models
 from .user import User
@@ -32,3 +37,4 @@ from .company import Company
 from .opportunity import Opportunity
 from .media import Media
 from .submission import Submission
+from .feedback import Feedback
