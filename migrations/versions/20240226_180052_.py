@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 78af260e5eba
+Revision ID: 54f0173970be
 Revises: 
-Create Date: 2024-02-26 17:15:56.477668
+Create Date: 2024-02-26 18:00:52.766449
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '78af260e5eba'
+revision = '54f0173970be'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -107,12 +107,26 @@ def upgrade():
     sa.ForeignKeyConstraint(['companyId'], ['companies.companyId'], ),
     sa.PrimaryKeyConstraint('oppId')
     )
+    op.create_table('opp_genres',
+    sa.Column('oppId', sa.Integer(), nullable=False),
+    sa.Column('genreId', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['genreId'], ['genres.genreId'], ),
+    sa.ForeignKeyConstraint(['oppId'], ['opportunities.oppId'], ),
+    sa.PrimaryKeyConstraint('oppId', 'genreId')
+    )
     op.create_table('opp_media',
     sa.Column('oppId', sa.Integer(), nullable=False),
     sa.Column('mediaId', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['mediaId'], ['media.mediaId'], ),
     sa.ForeignKeyConstraint(['oppId'], ['opportunities.oppId'], ),
     sa.PrimaryKeyConstraint('oppId', 'mediaId')
+    )
+    op.create_table('opp_types',
+    sa.Column('oppId', sa.Integer(), nullable=False),
+    sa.Column('typeId', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['oppId'], ['opportunities.oppId'], ),
+    sa.ForeignKeyConstraint(['typeId'], ['types.typeId'], ),
+    sa.PrimaryKeyConstraint('oppId', 'typeId')
     )
     op.create_table('submissions',
     sa.Column('subId', sa.Integer(), nullable=False),
@@ -158,7 +172,9 @@ def downgrade():
     op.drop_table('sub_media')
     op.drop_table('feedback')
     op.drop_table('submissions')
+    op.drop_table('opp_types')
     op.drop_table('opp_media')
+    op.drop_table('opp_genres')
     op.drop_table('opportunities')
     op.drop_table('creator_types')
     op.drop_table('creator_genres')
