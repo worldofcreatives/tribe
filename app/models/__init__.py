@@ -18,3 +18,4 @@ from .user import User
 from .creator import Creator
 from .genre import Genre
 from .type import Type
+from .company import Company

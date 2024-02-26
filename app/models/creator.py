@@ -11,7 +11,7 @@ class Creator(db.Model):
     creatorId = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False, unique=True)
     name = db.Column(db.String(255), nullable=False)
-    status = db.Column(db.String(255), nullable=True)
+    status = db.Column(db.Enum('Pre-Apply', 'Denied', 'Pending', 'Approved'), default='Pre-Apply', nullable=False)
     profilePic = db.Column(db.String(255), nullable=True)
     bio = db.Column(db.Text, nullable=True)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
