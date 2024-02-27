@@ -1,131 +1,78 @@
-# Flask React Project
+# Welcome to PackTune!
 
-This is the starter for the Flask React project.
+#### Sign Up
+- **As a new visitor**, I want to sign up for the platform so that I can access creator or company-specific functionalities.
+    - Can enter basic info and create a profile on the signup page.
+    - Automatically logged in upon successful sign-up to access opportunities.
 
-## Getting started
+#### Log In
+- **As a registered user**, I want to log in to the platform so that I can access my profile and associated features.
+    - Can enter my email and password to log in.
+    - Access to a dashboard with opportunities and feedback upon successful login.
 
-1. Clone this repository (only this branch).
+#### Demo User
+- **As a visitor**, I want to explore the platform using a demo account so that I can understand its features before signing up.
+    - Can click a button to log in.
+    - Access to a dashboard with opportunities and feedback upon successful login.
 
-2. Install dependencies.
+#### Log Out
+- **As a logged-in user**, I want to securely log out of the platform to protect my account.
 
-   ```bash
-   pipenv install -r requirements.txt
-   ```
+### For Users that are Tagged Creators:
 
-3. Create a __.env__ file based on the example with proper settings for your
-   development environment.
+#### Create Profile
+- **As a user that's a creator**, I want to create my profile with personal and professional details so that I can present myself to companies.
 
-4. Make sure the SQLite3 database connection URL is in the __.env__ file.
+#### View Opportunities
+- **As a user that's a creator**, I want to view a list of available opportunities so that I can find relevant projects to submit my music to.
+    - Opportunities page lists all available options with deadlines and requirements.
+    - Can filter or search opportunities based on specific criteria.
 
-5. This starter organizes all tables inside the `flask_schema` schema, defined
-   by the `SCHEMA` environment variable.  Replace the value for
-   `SCHEMA` with a unique name, **making sure you use the snake_case
-   convention.**
+#### Submit to Opportunity
+- **As a user that's a creator**, I want to submit my music to opportunities along with any necessary media files so that I can participate in projects.
+    - Can upload music files and attach them to chosen opportunities.
+    - Submission form allows for easy file upload and association with opportunities.
 
-6. Get into your pipenv, migrate your database, seed your database, and run your
-   Flask app:
+#### Manage Submissions
+- **As a user that's a creator**, I want to view and manage my submissions so that I can track the status of my applications.
 
-   ```bash
-   pipenv shell
-   ```
+#### View and Respond to Feedback
+- **As a user that's a creator**, I want to view feedback on my submissions and respond if necessary so that I can improve my submissions or clarify any queries.
+    - Feedback section where companies' comments and requests for changes are visible.
+    - Option to message back or resubmit music after making requested changes.
 
-   ```bash
-   flask db upgrade
-   ```
+### For Users that are Tagged as Companies:
 
-   ```bash
-   flask seed all
-   ```
+#### Create Profile
+- **As a new company**, I want to create a profile for my company so that I can post opportunities and review submissions.
 
-   ```bash
-   flask run
-   ```
+#### Create Opportunity
+- **As a user with a company**, I want to create new opportunities with all relevant details and attach any necessary media files so that creators can understand and apply to them.
+    - Can create new opportunities with detailed requirements and deadlines.
+    - Easy-to-use form for posting and editing opportunities.
 
-7. The React frontend has no styling applied. Copy the __.css__ files from your
-   Authenticate Me project into the corresponding locations in the
-   __react-vite__ folder to give your project a unique look.
+#### View Opportunity
+- **As a user with a company**, I want to view the details of opportunities I have posted so that I can manage them effectively.
 
-8. To run the React frontend in development, `cd` into the __react-vite__
-   directory and run `npm i` to install dependencies. Next, run `npm run build`
-   to create the `dist` folder. The starter has modified the `npm run build`
-   command to include the `--watch` flag. This flag will rebuild the __dist__
-   folder whenever you change your code, keeping the production version up to
-   date.
+#### Download Opportunity Files
+- **As a user with a company**, I want to download media files attached to opportunities so that I can review them thoroughly.
 
-## Deployment through Render.com
+#### Edit Opportunity
+- **As a user with a company**, I want to edit opportunities I have posted to update any details as necessary.
 
-First, recall that Vite is a development dependency, so it will not be used in
-production. This means that you must already have the __dist__ folder located in
-the root of your __react-vite__ folder when you push to GitHub. This __dist__
-folder contains your React code and all necessary dependencies minified and
-bundled into a smaller footprint, ready to be served from your Python API.
+#### Delete Opportunity
+- **As a user with a company**, I want to delete opportunities that are no longer available or relevant.
 
-Begin deployment by running `npm run build` in your __react-vite__ folder and
-pushing any changes to GitHub.
+#### Review Submissions
+- **As a user with a company**, I want to review submissions from creators, including listening to submitted music and viewing attached media files, so that I can select the best fit for my project.
+    - Can listen to submissions, provide feedback, and mark them as accepted or rejected.
+    - Tools to categorize and manage submissions efficiently.
 
-Refer to your Render.com deployment articles for more detailed instructions
-about getting started with [Render.com], creating a production database, and
-deployment debugging tips.
+#### Update Submission Status
+- **As a user with a company**, I want to update the status of submissions (e.g., accepted, rejected) so that creators are informed of their submission's outcome.
 
-From the Render [Dashboard], click on the "New +" button in the navigation bar,
-and click on "Web Service" to create the application that will be deployed.
-
-Select that you want to "Build and deploy from a Git repository" and click
-"Next". On the next page, find the name of the application repo you want to
-deploy and click the "Connect" button to the right of the name.
-
-Now you need to fill out the form to configure your app. Most of the setup will
-be handled by the __Dockerfile__, but you do need to fill in a few fields.
-
-Start by giving your application a name.
-
-Make sure the Region is set to the location closest to you, the Branch is set to
-"main", and Runtime is set to "Docker". You can leave the Root Directory field
-blank. (By default, Render will run commands from the root directory.)
-
-Select "Free" as your Instance Type.
-
-### Add environment variables
-
-In the development environment, you have been securing your environment
-variables in a __.env__ file, which has been removed from source control (i.e.,
-the file is gitignored). In this step, you will need to input the keys and
-values for the environment variables you need for production into the Render
-GUI.
-
-Add the following keys and values in the Render GUI form:
-
-- SECRET_KEY (click "Generate" to generate a secure secret for production)
-- FLASK_ENV production
-- FLASK_APP app
-- SCHEMA (your unique schema name, in snake_case)
-
-In a new tab, navigate to your dashboard and click on your Postgres database
-instance.
-
-Add the following keys and values:
-
-- DATABASE_URL (copy value from the **External Database URL** field)
-
-**Note:** Add any other keys and values that may be present in your local
-__.env__ file. As you work to further develop your project, you may need to add
-more environment variables to your local __.env__ file. Make sure you add these
-environment variables to the Render GUI as well for the next deployment.
-
-### Deploy
-
-Now you are finally ready to deploy! Click "Create Web Service" to deploy your
-project. The deployment process will likely take about 10-15 minutes if
-everything works as expected. You can monitor the logs to see your Dockerfile
-commands being executed and any errors that occur.
-
-When deployment is complete, open your deployed site and check to see that you
-have successfully deployed your Flask application to Render! You can find the
-URL for your site just below the name of the Web Service at the top of the page.
-
-**Note:** By default, Render will set Auto-Deploy for your project to true. This
-setting will cause Render to re-deploy your application every time you push to
-main, always keeping it up to date.
-
-[Render.com]: https://render.com/
-[Dashboard]: https://dashboard.render.com/
+#### Provide Feedback
+- **As a user with a company**, I want to give feedback to creators about their submissions.
+  - **Criteria**:
+    - Can send feedback directly on the submission page.
+    - Option to request changes or resubmission for further review.
