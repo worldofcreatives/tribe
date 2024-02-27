@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, FileField, SelectMultipleField
 from wtforms.validators import DataRequired, Email, Optional
 from flask_wtf.file import FileAllowed
-from wtforms.fields.core import FieldList
 from wtforms.widgets import ListWidget, CheckboxInput
 from app.models import Genre, Type
 
@@ -29,7 +28,7 @@ class ProfileForm(FlaskForm):
     def __init__(self, *args, user_type=None, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         # Adjusting form fields based on user type
-        if user_type == 'creator':
+        if user_type == 'Creator':
             del self.company_logo
             self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
             self.types.choices = [(type.id, type.name) for type in Type.query.all()]

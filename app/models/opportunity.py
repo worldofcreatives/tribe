@@ -42,7 +42,6 @@ class Opportunity(db.Model):
             'budget': str(self.budget),
             'guidelines': self.guidelines,
             'companyId': self.companyId,
-            'isActive': self.isActive,
             'createdDate': self.createdDate.isoformat(),
             'updatedDate': self.updatedDate.isoformat(),
             'oppMedia': [media.to_dict() for media in self.oppMedia],
