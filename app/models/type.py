@@ -6,11 +6,11 @@ class Type(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    typeId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     typeName = db.Column(db.String(255), unique=True, nullable=False)
 
     def to_dict(self):
         return {
-            'typeId': self.typeId,
+            'id': self.id,
             'typeName': self.typeName,
         }

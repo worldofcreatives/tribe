@@ -7,7 +7,7 @@ class Company(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    companyId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False, unique=True)
     name = db.Column(db.String(255), nullable=False)
     companyName = db.Column(db.String(255), nullable=False)
@@ -19,7 +19,7 @@ class Company(db.Model):
 
     def to_dict(self):
         return {
-            'companyId': self.companyId,
+            'id': self.id,
             'userId': self.userId,
             'name': self.name,
             'companyName': self.companyName,

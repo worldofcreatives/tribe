@@ -8,8 +8,8 @@ class Feedback(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    feedbackId = db.Column(db.Integer, primary_key=True)
-    submissionId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('submissions.subId')), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    submissionId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('submissions.id')), nullable=False)
     senderId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     message = db.Column(db.Text, nullable=False)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -22,7 +22,7 @@ class Feedback(db.Model):
 
     def to_dict(self):
         return {
-            'feedbackId': self.feedbackId,
+            'id': self.id,
             'submissionId': self.submissionId,
             'senderId': self.senderId,
             'message': self.message,

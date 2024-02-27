@@ -8,7 +8,7 @@ class Creator(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    creatorId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False, unique=True)
     name = db.Column(db.String(255), nullable=False)
     status = db.Column(db.Enum('Pre-Apply', 'Denied', 'Pending', 'Approved'), default='Pre-Apply', nullable=False)
@@ -26,7 +26,7 @@ class Creator(db.Model):
 
     def to_dict(self):
         return {
-            'creatorId': self.creatorId,
+            'id': self.id,
             'userId': self.userId,
             'name': self.name,
             'types': [type.to_dict() for type in self.types],

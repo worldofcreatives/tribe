@@ -6,11 +6,11 @@ class Genre(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    genreId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
 
     def to_dict(self):
         return {
-            'genreId': self.genreId,
+            'id': self.id,
             'name': self.name,
         }

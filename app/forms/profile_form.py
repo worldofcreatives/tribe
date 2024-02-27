@@ -20,7 +20,7 @@ class ProfileForm(FlaskForm):
     types = SelectMultipleField('Types', choices=[], validators=[Optional()], coerce=int)
 
     # Company-specific fields
-    company_logo = FileField('Company Logo', validators=[
+    logo = FileField('Company Logo', validators=[
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!'),
         Optional()
     ])
@@ -29,7 +29,7 @@ class ProfileForm(FlaskForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         # Adjusting form fields based on user type
         if user_type == 'Creator':
-            del self.company_logo
+            del self.logo
             self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
             self.types.choices = [(type.id, type.name) for type in Type.query.all()]
         elif user_type == 'company':

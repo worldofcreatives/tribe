@@ -17,10 +17,10 @@ def get_opportunities():
 
 # GET /api/opportunities/:id - Get a single opportunity
 
-@opportunity_routes.route('/<int:oppId>', methods=['GET'])
+@opportunity_routes.route('/<int:id>', methods=['GET'])
 @login_required
-def get_opportunity(oppId):
-    opportunity = Opportunity.query.get(oppId)
+def get_opportunity(id):
+    opportunity = Opportunity.query.get(id)
     if opportunity:
         return jsonify(opportunity.to_dict()), 200
     else:
@@ -45,7 +45,7 @@ def create_opportunity():
             targetAudience=form.target_audience.data,
             budget=form.budget.data,
             guidelines=form.guidelines.data,
-            companyId=current_user.company_id,
+            id=current_user.company_id,
         )
         try:
             db.session.add(new_opportunity)
@@ -60,15 +60,15 @@ def create_opportunity():
 
 # PUT /api/opportunities/:id - Update an opportunity
 
-@opportunity_routes.route('/<int:oppId>', methods=['PUT'])
+@opportunity_routes.route('/<int:id>', methods=['PUT'])
 @login_required
-def update_opportunity(oppId):
-    opportunity = Opportunity.query.get(oppId)
+def update_opportunity(id):
+    opportunity = Opportunity.query.get(id)
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
     # Ensure the current user is authorized to update the opportunity
-    if not current_user.is_company() or current_user.company_id != opportunity.companyId:
+    if not current_user.is_company() or current_user.company_id != opportunity.id:
         return jsonify({"error": "Unauthorized"}), 403
 
     form = OpportunityForm()
@@ -111,7 +111,7 @@ def update_opportunity(oppId):
 #     if not data.get('name') or not data.get('description'):
 #         return jsonify({"error": "Name and description are required."}), 400
 
-#     # if not data.get('companyId') or data.get('companyId') != current_user.company_id:
+#     # if not data.get('id') or data.get('id') != current_user.company_id:
 #     #     return jsonify({"error": "Invalid company ID."}), 400
 
 #     # Create a new Opportunity
@@ -121,7 +121,7 @@ def update_opportunity(oppId):
 #         targetAudience=data.get('targetAudience'),
 #         budget=data.get('budget'),
 #         guidelines=data.get('guidelines'),
-#         companyId=current_user.company_id,
+#         id=current_user.company_id,
 #     )
 
 #     try:

@@ -8,13 +8,13 @@ class Opportunity(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    oppId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     targetAudience = db.Column(db.String(255), nullable=True)
     budget = db.Column(db.DECIMAL(10,2), nullable=True)
     guidelines = db.Column(db.Text, nullable=True)
-    companyId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('companies.companyId')), nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('companies.id')), nullable=False)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -33,7 +33,7 @@ class Opportunity(db.Model):
 
     def to_dict(self):
         return {
-            'oppId': self.oppId,
+            'id': self.id,
             'name': self.name,
             'genres': [genre.to_dict() for genre in self.genres],
             'types': [type.to_dict() for type in self.types],
@@ -41,7 +41,7 @@ class Opportunity(db.Model):
             'targetAudience': self.targetAudience,
             'budget': str(self.budget),
             'guidelines': self.guidelines,
-            'companyId': self.companyId,
+            'id': self.id,
             'createdDate': self.createdDate.isoformat(),
             'updatedDate': self.updatedDate.isoformat(),
             'oppMedia': [media.to_dict() for media in self.oppMedia],

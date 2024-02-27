@@ -7,7 +7,7 @@ class Media(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    mediaId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     file = db.Column(db.String(255), nullable=False)
     userId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
@@ -19,7 +19,7 @@ class Media(db.Model):
 
     def to_dict(self):
         return {
-            'mediaId': self.mediaId,
+            'id': self.id,
             'name': self.name,
             'file': self.file,
             'userId': self.userId,

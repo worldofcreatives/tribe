@@ -9,9 +9,9 @@ class Submission(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
-    subId = db.Column(db.Integer, primary_key=True)
-    creatorId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.creatorId')), nullable=False)
-    oppId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.oppId')), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
+    id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), nullable=False)
     name = db.Column(db.Text, nullable=False)
     status = db.Column(Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), default='Pending', nullable=False)
     notes = db.Column(db.Text, nullable=True)
@@ -31,9 +31,9 @@ class Submission(db.Model):
 
     def to_dict(self):
         return {
-            'subId': self.subId,
-            'creatorId': self.creatorId,
-            'oppId': self.oppId,
+            'id': self.id,
+            'id': self.id,
+            'id': self.id,
             'name': self.name,
             'status': self.status,
             'notes': self.notes,
