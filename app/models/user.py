@@ -21,8 +21,8 @@ class User(db.Model, UserMixin):
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # # Relationship to Company (if applicable)
-    # company = db.relationship('Company', backref='users', lazy=True)
+    # One to One Relationship to Company
+    company = db.relationship('Company', backref=db.backref('user', uselist=False), foreign_keys=[company_id], lazy=True)
 
     @property
     def password(self):
@@ -47,6 +47,7 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email,
             'type': self.type,
+            'companyId': self.company_id,
             'createdDate': self.createdDate.isoformat(),
             'updatedDate': self.updatedDate.isoformat(),
         }
