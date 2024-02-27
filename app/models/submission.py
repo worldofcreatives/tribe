@@ -32,8 +32,8 @@ class Submission(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'id': self.id,
-            'id': self.id,
+            'creator_id': self.creator_id,
+            'opportunity_id': self.opportunity_id,
             'name': self.name,
             'status': self.status,
             'notes': self.notes,
