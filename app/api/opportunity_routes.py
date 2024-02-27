@@ -138,12 +138,106 @@ def create_submission(id):
     else:
         return jsonify({'errors': form.errors}), 400
 
+# GET /api/opportunities/:id/submissions - Get all submissions for an opportunity
 
+@opportunity_routes.route('/<int:id>/submissions', methods=['GET'])
+@login_required
+def get_submissions_for_opportunity(id):
 
+    opportunity = Opportunity.query.get(id)
 
+    if not opportunity:
+        return jsonify({"error": "Opportunity not found"}), 404
 
+    # Ensure the current user is a company
+    if current_user.type != 'Company':
+        return jsonify({"error": "Access denied. User is not a company."}), 403
 
+    # Ensure the current user is the creator of the opportunity
+    if opportunity.company_id != current_user.company_id:
+        return jsonify({"error": "Access denied. User did not create this opportunity."}), 403
 
+    submissions = Submission.query.filter_by(opportunity_id=id).all()
+    submissions_list = [submission.to_dict() for submission in submissions]
+
+    return jsonify(submissions_list), 200
+
+# GET /api/opportunities/:opp_id/submissions/:sub_id - Get a specific submission
+
+@opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>', methods=['GET'])
+@login_required
+def get_specific_submission(opp_id, sub_id):
+
+    opportunity = Opportunity.query.get(opp_id)
+    submission = Submission.query.filter_by(id=sub_id, opportunity_id=opp_id).first()
+
+    if submission.creator_id is current_user.creator_id:
+        return jsonify(submission.to_dict()), 200
+
+    if opportunity.company_id != current_user.company_id or current_user.type != 'Company':
+        return jsonify({"error": "Access denied."}), 403
+    if not opportunity:
+        return jsonify({"error": "Opportunity not found"}), 404
+    if not submission:
+        return jsonify({"error": "Submission not found"}), 404
+
+    return jsonify(submission.to_dict()), 200
+
+# PUT /api/opportunities/:opp_id/submissions/:sub_id - Update a submission status
+
+@opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>', methods=['PUT'])
+@login_required
+def update_submission_status(opp_id, sub_id):
+    submission = Submission.query.get(sub_id)
+    if not submission:
+        return jsonify({"error": "Submission not found"}), 404
+    if submission.opportunity_id != opp_id:
+        return jsonify({"error": "Submission does not belong to the given opportunity"}), 400
+
+    opportunity = Opportunity.query.get(opp_id)
+
+    if current_user.company_id != opportunity.company_id or current_user.type != 'Company':
+        return jsonify({"error": "Unauthorized to update submission status"}), 403
+
+    data = request.get_json()
+    new_status = data.get('status')
+
+    if new_status not in ['Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived']:
+        return jsonify({"error": "Invalid status value"}), 400
+
+    submission.status = new_status
+    db.session.commit()
+
+    return jsonify(submission.to_dict()), 200
+
+# DELETE /api/opportunities/:opp_id/submissions/:sub_id - Delete a submission
+
+@opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>', methods=['DELETE'])
+@login_required
+def delete_submission(opp_id, sub_id):
+    submission = Submission.query.get(sub_id)
+    if not submission:
+        return jsonify({"error": "Submission not found"}), 404
+
+    if submission.opportunity_id != opp_id:
+        return jsonify({"error": "Submission does not belong to the given opportunity"}), 400
+
+    opportunity = Opportunity.query.get(opp_id)
+    if not opportunity:
+        return jsonify({"error": "Opportunity not found"}), 404
+
+    if submission.creator_id is current_user.creator_id:
+        db.session.delete(submission)
+        db.session.commit()
+        return jsonify({"message": "Submission successfully deleted"}), 200
+
+    if current_user.type != 'Company' or opportunity.company_id != current_user.company_id:
+        return jsonify({"error": "Unauthorized to delete this submission"}), 403
+
+    db.session.delete(submission)
+    db.session.commit()
+
+    return jsonify({"message": "Submission successfully deleted"}), 200
 
 
 

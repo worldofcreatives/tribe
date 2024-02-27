@@ -35,11 +35,11 @@ class User(db.Model, UserMixin):
     @password.setter
     def password(self, password):
         self.salt = binascii.hexlify(os.urandom(16)).decode()  # Generate a new salt
-        # Incorporate the salt with the password before hashing
+        # mix in the the salt with the password before hashing
         self.hashed_password = generate_password_hash(password + self.salt)
 
     def check_password(self, password):
-        # Use the salt from the database with the input password to check against the hashed password
+        # check pw against the hashed password
         return check_password_hash(self.hashed_password, password + self.salt)
 
     def is_company(self):
