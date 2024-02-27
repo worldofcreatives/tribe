@@ -12,7 +12,11 @@ class Submission(db.Model):
     subId = db.Column(db.Integer, primary_key=True)
     creatorId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.creatorId')), nullable=False)
     oppId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.oppId')), nullable=False)
-    status = db.Column(Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), nullable=False)
+    name = db.Column(db.Text, nullable=False)
+    status = db.Column(Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), default='Pending', nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+    bpm = db.Column(db.Integer, nullable=True)
+    collaborators = db.Column(db.String(500), nullable=True)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -30,7 +34,11 @@ class Submission(db.Model):
             'subId': self.subId,
             'creatorId': self.creatorId,
             'oppId': self.oppId,
+            'name': self.name,
             'status': self.status,
+            'notes': self.notes,
+            'bpm': self.bpm,
+            'collaborators': self.collaborators,
             'createdDate': self.createdDate.isoformat(),
             'updatedDate': self.updatedDate.isoformat(),
             'subMedia': [media.to_dict() for media in self.subMedia],

@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
-    type = db.Column(db.Enum('Creator', 'Company'), default='Creator', nullable=False)
+    type = db.Column(db.Enum('creator', 'company'), default='creator', nullable=False)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
