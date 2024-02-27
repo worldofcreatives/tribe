@@ -18,11 +18,15 @@ class User(db.Model, UserMixin):
     salt = db.Column(db.String(255), nullable=False)
     type = db.Column(db.Enum('Creator', 'Company'), default='Creator', nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.companyId'), nullable=True)
+    creator_id = db.Column(db.Integer, db.ForeignKey('creators.creatorId'), nullable=True)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # One to One Relationship to Company
     company = db.relationship('Company', backref=db.backref('user', uselist=False), foreign_keys=[company_id], lazy=True)
+
+    # One to One Relationship to Creator
+    creator = db.relationship('Creator', backref=db.backref('user', uselist=False), foreign_keys=[creator_id], lazy=True)
 
     @property
     def password(self):

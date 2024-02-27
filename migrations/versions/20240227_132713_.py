@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b707f9eb21ac
+Revision ID: 1b01b9ee3850
 Revises: 
-Create Date: 2024-02-27 10:35:13.618623
+Create Date: 2024-02-27 13:27:13.961334
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b707f9eb21ac'
+revision = '1b01b9ee3850'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,6 +30,19 @@ def upgrade():
     sa.Column('updatedDate', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['userId'], ['users.id'], ),
     sa.PrimaryKeyConstraint('companyId'),
+    sa.UniqueConstraint('userId')
+    )
+    op.create_table('creators',
+    sa.Column('creatorId', sa.Integer(), nullable=False),
+    sa.Column('userId', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('status', sa.Enum('Pre-Apply', 'Denied', 'Pending', 'Approved'), nullable=False),
+    sa.Column('profilePic', sa.String(length=255), nullable=True),
+    sa.Column('bio', sa.Text(), nullable=True),
+    sa.Column('createdDate', sa.DateTime(), nullable=False),
+    sa.Column('updatedDate', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['userId'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('creatorId'),
     sa.UniqueConstraint('userId')
     )
     op.create_table('genres',
@@ -52,25 +65,28 @@ def upgrade():
     sa.Column('salt', sa.String(length=255), nullable=False),
     sa.Column('type', sa.Enum('Creator', 'Company'), nullable=False),
     sa.Column('company_id', sa.Integer(), nullable=True),
+    sa.Column('creator_id', sa.Integer(), nullable=True),
     sa.Column('createdDate', sa.DateTime(), nullable=False),
     sa.Column('updatedDate', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['company_id'], ['companies.companyId'], ),
+    sa.ForeignKeyConstraint(['creator_id'], ['creators.creatorId'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
-    op.create_table('creators',
+    op.create_table('creator_genres',
     sa.Column('creatorId', sa.Integer(), nullable=False),
-    sa.Column('userId', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('status', sa.Enum('Pre-Apply', 'Denied', 'Pending', 'Approved'), nullable=False),
-    sa.Column('profilePic', sa.String(length=255), nullable=True),
-    sa.Column('bio', sa.Text(), nullable=True),
-    sa.Column('createdDate', sa.DateTime(), nullable=False),
-    sa.Column('updatedDate', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['userId'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('creatorId'),
-    sa.UniqueConstraint('userId')
+    sa.Column('genreId', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['creatorId'], ['creators.creatorId'], ),
+    sa.ForeignKeyConstraint(['genreId'], ['genres.genreId'], ),
+    sa.PrimaryKeyConstraint('creatorId', 'genreId')
+    )
+    op.create_table('creator_types',
+    sa.Column('creatorId', sa.Integer(), nullable=False),
+    sa.Column('typeId', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['creatorId'], ['creators.creatorId'], ),
+    sa.ForeignKeyConstraint(['typeId'], ['types.typeId'], ),
+    sa.PrimaryKeyConstraint('creatorId', 'typeId')
     )
     op.create_table('media',
     sa.Column('mediaId', sa.Integer(), nullable=False),
@@ -94,20 +110,6 @@ def upgrade():
     sa.Column('updatedDate', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['companyId'], ['companies.companyId'], ),
     sa.PrimaryKeyConstraint('oppId')
-    )
-    op.create_table('creator_genres',
-    sa.Column('creatorId', sa.Integer(), nullable=False),
-    sa.Column('genreId', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['creatorId'], ['creators.creatorId'], ),
-    sa.ForeignKeyConstraint(['genreId'], ['genres.genreId'], ),
-    sa.PrimaryKeyConstraint('creatorId', 'genreId')
-    )
-    op.create_table('creator_types',
-    sa.Column('creatorId', sa.Integer(), nullable=False),
-    sa.Column('typeId', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['creatorId'], ['creators.creatorId'], ),
-    sa.ForeignKeyConstraint(['typeId'], ['types.typeId'], ),
-    sa.PrimaryKeyConstraint('creatorId', 'typeId')
     )
     op.create_table('opp_genres',
     sa.Column('oppId', sa.Integer(), nullable=False),
@@ -181,13 +183,13 @@ def downgrade():
     op.drop_table('opp_types')
     op.drop_table('opp_media')
     op.drop_table('opp_genres')
-    op.drop_table('creator_types')
-    op.drop_table('creator_genres')
     op.drop_table('opportunities')
     op.drop_table('media')
-    op.drop_table('creators')
+    op.drop_table('creator_types')
+    op.drop_table('creator_genres')
     op.drop_table('users')
     op.drop_table('types')
     op.drop_table('genres')
+    op.drop_table('creators')
     op.drop_table('companies')
     # ### end Alembic commands ###
