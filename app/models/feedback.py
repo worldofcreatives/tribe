@@ -9,10 +9,10 @@ class Feedback(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    submissionId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('submissions.id')), nullable=False)
-    senderId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
+    submission_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('submissions.id')), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     message = db.Column(db.Text, nullable=False)
-    createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     # Relationship to Submission
     submission = db.relationship('Submission', backref=db.backref('feedbacks', lazy=True))
@@ -23,9 +23,9 @@ class Feedback(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'submissionId': self.submissionId,
-            'senderId': self.senderId,
+            'submission_id': self.submission_id,
+            'sender_id': self.sender_id,
             'message': self.message,
-            'createdDate': self.createdDate.isoformat(),
+            'created_date': self.created_date.isoformat(),
             'feedMedia': [media.to_dict() for media in self.feedMedia],
         }

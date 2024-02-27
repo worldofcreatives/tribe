@@ -11,18 +11,18 @@ class Opportunity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    targetAudience = db.Column(db.String(255), nullable=True)
+    target_audience = db.Column(db.String(255), nullable=True)
     budget = db.Column(db.DECIMAL(10,2), nullable=True)
     guidelines = db.Column(db.Text, nullable=True)
-    id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('companies.id')), nullable=False)
-    createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    company_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('companies.id')), nullable=False)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship to Company
     company = db.relationship('Company', backref=db.backref('opportunities', lazy=True))
 
     # Many-to-Many Relationship with Media
-    oppMedia = db.relationship('Media', secondary=opp_media_table, backref=db.backref('opportunities', lazy='dynamic'))
+    opp_media = db.relationship('Media', secondary=opp_media_table, backref=db.backref('opportunities', lazy='dynamic'))
 
     # Many-to-Many Relationship with Genres
     genres = db.relationship('Genre', secondary=opp_genre_table, backref='opportunities')
@@ -38,11 +38,10 @@ class Opportunity(db.Model):
             'genres': [genre.to_dict() for genre in self.genres],
             'types': [type.to_dict() for type in self.types],
             'description': self.description,
-            'targetAudience': self.targetAudience,
+            'target_audience': self.target_audience,
             'budget': str(self.budget),
             'guidelines': self.guidelines,
-            'id': self.id,
-            'createdDate': self.createdDate.isoformat(),
-            'updatedDate': self.updatedDate.isoformat(),
-            'oppMedia': [media.to_dict() for media in self.oppMedia],
+            'created_date': self.created_date.isoformat(),
+            'updated_date': self.updated_date.isoformat(),
+            'opp_media': [media.to_dict() for media in self.opp_media],
         }

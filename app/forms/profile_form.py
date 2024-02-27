@@ -7,12 +7,11 @@ from app.models import Genre, Type
 
 class ProfileForm(FlaskForm):
     # Shared fields
-    email = StringField('Email', validators=[DataRequired(), Email()])
     bio = TextAreaField('Bio', validators=[Optional()])
-    display_name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
 
     # Creator-specific fields
-    profile_picture = FileField('Profile Picture', validators=[
+    profile_pic = FileField('Profile Picture', validators=[
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!'),
         Optional()
     ])
@@ -32,7 +31,7 @@ class ProfileForm(FlaskForm):
             del self.logo
             self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
             self.types.choices = [(type.id, type.name) for type in Type.query.all()]
-        elif user_type == 'company':
-            del self.profile_picture
+        elif user_type == 'Company':
+            del self.profile_pic
             del self.genres
             del self.types

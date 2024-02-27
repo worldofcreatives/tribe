@@ -4,18 +4,18 @@ from sqlalchemy.sql import text
 def seed_companies():
     # Example companies
     company1 = Company(
-        userId=1,
+        user_id=1,
         name='Demo Corp',
-        companyName='Demo Corporation',
+        company_name='Demo Corporation',
         bio='A demo company for demonstration purposes.',
         logo='path/to/demo/logo.png',
         status='Approved'
     )
 
     company2 = Company(
-        userId=5,
+        user_id=5,
         name='Tech Innovations',
-        companyName='Innovative Tech Solutions',
+        company_name='Innovative Tech Solutions',
         bio='Innovating the future of technology.',
         logo='path/to/tech/innovations/logo.png',
         status='Pending'

@@ -10,15 +10,15 @@ class Submission(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
-    id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
+    opportunity_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), nullable=False)
     name = db.Column(db.Text, nullable=False)
     status = db.Column(Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), default='Pending', nullable=False)
     notes = db.Column(db.Text, nullable=True)
     bpm = db.Column(db.Integer, nullable=True)
     collaborators = db.Column(db.String(500), nullable=True)
-    createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship to Creator
     creator = db.relationship('Creator', backref=db.backref('submissions', lazy=True))
@@ -39,7 +39,7 @@ class Submission(db.Model):
             'notes': self.notes,
             'bpm': self.bpm,
             'collaborators': self.collaborators,
-            'createdDate': self.createdDate.isoformat(),
-            'updatedDate': self.updatedDate.isoformat(),
+            'created_date': self.created_date.isoformat(),
+            'updated_date': self.updated_date.isoformat(),
             'subMedia': [media.to_dict() for media in self.subMedia],
         }

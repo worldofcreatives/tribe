@@ -42,10 +42,10 @@ def create_opportunity():
         new_opportunity = Opportunity(
             name=form.name.data,
             description=form.description.data,
-            targetAudience=form.target_audience.data,
+            target_audience=form.target_audience.data,
             budget=form.budget.data,
             guidelines=form.guidelines.data,
-            id=current_user.company_id,
+            company_id=current_user.company_id,
         )
         try:
             db.session.add(new_opportunity)
@@ -76,7 +76,7 @@ def update_opportunity(id):
     if form.validate_on_submit():
         opportunity.name = form.name.data
         opportunity.description = form.description.data
-        opportunity.targetAudience = form.target_audience.data
+        opportunity.target_audience = form.target_audience.data
         opportunity.budget = form.budget.data
         opportunity.guidelines = form.guidelines.data
 
@@ -88,6 +88,27 @@ def update_opportunity(id):
             return jsonify({"error": "Database error", "message": str(e)}), 500
     else:
         return jsonify(form.errors), 400
+
+# DELETE /api/opportunities/:id - Delete an opportunity
+
+@opportunity_routes.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete_opportunity(id):
+    opportunity = Opportunity.query.get(id)
+    if not opportunity:
+        return jsonify({"error": "Opportunity not found"}), 404
+
+    # Ensure the current user is authorized to delete the opportunity
+    if not current_user.is_company() or current_user.company_id != opportunity.company_id:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    try:
+        db.session.delete(opportunity)
+        db.session.commit()
+        return jsonify({"message": "Opportunity deleted successfully"}), 200
+    except IntegrityError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error", "message": str(e)}), 500
 
 
 # from flask import Blueprint, request, jsonify
@@ -118,7 +139,7 @@ def update_opportunity(id):
 #     new_opportunity = Opportunity(
 #         name=data['name'],
 #         description=data['description'],
-#         targetAudience=data.get('targetAudience'),
+#         target_audience=data.get('target_audience'),
 #         budget=data.get('budget'),
 #         guidelines=data.get('guidelines'),
 #         id=current_user.company_id,

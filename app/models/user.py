@@ -19,8 +19,8 @@ class User(db.Model, UserMixin):
     type = db.Column(db.Enum('Creator', 'Company'), default='Creator', nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=True)
     creator_id = db.Column(db.Integer, db.ForeignKey('creators.id'), nullable=True)
-    createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # One to One Relationship to Company
     company = db.relationship('Company', backref=db.backref('user', uselist=False), foreign_keys=[company_id], lazy=True)
@@ -47,11 +47,11 @@ class User(db.Model, UserMixin):
 
     def to_dict(self):
         return {
-            'userId': self.id,
+            'user_id': self.id,
             'username': self.username,
             'email': self.email,
             'type': self.type,
             'id': self.company_id,
-            'createdDate': self.createdDate.isoformat(),
-            'updatedDate': self.updatedDate.isoformat(),
+            'created_date': self.created_date.isoformat(),
+            'updated_date': self.updated_date.isoformat(),
         }

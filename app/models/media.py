@@ -10,9 +10,9 @@ class Media(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     file = db.Column(db.String(255), nullable=False)
-    userId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
-    createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updatedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
+    created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship to User
     user = db.relationship('User', backref=db.backref('media', lazy=True))
@@ -22,7 +22,7 @@ class Media(db.Model):
             'id': self.id,
             'name': self.name,
             'file': self.file,
-            'userId': self.userId,
-            'createdDate': self.createdDate.isoformat(),
-            'updatedDate': self.updatedDate.isoformat(),
+            'user_id': self.user_id,
+            'created_date': self.created_date.isoformat(),
+            'updated_date': self.updated_date.isoformat(),
         }

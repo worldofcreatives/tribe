@@ -3,18 +3,18 @@ from sqlalchemy.sql import text
 
 def seed_creators():
     creator1 = Creator(
-        userId=2,
+        user_id=2,
         name='Creative Mind',
         status='Approved',
-        profilePic='url/profile.png',
+        profile_pic='url/profile.png',
         bio='Exploring creativity in every aspect.'
     )
 
     creator2 = Creator(
-        userId=3,
+        user_id=3,
         name='Innovative Artist',
         status='Pending',
-        profilePic='url/profile2.png',
+        profile_pic='url/profile2.png',
         bio='Innovating art for the new age.'
     )
 

@@ -37,7 +37,7 @@ def upload_media():
         new_media = Media(
             name=name,
             file=upload_response["url"],
-            userId=current_user.id
+            user_id=current_user.id
         )
 
         try:
@@ -77,7 +77,7 @@ def upload_media():
 #         new_media = Media(
 #             name=form.name.data,
 #             file=filename,
-#             userId=current_user.id
+#             user_id=current_user.id
 #         )
 
 #         db.session.add(new_media)
