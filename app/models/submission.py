@@ -16,6 +16,7 @@ class Submission(db.Model):
     status = db.Column(Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), default='Pending', nullable=False)
     notes = db.Column(db.Text, nullable=True)
     bpm = db.Column(db.Integer, nullable=True)
+    file_url = db.Column(db.String(500), nullable=True)
     collaborators = db.Column(db.String(500), nullable=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -38,6 +39,7 @@ class Submission(db.Model):
             'status': self.status,
             'notes': self.notes,
             'bpm': self.bpm,
+            'file_url': self.file_url,
             'collaborators': self.collaborators,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),

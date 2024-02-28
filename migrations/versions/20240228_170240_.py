@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c7e9b7b8fe2e
+Revision ID: 1ff9c2f17ed5
 Revises: 
-Create Date: 2024-02-28 15:43:17.291009
+Create Date: 2024-02-28 17:02:40.270084
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c7e9b7b8fe2e'
+revision = '1ff9c2f17ed5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -101,17 +101,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['company_id'], ['companies.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('video_content',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=500), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('genre', sa.String(length=500), nullable=True),
-    sa.Column('video_url', sa.String(length=500), nullable=True),
-    sa.Column('thumbnail_url', sa.String(length=500), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('opp_genres',
     sa.Column('opportunities_id', sa.Integer(), nullable=False),
     sa.Column('genres_id', sa.Integer(), nullable=False),
@@ -134,19 +123,12 @@ def upgrade():
     sa.Column('status', sa.Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), nullable=False),
     sa.Column('notes', sa.Text(), nullable=True),
     sa.Column('bpm', sa.Integer(), nullable=True),
+    sa.Column('file_url', sa.String(length=500), nullable=True),
     sa.Column('collaborators', sa.String(length=500), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('updated_date', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['creator_id'], ['creators.id'], ),
     sa.ForeignKeyConstraint(['opportunity_id'], ['opportunities.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('watchlist',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('video_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.ForeignKeyConstraint(['video_id'], ['video_content.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('feedback',
@@ -204,11 +186,9 @@ def downgrade():
     op.drop_table('feedback_media')
     op.drop_table('media')
     op.drop_table('feedback')
-    op.drop_table('watchlist')
     op.drop_table('submissions')
     op.drop_table('opp_types')
     op.drop_table('opp_genres')
-    op.drop_table('video_content')
     op.drop_table('opportunities')
     op.drop_table('creator_types')
     op.drop_table('creator_genres')
