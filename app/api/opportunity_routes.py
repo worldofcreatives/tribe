@@ -295,7 +295,23 @@ def submit_feedback(opp_id, sub_id):
     else:
         return jsonify({'errors': form.errors}), 400
 
+# GET /api/opportunities/:opp_id/submissions/:sub_id/feedback - List feedback for a submission
 
+@opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>/feedback', methods=['GET'])
+@login_required
+def list_feedback_for_submission(opp_id, sub_id):
+
+    submission = Submission.query.filter_by(id=sub_id, opportunity_id=opp_id).first()
+    if not submission:
+        return jsonify({'error': 'Submission not found or does not belong to the specified opportunity'}), 404
+
+    if current_user.id != submission.creator_id and current_user.company_id != submission.opportunity.company_id:
+        return jsonify({'error': 'Unauthorized access to feedback'}), 403
+
+    feedback_list = Feedback.query.filter_by(submission_id=sub_id).all()
+    feedback_data = [feedback.to_dict() for feedback in feedback_list]
+
+    return jsonify(feedback_data), 200
 
 
 
