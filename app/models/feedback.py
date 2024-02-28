@@ -11,7 +11,7 @@ class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     submission_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('submissions.id')), nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
-    message = db.Column(db.Text, nullable=False)
+    feedback = db.Column(db.Text, nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     # Relationship to Submission
@@ -25,7 +25,7 @@ class Feedback(db.Model):
             'id': self.id,
             'submission_id': self.submission_id,
             'sender_id': self.sender_id,
-            'message': self.message,
+            'feedback': self.feedback,
             'created_date': self.created_date.isoformat(),
             'feedMedia': [media.to_dict() for media in self.feedMedia],
         }

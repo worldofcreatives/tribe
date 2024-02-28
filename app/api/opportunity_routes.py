@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask_login import login_required, current_user
-from app.models import db, Opportunity, Submission
+from app.models import db, Opportunity, Submission, Feedback
 from app.forms.opportunity_form import OpportunityForm
 from app.forms.submission_form import SubmissionForm
+from app.forms.feedback_form import FeedbackForm
 from sqlalchemy.exc import IntegrityError
 from ..api.aws_helpers import get_unique_filename, upload_file_to_s3
 
@@ -161,31 +162,6 @@ def create_submission(id):
     else:
         return jsonify({'errors': form.errors}), 400
 
-# @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
-# @login_required
-# def create_submission(id):
-
-#     form = SubmissionForm()
-#     form['csrf_token'].data = request.cookies['csrf_token']
-#     opportunity = Opportunity.query.get(id)
-
-#     if form.validate_on_submit():
-
-#         new_submission = Submission(
-#             creator_id=current_user.id,
-#             opportunity_id=opportunity.id,
-#             name=form.name.data,
-#             notes=form.notes.data,
-#             bpm=form.bpm.data,
-#             collaborators=form.collaborators.data,
-#         )
-#         db.session.add(new_submission)
-#         db.session.commit()
-
-#         return jsonify(new_submission.to_dict()), 201
-#     else:
-#         return jsonify({'errors': form.errors}), 400
-
 # GET /api/opportunities/:id/submissions - Get all submissions for an opportunity
 
 @opportunity_routes.route('/<int:id>/submissions', methods=['GET'])
@@ -287,8 +263,37 @@ def delete_submission(opp_id, sub_id):
 
     return jsonify({"message": "Submission successfully deleted"}), 200
 
+# POST /api/opportunities/:opp_id/submissions/:sub_id/feedback - Create feedback for a submission
 
+@opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>/feedback', methods=['POST'])
+@login_required
+def submit_feedback(opp_id, sub_id):
+    form = FeedbackForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
 
+    submission = Submission.query.filter_by(id=sub_id, opportunity_id=opp_id).first()
+    if not submission:
+        return jsonify({'error': 'Submission not found or does not belong to the specified opportunity'}), 404
+
+    # Check if the current user is authorized to give feedback
+    if current_user.id != submission.creator_id or current_user.company_id != submission.opportunity.company_id:
+        return jsonify({'error': 'You are unauthorized'}), 403
+
+    if form.validate_on_submit():
+        new_feedback = Feedback(
+            submission_id=sub_id,
+            sender_id=current_user.id,
+            feedback=form.feedback.data
+        )
+        db.session.add(new_feedback)
+        try:
+            db.session.commit()
+            return jsonify(new_feedback.to_dict()), 201
+        except IntegrityError:
+            db.session.rollback()
+            return jsonify({'error': 'Database error'}), 500
+    else:
+        return jsonify({'errors': form.errors}), 400
 
 
 
