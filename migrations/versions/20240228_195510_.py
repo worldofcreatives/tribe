@@ -1,16 +1,17 @@
 """empty message
 
-Revision ID: 5f548e73f07c
-Revises: 
-Create Date: 2024-02-28 18:44:33.945013
+Revision ID: 3071627c41c7
+Revises:
+Create Date: 2024-02-28 19:55:10.701344
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects import postgresql
+from sqlalchemy import MetaData
 
 # revision identifiers, used by Alembic.
-revision = '5f548e73f07c'
+revision = '3071627c41c7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +26,7 @@ def upgrade():
     sa.Column('company_name', sa.String(length=255), nullable=False),
     sa.Column('bio', sa.Text(), nullable=True),
     sa.Column('logo', sa.String(length=255), nullable=True),
-    sa.Column('status', sa.Enum('Pre-Apply', 'Denied', 'Pending', 'Approved'), nullable=False),
+    sa.Column('status', postgresql.ENUM('Pre-Apply', 'Denied', 'Pending', 'Approved', name='status_enum', metadata=MetaData()), nullable=False),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('updated_date', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -36,7 +37,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('status', sa.Enum('Pre-Apply', 'Denied', 'Pending', 'Approved'), nullable=False),
+    sa.Column('status', postgresql.ENUM('Pre-Apply', 'Denied', 'Pending', 'Approved', name='creator_status_enum', metadata=MetaData()), nullable=False),
     sa.Column('profile_pic', sa.String(length=255), nullable=True),
     sa.Column('bio', sa.Text(), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
@@ -63,7 +64,7 @@ def upgrade():
     sa.Column('username', sa.String(length=40), nullable=False),
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
     sa.Column('salt', sa.String(length=255), nullable=False),
-    sa.Column('type', sa.Enum('Creator', 'Company'), nullable=False),
+    sa.Column('type', postgresql.ENUM('Creator', 'Company', name='user_type_enum', metadata=MetaData()), nullable=False),
     sa.Column('company_id', sa.Integer(), nullable=True),
     sa.Column('creator_id', sa.Integer(), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
@@ -120,7 +121,7 @@ def upgrade():
     sa.Column('creator_id', sa.Integer(), nullable=False),
     sa.Column('opportunity_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.Text(), nullable=False),
-    sa.Column('status', sa.Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), nullable=False),
+    sa.Column('status', postgresql.ENUM('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived', name='submission_status', metadata=MetaData()), nullable=False),
     sa.Column('notes', sa.Text(), nullable=True),
     sa.Column('bpm', sa.Integer(), nullable=True),
     sa.Column('file_url', sa.String(length=500), nullable=True),

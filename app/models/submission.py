@@ -1,6 +1,6 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
-from sqlalchemy import Enum
+from sqlalchemy.dialects.postgresql import ENUM
 from . import sub_media_table
 
 class Submission(db.Model):
@@ -9,11 +9,13 @@ class Submission(db.Model):
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
+    status_enum = ENUM('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived', name='submission_status', metadata=db.metadata, create_type=False)
+
     id = db.Column(db.Integer, primary_key=True)
     creator_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
     opportunity_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), nullable=False)
     name = db.Column(db.Text, nullable=False)
-    status = db.Column(Enum('Pending', 'Reviewing', 'Accepted', 'Rejected', 'Archived'), default='Pending', nullable=False)
+    status = db.Column(status_enum, default='Pending', nullable=False)
     notes = db.Column(db.Text, nullable=True)
     bpm = db.Column(db.Integer, nullable=True)
     file_url = db.Column(db.String(500), nullable=True)
