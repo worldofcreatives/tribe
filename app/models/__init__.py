@@ -38,7 +38,6 @@ feedback_media_table = db.Table('feedback_media',
 )
 
 
-
 # Models
 from .user import User
 from .creator import Creator
