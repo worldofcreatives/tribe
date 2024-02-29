@@ -16,6 +16,8 @@ opp_genre_table = db.Table('opp_genres',
     db.Column('opportunities_id', db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), primary_key=True),
     db.Column('genres_id', db.Integer, db.ForeignKey(add_prefix_for_prod('genres.id')), primary_key=True)
 )
+if environment == "production":
+       opp_genre_table.schema = SCHEMA
 
 opp_type_table = db.Table('opp_types',
     db.Column('opportunities_id', db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), primary_key=True),

@@ -11,6 +11,10 @@ from .api.profile_routes import profile_routes
 from .api.opportunity_routes import opportunity_routes
 from .seeds import seed_commands
 from .config import Config
+# import logging
+
+# logging.basicConfig()
+# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 
