@@ -5,17 +5,17 @@ from sqlalchemy.sql import text
 def seed_users():
     # Existing users
     demo = User(
-        username='Demo', email='demo@aa.io', password='password', type='Company', company_id=1)
+        username='Demo', email='demo@aa.io', password='password', type='Company')
     marnie = User(
-        username='marnie', email='marnie@aa.io', password='password', creator_id=1)
+        username='marnie', email='marnie@aa.io', password='password')
     bobbie = User(
-        username='bobbie', email='bobbie@aa.io', password='password', creator_id=2)
+        username='bobbie', email='bobbie@aa.io', password='password')
 
     # New users
     alice = User(
         username='alice', email='alice@example.com', password='password', type='Creator')
     charlie = User(
-        username='charlie', email='charlie@example.com', password='password', type='Company', company_id=2)
+        username='charlie', email='charlie@example.com', password='password', type='Company')
     dana = User(
         username='dana', email='dana@example.com', password='password')
     evan = User(

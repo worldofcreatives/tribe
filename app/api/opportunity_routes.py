@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask_login import login_required, current_user
-from app.models import db, Opportunity, Submission, Feedback
+from app.models import db, Opportunity, Submission, Feedback, Company, Creator
 from app.forms.opportunity_form import OpportunityForm
 from app.forms.submission_form import SubmissionForm
 from app.forms.feedback_form import FeedbackForm
@@ -39,6 +39,8 @@ def create_opportunity():
     if not current_user.is_company():
         return jsonify({"error": "Unauthorized"}), 403
 
+    company = Company.query.filter_by(user_id=current_user.id).first()
+
     form = OpportunityForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
     if form.validate_on_submit():
@@ -48,7 +50,7 @@ def create_opportunity():
             target_audience=form.target_audience.data,
             budget=form.budget.data,
             guidelines=form.guidelines.data,
-            company_id=current_user.company_id,
+            company_id=company.id,
         )
         try:
             db.session.add(new_opportunity)
@@ -70,8 +72,11 @@ def update_opportunity(id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    # Ensure the current user is authorized to update the opportunity
-    if not current_user.is_company() or current_user.company_id != opportunity.id:
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    if not company:
+        return jsonify({"error": "Unauthorized - User is not associated with any company"}), 403
+
+    if opportunity.company_id != company.id:
         return jsonify({"error": "Unauthorized"}), 403
 
     form = OpportunityForm()
@@ -92,6 +97,7 @@ def update_opportunity(id):
     else:
         return jsonify(form.errors), 400
 
+
 # DELETE /api/opportunities/:id - Delete an opportunity
 
 @opportunity_routes.route('/<int:id>', methods=['DELETE'])
@@ -101,8 +107,11 @@ def delete_opportunity(id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    # Ensure the current user is authorized to delete the opportunity
-    if not current_user.is_company() or current_user.company_id != opportunity.company_id:
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    if not company:
+        return jsonify({"error": "Unauthorized - User is not associated with any company"}), 403
+
+    if opportunity.company_id != company.id:
         return jsonify({"error": "Unauthorized"}), 403
 
     try:
@@ -112,6 +121,7 @@ def delete_opportunity(id):
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({"error": "Database error", "message": str(e)}), 500
+
 
 # POST /api/opportunities/:id/submit - Create a new submission
 
@@ -167,18 +177,18 @@ def create_submission(id):
 @opportunity_routes.route('/<int:id>/submissions', methods=['GET'])
 @login_required
 def get_submissions_for_opportunity(id):
-
     opportunity = Opportunity.query.get(id)
 
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    # Ensure the current user is a company
-    if current_user.type != 'Company':
-        return jsonify({"error": "Access denied. User is not a company."}), 403
+    # Query for the company associated with the current user
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    if not company:
+        return jsonify({"error": "Access denied. User is not associated with any company."}), 403
 
-    # Ensure the current user is the creator of the opportunity
-    if opportunity.company_id != current_user.company_id:
+    # Ensure the current user is authorized to view submissions for the opportunity
+    if opportunity.company_id != company.id:
         return jsonify({"error": "Access denied. User did not create this opportunity."}), 403
 
     submissions = Submission.query.filter_by(opportunity_id=id).all()
@@ -191,21 +201,24 @@ def get_submissions_for_opportunity(id):
 @opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>', methods=['GET'])
 @login_required
 def get_specific_submission(opp_id, sub_id):
-
-    opportunity = Opportunity.query.get(opp_id)
     submission = Submission.query.filter_by(id=sub_id, opportunity_id=opp_id).first()
-
-    if submission.creator_id is current_user.creator_id:
-        return jsonify(submission.to_dict()), 200
-
-    if opportunity.company_id != current_user.company_id or current_user.type != 'Company':
-        return jsonify({"error": "Access denied."}), 403
-    if not opportunity:
-        return jsonify({"error": "Opportunity not found"}), 404
     if not submission:
         return jsonify({"error": "Submission not found"}), 404
 
-    return jsonify(submission.to_dict()), 200
+    opportunity = Opportunity.query.get(opp_id)
+    if not opportunity:
+        return jsonify({"error": "Opportunity not found"}), 404
+
+    creator = Creator.query.filter_by(user_id=current_user.id).first()
+    if creator and submission.creator_id == creator.id:
+        return jsonify(submission.to_dict()), 200
+
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    if company and opportunity.company_id == company.id:
+        return jsonify(submission.to_dict()), 200
+
+    return jsonify({"error": "Access denied."}), 403
+
 
 # PUT /api/opportunities/:opp_id/submissions/:sub_id - Update a submission status
 
@@ -215,12 +228,16 @@ def update_submission_status(opp_id, sub_id):
     submission = Submission.query.get(sub_id)
     if not submission:
         return jsonify({"error": "Submission not found"}), 404
+
     if submission.opportunity_id != opp_id:
         return jsonify({"error": "Submission does not belong to the given opportunity"}), 400
 
-    opportunity = Opportunity.query.get(opp_id)
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    if not company:
+        return jsonify({"error": "Unauthorized to update submission status - User is not associated with any company"}), 403
 
-    if current_user.company_id != opportunity.company_id or current_user.type != 'Company':
+    opportunity = Opportunity.query.get(opp_id)
+    if not opportunity or company.id != opportunity.company_id:
         return jsonify({"error": "Unauthorized to update submission status"}), 403
 
     data = request.get_json()
@@ -233,6 +250,7 @@ def update_submission_status(opp_id, sub_id):
     db.session.commit()
 
     return jsonify(submission.to_dict()), 200
+
 
 # DELETE /api/opportunities/:opp_id/submissions/:sub_id - Delete a submission
 
@@ -250,18 +268,20 @@ def delete_submission(opp_id, sub_id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    if submission.creator_id is current_user.creator_id:
+    creator = Creator.query.filter_by(user_id=current_user.id).first()
+    if creator and submission.creator_id == creator.id:
         db.session.delete(submission)
         db.session.commit()
         return jsonify({"message": "Submission successfully deleted"}), 200
 
-    if current_user.type != 'Company' or opportunity.company_id != current_user.company_id:
-        return jsonify({"error": "Unauthorized to delete this submission"}), 403
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    if company and opportunity.company_id == company.id:
+        db.session.delete(submission)
+        db.session.commit()
+        return jsonify({"message": "Submission successfully deleted"}), 200
 
-    db.session.delete(submission)
-    db.session.commit()
+    return jsonify({"error": "Unauthorized to delete this submission"}), 403
 
-    return jsonify({"message": "Submission successfully deleted"}), 200
 
 # POST /api/opportunities/:opp_id/submissions/:sub_id/feedback - Create feedback for a submission
 
@@ -275,9 +295,13 @@ def submit_feedback(opp_id, sub_id):
     if not submission:
         return jsonify({'error': 'Submission not found or does not belong to the specified opportunity'}), 404
 
-    # Check if the current user is authorized to give feedback
-    if current_user.id != submission.creator_id or current_user.company_id != submission.opportunity.company_id:
-        return jsonify({'error': 'You are unauthorized'}), 403
+    creator = Creator.query.filter_by(user_id=current_user.id).first()
+    if creator and submission.creator_id == creator.id:
+        pass
+    else:
+        company = Company.query.filter_by(user_id=current_user.id).first()
+        if not company or company.id != submission.opportunity.company_id:
+            return jsonify({'error': 'You are unauthorized'}), 403
 
     if form.validate_on_submit():
         new_feedback = Feedback(
@@ -295,65 +319,24 @@ def submit_feedback(opp_id, sub_id):
     else:
         return jsonify({'errors': form.errors}), 400
 
+
 # GET /api/opportunities/:opp_id/submissions/:sub_id/feedback - List feedback for a submission
 
 @opportunity_routes.route('/<int:opp_id>/submissions/<int:sub_id>/feedback', methods=['GET'])
 @login_required
 def list_feedback_for_submission(opp_id, sub_id):
-
     submission = Submission.query.filter_by(id=sub_id, opportunity_id=opp_id).first()
     if not submission:
         return jsonify({'error': 'Submission not found or does not belong to the specified opportunity'}), 404
 
-    if current_user.id != submission.creator_id and current_user.company_id != submission.opportunity.company_id:
+    is_creator = submission.creator_id == current_user.id
+    company = Company.query.filter_by(user_id=current_user.id).first()
+    is_company_associated = company and company.id == submission.opportunity.company_id
+
+    if not is_creator and not is_company_associated:
         return jsonify({'error': 'Unauthorized access to feedback'}), 403
 
     feedback_list = Feedback.query.filter_by(submission_id=sub_id).all()
     feedback_data = [feedback.to_dict() for feedback in feedback_list]
 
     return jsonify(feedback_data), 200
-
-
-
-
-# from flask import Blueprint, request, jsonify
-# from flask_login import login_required, current_user
-# from app.models import db, Opportunity, Company
-# from sqlalchemy.exc import IntegrityError
-
-# # Define the opportunities Blueprint
-# opportunity_routes = Blueprint('opportunities', __name__)
-
-# @opportunity_routes.route('/', methods=['POST'])
-# @login_required
-# def create_opportunity():
-#     # Ensure the current user is a company
-#     if not current_user.is_company():
-#         return jsonify({"error": "Unauthorized"}), 403
-
-#     data = request.get_json()
-
-#     # Basic validation
-#     if not data.get('name') or not data.get('description'):
-#         return jsonify({"error": "Name and description are required."}), 400
-
-#     # if not data.get('id') or data.get('id') != current_user.company_id:
-#     #     return jsonify({"error": "Invalid company ID."}), 400
-
-#     # Create a new Opportunity
-#     new_opportunity = Opportunity(
-#         name=data['name'],
-#         description=data['description'],
-#         target_audience=data.get('target_audience'),
-#         budget=data.get('budget'),
-#         guidelines=data.get('guidelines'),
-#         id=current_user.company_id,
-#     )
-
-#     try:
-#         db.session.add(new_opportunity)
-#         db.session.commit()
-#         return jsonify(new_opportunity.to_dict()), 201
-#     except IntegrityError as e:
-#         db.session.rollback()
-#         return jsonify({"error": "Database error", "message": str(e)}), 500

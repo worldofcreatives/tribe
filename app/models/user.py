@@ -17,16 +17,16 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(50), default='Creator', nullable=False)
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=True)
-    creator_id = db.Column(db.Integer, db.ForeignKey('creators.id'), nullable=True)
+    # company_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=True)
+    # creator_id = db.Column(db.Integer, db.ForeignKey('creators.id'), nullable=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # One to One Relationship to Company
-    company = db.relationship('Company', backref=db.backref('user', uselist=False), foreign_keys=[company_id], lazy=True)
+    # # # One to One Relationship to Company
+    # company = db.relationship('Company', backref=db.backref('user', uselist=False), foreign_keys=[company_id], lazy=True)
 
-    # One to One Relationship to Creator
-    creator = db.relationship('Creator', backref=db.backref('user', uselist=False), foreign_keys=[creator_id], lazy=True)
+    # # # One to One Relationship to Creator
+    # creator = db.relationship('Creator', backref=db.backref('user', uselist=False), foreign_keys=[creator_id], lazy=True)
 
     @property
     def password(self):
@@ -47,11 +47,11 @@ class User(db.Model, UserMixin):
 
     def to_dict(self):
         return {
-            'user_id': self.id,
+            'id': self.id,
             'username': self.username,
             'email': self.email,
             'type': self.type,
-            'id': self.company_id,
+            # 'company_id': self.company_id,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }
