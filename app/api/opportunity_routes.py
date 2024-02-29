@@ -11,7 +11,7 @@ opportunity_routes = Blueprint('opportunities', __name__)
 
 # GET /api/opportunities - Get all opportunities
 
-@opportunity_routes.route('/', methods=['GET'])
+@opportunity_routes.route('', methods=['GET'])
 @login_required
 def get_opportunities():
     opportunities = Opportunity.query.all()
@@ -31,7 +31,7 @@ def get_opportunity(id):
 
 # POST /api/opportunities - Create a new opportunity
 
-@opportunity_routes.route('/', methods=['POST'])
+@opportunity_routes.route('', methods=['POST'])
 @login_required
 def create_opportunity():
 
