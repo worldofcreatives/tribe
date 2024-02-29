@@ -18,8 +18,8 @@ opp_genre_table = db.Table('opp_genres',
 )
 
 opp_type_table = db.Table('opp_types',
-    db.Column('opportunities_id', db.Integer, db.ForeignKey('opportunities.id'), primary_key=True),
-    db.Column('types_id', db.Integer, db.ForeignKey('types.id'), primary_key=True)
+    db.Column('opportunities_id', db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), primary_key=True),
+    db.Column('types_id', db.Integer, db.ForeignKey(add_prefix_for_prod('types.id')), primary_key=True)
 )
 
 opp_media_table = db.Table('opp_media',
