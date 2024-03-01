@@ -156,7 +156,6 @@ export const updateOpportunity = (oppId, updatedOpportunityData) => async (dispa
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        // Include additional headers if needed, like authorization tokens
       },
       body: JSON.stringify(updatedOpportunityData),
     });
@@ -178,7 +177,6 @@ export const deleteOpportunity = (oppId) => async (dispatch) => {
     try {
       const response = await fetch(`/api/opportunities/${oppId}`, {
         method: 'DELETE',
-        // Include headers if needed, like authorization tokens
       });
       if (response.ok) {
         dispatch(deleteOpportunitySuccess(oppId));
@@ -222,23 +220,6 @@ switch (action.type) {
         error: action.payload,
         opportunities: [],
     };
-    case FETCH_OPPORTUNITIES_REQUEST:
-        return {
-          ...state,
-          loading: true,
-        };
-      case FETCH_OPPORTUNITIES_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          opportunities: action.payload,
-        };
-      case FETCH_OPPORTUNITIES_FAILURE:
-        return {
-          ...state,
-          loading: false,
-          error: action.payload,
-        };
       case FETCH_SINGLE_OPPORTUNITY_REQUEST:
         return {
           ...state,
