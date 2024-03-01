@@ -193,6 +193,7 @@ export const deleteOpportunity = (oppId) => async (dispatch) => {
 //*====> Reducers <====
 const initialState = {
     loading: false,
+    loadingSingleOpportunity: false,
     opportunities: [],
     singleOpportunity: null,
     error: '',
@@ -223,18 +224,18 @@ switch (action.type) {
       case FETCH_SINGLE_OPPORTUNITY_REQUEST:
         return {
           ...state,
-          loading: true,
+          loadingSingleOpportunity: true,
         };
       case FETCH_SINGLE_OPPORTUNITY_SUCCESS:
         return {
           ...state,
-          loading: false,
+          loadingSingleOpportunity: false,
           singleOpportunity: action.payload,
         };
       case FETCH_SINGLE_OPPORTUNITY_FAILURE:
         return {
           ...state,
-          loading: false,
+          loadingSingleOpportunity: false,
           error: action.payload,
           singleOpportunity: null,
         };
