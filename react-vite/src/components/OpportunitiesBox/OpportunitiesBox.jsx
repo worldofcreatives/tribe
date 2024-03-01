@@ -19,3 +19,5 @@ const OpportunityBox = ({ opportunity }) => {
 };
 
 export default OpportunityBox;
+
+
