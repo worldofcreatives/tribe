@@ -88,15 +88,12 @@ const deleteSubmissionFailure = (error) => ({
 //*====> Thunk Action Creators <====
 
 // Create a new submission for a specific opportunity
-export const createNewSubmission = (submissionData, oppId) => async (dispatch) => {
+export const createNewSubmission = (formData, oppId) => async (dispatch) => {
   dispatch(createSubmissionRequest());
   try {
     const response = await fetch(`/api/opportunities/${oppId}/submit`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(submissionData),
+      body: formData,
     });
 
     if (response.ok) {

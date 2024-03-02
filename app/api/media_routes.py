@@ -37,7 +37,9 @@ def upload_media():
         new_media = Media(
             name=name,
             file=upload_response["url"],
-            user_id=current_user.id
+            user_id=current_user.id,
+            opportunity_id=form.opportunity_id.data,
+            submission_id=form.submission_id.data,
         )
 
         try:
