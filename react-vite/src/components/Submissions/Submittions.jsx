@@ -5,7 +5,7 @@ import { fetchSubmissionsForOpportunity } from '../../redux/submissions'; // Adj
 import SubmissionItem from '../SubmissionItem';
 
 const Submissions = () => {
-  const { id } = useParams(); // This is the opportunity ID
+  const { oppId } = useParams(); // This is the opportunity ID
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.session);
   const { submissions, loading, error } = useSelector((state) => state.submissions);
@@ -16,9 +16,9 @@ const Submissions = () => {
 
   useEffect(() => {
     if (isCompany || user) {
-      dispatch(fetchSubmissionsForOpportunity(id));
+      dispatch(fetchSubmissionsForOpportunity(oppId));
     }
-  }, [dispatch, id, isCompany, user]);
+  }, [dispatch, oppId, isCompany, user]);
 
   if (loading) {
     return <div>Loading submissions...</div>;
@@ -35,7 +35,7 @@ const Submissions = () => {
 
   return (
     <div>
-      <h2>Submissions for Opportunity {id}</h2>
+      <h2>Submissions for Opportunity {oppId}</h2>
       {visibleSubmissions.length > 0 ? (
         <ul>
           {visibleSubmissions.map((submission) => (
