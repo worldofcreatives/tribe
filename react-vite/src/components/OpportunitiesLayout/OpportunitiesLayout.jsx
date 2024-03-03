@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { fetchOpportunities } from '../../redux/opportunities';
-import OpportunityBox from '../OpportunitiesBox/OpportunitiesBox'; // Make sure the import path is correct
+import OpportunityBox from '../OpportunitiesBox/OpportunitiesBox';
+import './OpportunitiesLayout.css'; // Import the CSS module
 
 const OpportunitiesLayout = () => {
   const dispatch = useDispatch();
@@ -13,10 +14,9 @@ const OpportunitiesLayout = () => {
   }, [dispatch]);
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ width: '30%', borderRight: '1px solid #ccc' }}>
-        <h2>All Opportunities</h2>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
+    <div className="opportunities-layout">
+      <div className="opportunities-sidebar">
+        <ul>
           {opportunities.map((opportunity) => (
             <li key={opportunity.id}>
               <OpportunityBox opportunity={opportunity} />
@@ -24,7 +24,7 @@ const OpportunitiesLayout = () => {
           ))}
         </ul>
       </div>
-      <div style={{ flex: 1, padding: '20px' }}>
+      <div className="opportunities-content">
         <Outlet />
       </div>
     </div>
