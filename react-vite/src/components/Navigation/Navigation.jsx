@@ -10,6 +10,14 @@ function Navigation() {
       </li>
 
       <li>
+        <NavLink to="/opps">Opps</NavLink>
+      </li>
+
+      <li>
+        <NavLink to="/opps/form">Add New Opp</NavLink>
+      </li>
+
+      <li>
         <ProfileButton />
       </li>
     </ul>
