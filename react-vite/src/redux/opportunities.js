@@ -126,24 +126,32 @@ export const fetchSingleOpportunity = (opportunityId) => async (dispatch) => {
 
 // Create a new opportunity
 
-export const createOpportunity = (opportunityData) => async (dispatch) => {
+export const createOpportunity = (formData) => async (dispatch) => {
   dispatch(createOpportunityRequest());
   try {
     const response = await fetch('/api/opportunities', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(opportunityData),
+      body: formData,
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // },
+      // body: JSON.stringify(opportunityData),
     });
+    console.log("🚀 ~ createOpportunity ~ response:", response)
     if (response.ok) {
       const data = await response.json();
+      console.log("🚀 ~ createOpportunity ~ data:", data)
       dispatch(createOpportunitySuccess(data));
+      return data;
     } else {
-      throw new Error('Failed to create a new opportunity');
+      const error = await response.json();
+      console.error('Failed to create a new opportunity:', error);
+      return Promise.reject(error);
+      // throw new Error('Failed to create a new opportunity');
     }
   } catch (error) {
     dispatch(createOpportunityFailure(error.toString()));
+    return Promise.reject(error);
   }
 };
 
@@ -194,8 +202,10 @@ export const deleteOpportunity = (oppId) => async (dispatch) => {
 const initialState = {
     loading: false,
     loadingSingleOpportunity: false,
+    creatingSingleOpportunity: false,
     opportunities: [],
     singleOpportunity: null,
+    createdSingleOpportunity: null,
     error: '',
   };
 
@@ -242,19 +252,20 @@ switch (action.type) {
     case CREATE_OPPORTUNITY_REQUEST:
       return {
         ...state,
-        loading: true,
+        creatingSingleOpportunity: true,
       };
     case CREATE_OPPORTUNITY_SUCCESS:
       return {
         ...state,
-        loading: false,
-        opportunities: [...state.opportunities, action.payload],
+        creatingSingleOpportunity: false,
+        createdSingleOpportunity: action.payload,
       };
     case CREATE_OPPORTUNITY_FAILURE:
       return {
         ...state,
-        loading: false,
+        creatingSingleOpportunity: false,
         error: action.payload,
+        createdSingleOpportunity: null,
       };
     case UPDATE_OPPORTUNITY_REQUEST:
       return {

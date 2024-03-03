@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
-import Opportunities from '../components/Opportunities';
 import OpportunityPage from '../components/OpportunityPage';
 import Layout from './Layout';
 import OpportunitiesLayout from '../components/OpportunitiesLayout';
+import OpportunityForm from '../components/OpportunityForm/OpportunityForm';
 
 export const router = createBrowserRouter([
   {
@@ -34,8 +34,8 @@ export const router = createBrowserRouter([
         element: <h1>Not Found</h1>,
       },
       {
-        path: "/opportunities",
-        element: <OpportunitiesLayout />,
+        path: "/opps/form",
+        element: <OpportunityForm />,
       }
     ],
   },
