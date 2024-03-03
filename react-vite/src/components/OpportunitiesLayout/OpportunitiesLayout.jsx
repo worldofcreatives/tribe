@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { fetchOpportunities } from '../../redux/opportunities';
 import OpportunityBox from '../OpportunitiesBox/OpportunitiesBox';
-import './OpportunitiesLayout.css'; // Import the CSS module
+import './OpportunitiesLayout.css';
 
 const OpportunitiesLayout = () => {
   const dispatch = useDispatch();

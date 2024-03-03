@@ -5,7 +5,7 @@ import OpportunityPage from '../components/OpportunityPage';
 import Layout from './Layout';
 import OpportunitiesLayout from '../components/OpportunitiesLayout';
 import OpportunityForm from '../components/OpportunityForm/OpportunityForm';
-import Submissions from '../components/Submissions/Submittions';
+import Submissions from '../components/Submissions/Submissions';
 import SubmissionDetails from '../components/SubmissionDetails/SubmissionDetails';
 
 export const router = createBrowserRouter([

@@ -1,0 +1,9 @@
+/* SubmissionItem.css */
+.submission-item {
+    cursor: pointer;
+    /* Add more styles here */
+  }
+
+  .submission-item:hover {
+    background-color: #f2f2f2; /* Example hover state */
+  }
