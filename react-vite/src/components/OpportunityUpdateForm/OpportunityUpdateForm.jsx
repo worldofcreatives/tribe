@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createOpportunity } from '../../redux/opportunities';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchSingleOpportunity, updateOpportunity } from '../../redux/opportunities';
 
-const OpportunityForm = () => {
+const OpportunityUpdateForm = () => {
+  const { id } = useParams(); // Get the opportunity id from the URL parameter
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const opportunityDetails = useSelector(state => state.opportunities.singleOpportunity);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -13,44 +15,39 @@ const OpportunityForm = () => {
     budget: 0,
     guidelines: '',
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!opportunityDetails || opportunityDetails.id !== parseInt(id)) {
+      dispatch(fetchSingleOpportunity(id));
+    } else {
+      // If opportunity details are available, pre-fill the form
+      setFormData({
+        name: opportunityDetails.name,
+        description: opportunityDetails.description,
+        target_audience: opportunityDetails.target_audience || '',
+        budget: opportunityDetails.budget || 0,
+        guidelines: opportunityDetails.guidelines || '',
+      });
+    }
+  }, [dispatch, id, opportunityDetails]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    const opportunityData = new FormData();
-    for (const key in formData) {
-      opportunityData.append(key, formData[key]);
-    }
-
-    try {
-      const actionResult = await dispatch(createOpportunity(opportunityData));
-      console.log("🚀 ~ handleSubmit ~ actionResult:", actionResult)
-
-      const newOpportunity = actionResult;
-      console.log("🚀 ~ handleSubmit ~ newOpportunity:", newOpportunity)
-      navigate(`/opps/${newOpportunity.id}`);
-      setLoading(false);
-    } catch (error) {
-      console.error('Failed to create opportunity:', error);
-      setError(error.message || 'Something went wrong!');
-      setLoading(false);
-    }
+    dispatch(updateOpportunity(id, formData));
+    navigate(`/opps/${id}`);
   };
+
+  if (!opportunityDetails) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <form onSubmit={handleSubmit} encType="multipart/form-data">
+    <form onSubmit={handleSubmit}>
        <div>
          <label htmlFor="name">Name</label>
          <input
@@ -101,12 +98,9 @@ const OpportunityForm = () => {
           onChange={handleChange}
         />
       </div>
-      <button type="submit" disabled={loading}>
-        {loading ? 'Creating...' : 'Create Opportunity'}
-      </button>
-      {error && <div>{error}</div>}
+      <button type="submit">Update Opportunity</button>
     </form>
   );
 };
 
-export default OpportunityForm;
+export default OpportunityUpdateForm;

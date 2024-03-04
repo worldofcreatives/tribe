@@ -7,6 +7,8 @@ import OpportunitiesLayout from '../components/OpportunitiesLayout';
 import OpportunityForm from '../components/OpportunityForm/OpportunityForm';
 import Submissions from '../components/Submissions/Submissions';
 import SubmissionDetails from '../components/SubmissionDetails/SubmissionDetails';
+import OpportunityUpdateForm from '../components/OpportunityUpdateForm/OpportunityUpdateForm';
+
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +48,11 @@ export const router = createBrowserRouter([
       {
         path: "/opps/:oppId/subs/:subId",
         element: <SubmissionDetails />,
-      }
+      },
+      {
+        path: "/opps/:id/update",
+        element: <OpportunityUpdateForm />,
+      },
     ],
   },
 ]);

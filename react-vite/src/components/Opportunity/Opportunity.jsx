@@ -17,6 +17,14 @@ const Opportunity = ({ opportunity }) => {
     }
   };
 
+  const handleViewSubs = () => {
+    navigate(`/opps/${opportunity.id}/subs`);
+  }
+
+  const handleUpdate = () => {
+    navigate(`/opps/${opportunity.id}/update`);
+  }
+
   return (
     <div>
       {opportunity ? (
@@ -25,6 +33,10 @@ const Opportunity = ({ opportunity }) => {
           {sessionUser && sessionUser.type === 'Company' && (
             <button onClick={handleDelete}>Delete</button>
           )}
+          {sessionUser && sessionUser.type === 'Company' && (
+            <button onClick={handleUpdate}>Update</button>
+          )}
+          <button onClick={handleViewSubs}>View Submissions</button>
           <p><strong>Budget:</strong> ${opportunity.budget}</p>
           <p><strong>Created Date:</strong> {new Date(opportunity.created_date).toLocaleDateString()}</p>
           <p><strong>Description:</strong> {opportunity.description}</p>
