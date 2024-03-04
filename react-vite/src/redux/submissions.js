@@ -262,16 +262,16 @@ const submissionReducer = (state = initialState, action) => {
     //     updateError: '',
     //   };
     case UPDATE_SUBMISSION_STATUS_SUCCESS:
-    const updatedSubmissions = state.submissions.map((submission) => {
-      if (submission.id === action.payload.id) {
-        return { ...submission, status: action.payload.status };
-      }
-      return submission;
-    });
-    return {
-      ...state,
-      submissions: updatedSubmissions,
-    };
+      const updatedSubmissions = state.submissions.map((submission) => {
+        if (submission.id === action.payload.id) {
+          return { ...submission, status: action.payload.status };
+        }
+        return submission;
+      });
+      return {
+        ...state,
+        submissions: updatedSubmissions,
+      };
     case UPDATE_SUBMISSION_STATUS_FAILURE:
       return {
         ...state,

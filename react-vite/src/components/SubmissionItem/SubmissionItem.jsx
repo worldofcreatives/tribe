@@ -1,55 +1,3 @@
-// import React from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import './SubmissionItem.css';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { updateSubmissionStatus } from '../../redux/submissions';
-
-
-// const SubmissionItem = ({ submission, onPlay }) => {
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-//   const statusOptions = ['Pending', 'Reviewing', 'Accepted', 'Rejected'];
-
-//   const handleStatusChange = (newStatus) => {
-//     dispatch(updateSubmissionStatus(submission.opportunity_id, submission.id, newStatus));
-//   };
-
-//   const updatedSubmission = useSelector(state =>
-//     state.submissions.submissions.find(s => s.id === submission.id)
-//   );
-//   console.log("🚀 ~ SubmissionItem ~ updatedSubmission:", updatedSubmission)
-
-//   const goToSubmissionDetails = () => {
-//     navigate(`/opps/${submission.opportunity_id}/subs/${submission.id}`);
-//   };
-
-//   return (
-
-//     <div>
-//     <div className="submission-item" onClick={goToSubmissionDetails}>
-//       <h3>{submission.name}</h3>
-//       <p><strong>Status:</strong> {submission.status}</p>
-//       <p><strong>Submitted by:</strong> {submission.creator_id}</p>
-//     </div>
-//       <button onClick={() => onPlay(submission.file_url)}>
-//         {submission.isPlaying ? 'Pause' : 'Play'}
-//       </button>
-//       <div>
-//         {statusOptions.map((status) => (
-//           submission.status !== status && (
-//             <button key={status} onClick={() => handleStatusChange(status)}>
-//               Set as {status}
-//             </button>
-//           )
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SubmissionItem;
-
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SubmissionItem.css';
@@ -67,6 +15,15 @@ const SubmissionItem = ({ submission, onPlay }) => {
 
   const goToSubmissionDetails = () => {
     navigate(`/opps/${submission.opportunity_id}/subs/${submission.id}`);
+  };
+
+  const generateFileName = (url) => {
+    // Extract the file extension from the URL
+    const extension = url.split('.').pop();
+    // Create a dynamic file name. You can include other details such as the submission name or date
+    const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD format
+    const fileName = `${submission.name}_${date}.${extension}`;
+    return fileName;
   };
 
   return (
@@ -90,6 +47,15 @@ const SubmissionItem = ({ submission, onPlay }) => {
             {status}
           </button>
         ))}
+      </div>
+      <div>
+        <a
+          href={submission.file_url}
+          download={generateFileName(submission.file_url)}
+          className="download-button"
+        >
+          Download Song
+        </a>
       </div>
     </div>
   );

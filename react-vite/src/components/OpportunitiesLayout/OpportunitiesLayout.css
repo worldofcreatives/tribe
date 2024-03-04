@@ -1,5 +1,3 @@
-/* OpportunitiesLayout.css */
-
 .opportunities-layout {
     display: flex;
     height: 90vh; /* Full height of the viewport */
@@ -9,7 +7,7 @@
     width: 30%;
     border-right: 1px solid #ccc;
     overflow-y: auto; /* Enable vertical scroll */
-    max-height: 900vh; /* Set max height to viewport height */
+    max-height: 900vh;
     padding: 0;
     list-style-type: none; /* Remove default list styling */
   }
@@ -20,4 +18,3 @@
     overflow-y: auto; /* Enable vertical scroll for content area */
   }
 
-  /* You may want to add additional styling here for OpportunityBox or other elements */
