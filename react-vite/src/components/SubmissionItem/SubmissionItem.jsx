@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SubmissionItem.css';
 import { useDispatch } from 'react-redux';
-import { updateSubmissionStatus } from '../../redux/submissions';
+import { deleteSubmission, updateSubmissionStatus } from '../../redux/submissions';
 
 const SubmissionItem = ({ submission, onPlay }) => {
   const navigate = useNavigate();
@@ -13,14 +13,22 @@ const SubmissionItem = ({ submission, onPlay }) => {
     dispatch(updateSubmissionStatus(submission.opportunity_id, submission.id, newStatus));
   };
 
+    // Function to handle deletion
+  const handleDelete = () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this submission?");
+    if (confirmDelete) {
+      dispatch(deleteSubmission(submission.opportunity_id, submission.id));
+      // Optionally navigate user away or refresh the list of submissions
+      navigate(`/opps/${submission.opportunity_id}/subs`);
+    }
+  };
+
   const goToSubmissionDetails = () => {
     navigate(`/opps/${submission.opportunity_id}/subs/${submission.id}`);
   };
 
   const generateFileName = (url) => {
-    // Extract the file extension from the URL
     const extension = url.split('.').pop();
-    // Create a dynamic file name. You can include other details such as the submission name or date
     const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD format
     const fileName = `${submission.name}_${date}.${extension}`;
     return fileName;
@@ -48,6 +56,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
           </button>
         ))}
       </div>
+      <button onClick={handleDelete}>Delete</button>
       <div>
         <a
           href={submission.file_url}
