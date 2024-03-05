@@ -9,6 +9,7 @@ import Submissions from '../components/Submissions/Submissions';
 import SubmissionDetails from '../components/SubmissionDetails/SubmissionDetails';
 import OpportunityUpdateForm from '../components/OpportunityUpdateForm/OpportunityUpdateForm';
 import UserOpportunitiesTable from '../components/OpportunitiesChart/OpportunitiesChart';
+import LandingPage from '../components/LandingPage/LandingPage';
 
 
 export const router = createBrowserRouter([
@@ -17,7 +18,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <h1>Welcome Home!</h1>,
+        element: <LandingPage />,
       },
       {
         path: "login",
