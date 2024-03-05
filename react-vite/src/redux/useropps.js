@@ -19,7 +19,7 @@ const fetchUserOpportunitiesRequest = () => ({
 export const fetchUserOpportunities = () => async (dispatch) => {
   dispatch(fetchUserOpportunitiesRequest());
   try {
-    const response = await fetch('/api/opportunities/myopps'); // Adjust this URL to your API endpoint
+    const response = await fetch('/api/opportunities/myopps');
     if (!response.ok) throw new Error('Failed to fetch opportunities');
     const data = await response.json();
     dispatch(fetchUserOpportunitiesSuccess(data));

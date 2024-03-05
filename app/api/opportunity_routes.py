@@ -351,6 +351,4 @@ def user_opportunities():
     created_opportunities = Opportunity.query.filter_by(user_id=current_user_id).all()
     created_opportunities_data = [opportunity.to_dict() for opportunity in created_opportunities]
 
-    return jsonify({
-        "my_opps": created_opportunities_data,
-    })
+    return jsonify(created_opportunities_data)

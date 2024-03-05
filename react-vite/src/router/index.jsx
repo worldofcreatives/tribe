@@ -8,6 +8,7 @@ import OpportunityForm from '../components/OpportunityForm/OpportunityForm';
 import Submissions from '../components/Submissions/Submissions';
 import SubmissionDetails from '../components/SubmissionDetails/SubmissionDetails';
 import OpportunityUpdateForm from '../components/OpportunityUpdateForm/OpportunityUpdateForm';
+import UserOpportunitiesTable from '../components/OpportunitiesChart/OpportunitiesChart';
 
 
 export const router = createBrowserRouter([
@@ -52,6 +53,10 @@ export const router = createBrowserRouter([
       {
         path: "/opps/:id/update",
         element: <OpportunityUpdateForm />,
+      },
+      {
+        path: "/myopps",
+        element: <UserOpportunitiesTable />,
       },
     ],
   },
