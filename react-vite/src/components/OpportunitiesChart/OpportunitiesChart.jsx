@@ -21,6 +21,7 @@ const UserOpportunitiesTable = () => {
           <th>Date Added</th>
           <th>Date Updated</th>
           <th># of Submissions</th>
+          <th># of Pending Submissions</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -31,6 +32,7 @@ const UserOpportunitiesTable = () => {
             <td>{new Date(opportunity.created_at).toLocaleDateString()}</td>
             <td>{new Date(opportunity.updated_at).toLocaleDateString()}</td>
             <td>{opportunity.submissions_count}</td>
+            <td>{opportunity.pending_submissions}</td>
             <td>
               <Link to={`/opps/${opportunity.id}/subs`}>View Submissions</Link>
               {' | '}

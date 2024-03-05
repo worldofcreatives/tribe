@@ -1,6 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 from . import opp_media_table, opp_genre_table, opp_type_table
+from .submission import Submission
 
 class Opportunity(db.Model):
     __tablename__ = 'opportunities'
@@ -31,6 +32,8 @@ class Opportunity(db.Model):
     # Many-to-Many Relationship with Types
     types = db.relationship('Type', secondary=opp_type_table, backref='opportunities')
 
+    def count_pending_submissions(self):
+        return Submission.query.filter(Submission.opportunity_id == self.id, Submission.status == 'Pending').count()
 
     def to_dict(self):
         return {
@@ -45,6 +48,7 @@ class Opportunity(db.Model):
             'created_date': self.created_date.isoformat(),
             'user_id': self.user_id,
             'submissions_count': len(self.submissions),
+            'pending_submissions': self.count_pending_submissions(),
             'updated_date': self.updated_date.isoformat(),
             'opp_media': [media.to_dict() for media in self.opp_media],
         }
