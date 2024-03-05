@@ -1,3 +1,75 @@
 .profile-dropdown {
   position: absolute;
 }
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1A1A1D; /* Dark background */
+  padding: 0 20px;
+  height: 60px;
+}
+
+.logo-link {
+  text-decoration: none;
+}
+
+.logo {
+  height: 50px; /* Adjust based on your logo's size */
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 0 10px;
+}
+
+.nav-links li a {
+  color: #C5C6C7; /* Light grey text */
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links li a:hover, .nav-links li a.active {
+  background-color: #4E4E50;
+  border-radius: 5px;
+}
+
+.logout-button {
+  background-color: #6B6E70; /* Lighter grey */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #575A5E; /* Darker shade for hover */
+}
+
+/* Styles for the log-in and sign-up links */
+.log-in, .sign-up {
+  background-color: #0B0C10; /* Very dark grey - almost black */
+  color: #66FCF1; /* Bright cyan for buttons */
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.log-in:hover, .sign-up:hover {
+  background-color: #1F2833; /* Dark blue/grey shade for hover */
+}
+
+/* Extra styling for the content-nav section if needed */
+.content-nav {
+  display: flex;
+}

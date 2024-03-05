@@ -1,26 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { deleteOpportunity } from '../../redux/opportunities';
+import { useNavigate, useParams } from 'react-router-dom';
+import './OpportunitiesBox.css';
+
 
 const OpportunityBox = ({ opportunity }) => {
 
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isSelected = opportunity.id === Number(id);
+
 
   const goToOpportunityPage = () => {
     navigate(`/opps/${opportunity.id}`);
   };
 
   return (
-    <div className="opportunity-details">
-      <h3>{opportunity.name}</h3>
+    <div className={`opportunity-details ${isSelected ? 'selected' : ''}`}>
+      <h3 className='opp-name'>{opportunity.name}</h3>
       <p><strong>Budget:</strong> ${opportunity.budget}</p>
       <p><strong>Created Date:</strong> {new Date(opportunity.created_date).toLocaleDateString()}</p>
       <p><strong>Description:</strong> {opportunity.description}</p>
-      <button onClick={goToOpportunityPage}>View Details</button>
+      <button onClick={goToOpportunityPage} className='main-button'>View Details</button>
     </div>
   );
 };
 
 export default OpportunityBox;
-
-

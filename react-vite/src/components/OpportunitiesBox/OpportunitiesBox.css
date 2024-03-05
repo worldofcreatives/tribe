@@ -1,0 +1,49 @@
+.opportunity-details {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .opportunity-details:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .opp-name {
+    color: #333;
+    margin: 0 0 15px 0;
+  }
+
+  .opportunity-details p {
+    color: #666;
+    margin: 5px 0;
+  }
+
+  .main-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease;
+  }
+
+  .main-button:hover {
+    background-color: #0056b3;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .opportunity-details.selected {
+    outline: 2px solid #007bff; /* Change the color as needed */
+    outline-offset: -2px;
+  }
