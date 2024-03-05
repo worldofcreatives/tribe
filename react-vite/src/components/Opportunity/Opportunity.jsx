@@ -4,8 +4,6 @@ import { deleteOpportunity } from '../../redux/opportunities';
 
 const Opportunity = ({ opportunity }) => {
   const sessionUser = useSelector((state) => state.session.user);
-  console.log("🚀 ~ OpportunityBox ~ sessionUser:", sessionUser)
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -30,13 +28,14 @@ const Opportunity = ({ opportunity }) => {
       {opportunity ? (
         <div>
           <h2>{opportunity.name}</h2>
-          {sessionUser && sessionUser.type === 'Company' && (
-            <button onClick={handleDelete}>Delete</button>
+         {/* Ensure buttons show only if the session user's id matches the opportunity's user_id */}
+         {sessionUser && sessionUser.id === opportunity.user_id && (
+            <>
+              <button onClick={handleDelete}>Delete</button>
+              <button onClick={handleUpdate}>Update</button>
+              <button onClick={handleViewSubs}>View Submissions</button>
+            </>
           )}
-          {sessionUser && sessionUser.type === 'Company' && (
-            <button onClick={handleUpdate}>Update</button>
-          )}
-          <button onClick={handleViewSubs}>View Submissions</button>
           <p><strong>Budget:</strong> ${opportunity.budget}</p>
           <p><strong>Created Date:</strong> {new Date(opportunity.created_date).toLocaleDateString()}</p>
           <p><strong>Description:</strong> {opportunity.description}</p>
