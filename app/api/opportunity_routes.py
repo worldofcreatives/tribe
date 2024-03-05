@@ -340,3 +340,17 @@ def list_feedback_for_submission(opp_id, sub_id):
     feedback_data = [feedback.to_dict() for feedback in feedback_list]
 
     return jsonify(feedback_data), 200
+
+
+@opportunity_routes.route('/myopps', methods=['GET'])
+@login_required
+def user_opportunities():
+    current_user_id = current_user.id
+
+    # Fetch opportunities created by the user
+    created_opportunities = Opportunity.query.filter_by(user_id=current_user_id).all()
+    created_opportunities_data = [opportunity.to_dict() for opportunity in created_opportunities]
+
+    return jsonify({
+        "my_opps": created_opportunities_data,
+    })

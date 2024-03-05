@@ -10,6 +10,7 @@ import opportunitiesReducer from "./opportunities";
 import submissionReducer from "./submissions";
 import feedbackReducer from "./feedback";
 import mediaReducer from "./media";
+import userOpportunitiesReducer from "./useropps";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   submissions: submissionReducer,
   feedback: feedbackReducer,
   media: mediaReducer,
+  userOpportunities: userOpportunitiesReducer,
 });
 
 let enhancer;
