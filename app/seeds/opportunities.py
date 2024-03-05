@@ -5,6 +5,7 @@ from datetime import datetime
 def seed_opportunities():
     opportunity1 = Opportunity(
         company_id=1,
+        user_id=1,
         name='Music for Commercial',
         description='Seeking original music to feature in a national commercial.',
         target_audience='All Ages',
@@ -16,6 +17,7 @@ def seed_opportunities():
 
     opportunity2 = Opportunity(
         company_id=1,
+        user_id=1,
         name='Theme Song for Podcast',
         description='Looking for a catchy theme song for our new tech podcast.',
         target_audience='Tech Enthusiasts',
