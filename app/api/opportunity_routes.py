@@ -141,6 +141,8 @@ def create_submission(id):
     if form.validate_on_submit():
 
         file = form.file.data
+        print("🚀 ~ file:", file)
+
 
         allowed_extensions = set(["mp3", "wav"])
 

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createNewSubmission } from '../../redux/submissions'; // Adjust the path according to your project structure
+import { createNewSubmission } from '../../redux/submissions';
+import { useLocation } from 'react-router-dom';
 
 const SubmissionForm = ({ opportunityId }) => {
   const dispatch = useDispatch();
@@ -11,9 +12,15 @@ const SubmissionForm = ({ opportunityId }) => {
     collaborators: '',
     file: null,
   });
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    setSuccessMessage('');
+    setErrorMessage('');
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,22 +36,6 @@ const SubmissionForm = ({ opportunityId }) => {
       file: e.target.files[0],
     });
   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const submissionDetails = new submissionDetails();
-//     submissionDetails.append('name', submissionDetails.name);
-//     submissionDetails.append('notes', submissionDetails.notes);
-//     submissionDetails.append('bpm', submissionDetails.bpm);
-//     submissionDetails.append('collaborators', submissionDetails.collaborators);
-//     if (submissionDetails.file) {
-//       submissionDetails.append('file', submissionDetails.file);
-//     }
-
-
-//     dispatch(createNewSubmission(submissionDetails, opportunityId));
-//     // Reset the form or navigate the user as needed
-//   };
 
 const handleSubmit = async (e) => {
     e.preventDefault();

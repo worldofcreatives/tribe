@@ -36,10 +36,8 @@ const OpportunityForm = () => {
 
     try {
       const actionResult = await dispatch(createOpportunity(opportunityData));
-      console.log("🚀 ~ handleSubmit ~ actionResult:", actionResult)
 
       const newOpportunity = actionResult;
-      console.log("🚀 ~ handleSubmit ~ newOpportunity:", newOpportunity)
       navigate(`/opps/${newOpportunity.id}`);
       setLoading(false);
     } catch (error) {
