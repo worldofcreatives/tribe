@@ -13,7 +13,7 @@ def seed_users():
 
     # New users
     alice = User(
-        username='alice', email='alice@example.com', password='password', type='Creator')
+        username='alice', email='alice@example.com', password='password', type='Company')
     charlie = User(
         username='charlie', email='charlie@example.com', password='password', type='Company')
     dana = User(

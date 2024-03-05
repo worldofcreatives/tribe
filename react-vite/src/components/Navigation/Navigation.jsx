@@ -18,6 +18,10 @@ function Navigation() {
       </li>
 
       <li>
+        <NavLink to="/myopps">My Opps</NavLink>
+      </li>
+
+      <li>
         <ProfileButton />
       </li>
     </ul>
