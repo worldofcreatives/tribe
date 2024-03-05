@@ -51,6 +51,7 @@ def create_opportunity():
             budget=form.budget.data,
             guidelines=form.guidelines.data,
             company_id=company.id,
+            user_id=current_user.id
         )
         try:
             db.session.add(new_opportunity)
