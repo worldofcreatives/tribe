@@ -44,6 +44,7 @@ class Opportunity(db.Model):
             'guidelines': self.guidelines,
             'created_date': self.created_date.isoformat(),
             'user_id': self.user_id,
+            'submissions_count': len(self.submissions),
             'updated_date': self.updated_date.isoformat(),
             'opp_media': [media.to_dict() for media in self.opp_media],
         }

@@ -30,7 +30,7 @@ const UserOpportunitiesTable = () => {
             <td>{opportunity.name}</td>
             <td>{new Date(opportunity.created_at).toLocaleDateString()}</td>
             <td>{new Date(opportunity.updated_at).toLocaleDateString()}</td>
-            <td>{/* I need to still alculate # of submissions for this opportunity */}</td>
+            <td>{opportunity.submissions_count}</td>
             <td>
               <Link to={`/opps/${opportunity.id}/subs`}>View Submissions</Link>
               {' | '}
