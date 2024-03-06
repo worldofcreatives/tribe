@@ -21,6 +21,11 @@ s3 = boto3.client(
     aws_secret_access_key=os.environ.get("S3_SECRET"),
 )
 
+file_url = s3.generate_presigned_url('get_object',
+    Params={'Bucket': 'your-bucket-name',
+            'Key': 'your-file-key',
+            'ResponseContentDisposition': 'attachment; filename="your-download-filename.ext"'},
+    ExpiresIn=3600)  # URL expires in 1 hour
 
 def get_unique_filename(filename):
     ext = filename.rsplit(".", 1)[1].lower()
@@ -29,6 +34,7 @@ def get_unique_filename(filename):
 
 
 def upload_file_to_s3(file, filename, acl="public-read"):
+    metadata = {'ContentDisposition': 'attachment', 'ContentType': 'application/octet-stream'}
     content_type = mimetypes.guess_type(file.filename)[0] or "application/octet-stream"
     filename = get_unique_filename(file.filename)
     try:
@@ -39,7 +45,8 @@ def upload_file_to_s3(file, filename, acl="public-read"):
             file,
             BUCKET_NAME,
             filename,
-            ExtraArgs={"ACL": acl, "ContentType": content_type},
+            ExtraArgs={"ACL": acl, "ContentType": content_type, 'Metadata': metadata},
+            # ExtraArgs={"ACL": acl, "ContentType": content_type},
         )
 
         return {"url": f"{S3_LOCATION}{filename}"}

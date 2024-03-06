@@ -12,6 +12,8 @@ class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     creator_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
     opportunity_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
+    username = db.Column(db.String(40), nullable=False)
     name = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(50), default='Pending', nullable=False)
     notes = db.Column(db.Text, nullable=True)
@@ -35,6 +37,8 @@ class Submission(db.Model):
             'id': self.id,
             'creator_id': self.creator_id,
             'opportunity_id': self.opportunity_id,
+            'user_id': self.user_id,
+            'username': self.username,
             'name': self.name,
             'status': self.status,
             'notes': self.notes,

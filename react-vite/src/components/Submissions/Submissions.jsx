@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fetchSubmissionsForOpportunity } from '../../redux/submissions';
 import SubmissionItem from '../SubmissionItem';
 import MusicPlayer from '../MusicPlayer/MusicPlayer';
@@ -13,7 +13,7 @@ const Submissions = () => {
   const isCompany = user && user.type === 'Company';
   const [currentSong, setCurrentSong] = useState('');
   const [playing, setPlaying] = useState(false);
-
+  const navigate = useNavigate();
 
 //   const currentUser = useSelector((state) => state.session.user);
 
@@ -36,7 +36,9 @@ const Submissions = () => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    // return <div>Error: {error}</div>;
+    navigate('/opps');
+    return <div>You are not authorized to view these submissions.</div>;
   }
 
   // Filter submissions if user is not a company

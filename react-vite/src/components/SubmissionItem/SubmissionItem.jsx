@@ -38,6 +38,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
     <div className="submission-item-container">
       <div className="submission-item" onClick={goToSubmissionDetails}>
         <h3>{submission.name}</h3>
+        <h4>by {submission.username}</h4>
         <p><strong>Status:</strong> {submission.status}</p>
         <p><strong>Submitted by:</strong> {submission.creator_id}</p>
       </div>
@@ -60,7 +61,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
       <div>
         <a
           href={submission.file_url}
-          download={generateFileName(submission.file_url)}
+          download={submission.name}
           className="download-button"
         >
           Download Song

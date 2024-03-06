@@ -162,6 +162,8 @@ def create_submission(id):
         new_submission = Submission(
             creator_id=current_user.id,
             opportunity_id=opportunity.id,
+            user_id=current_user.id,
+            username=current_user.username,
             name=form.name.data,
             notes=form.notes.data,
             bpm=form.bpm.data,

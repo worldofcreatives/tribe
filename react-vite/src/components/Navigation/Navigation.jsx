@@ -13,7 +13,6 @@ function Navigation() {
   const logout = (e) => {
     e.preventDefault();
     dispatch(thunkLogout());
-    closeMenu();
     navigate("/");
   };
 
@@ -37,11 +36,11 @@ return (
             <li>
               <NavLink to="/opps/form" activeClassName="active">Add New Opp</NavLink>
             </li>
-
             <li>
               <NavLink to="/myopps" activeClassName="active">My Opps</NavLink>
             </li>
             <li>
+
               <button onClick={logout} className="logout-button">
                 Logout
               </button>
