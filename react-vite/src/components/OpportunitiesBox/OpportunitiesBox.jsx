@@ -13,6 +13,7 @@ const OpportunityBox = ({ opportunity }) => {
     navigate(`/opps/${opportunity.id}`);
   };
 
+
   return (
     <div className={`opportunity-details ${isSelected ? 'selected' : ''}`}>
       <h3 className='opp-name'>{opportunity.name}</h3>

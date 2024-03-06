@@ -1,31 +1,27 @@
-/* SiteWide.css */
-
 body {
     margin: 0;
     padding: 0;
-    background-color: #121212; /* Dark background */
-    color: #c0c0c0; /* Light grey text for readability */
-    font-family: 'Roboto', sans-serif; /* Default font */
+    background-color: #121212;
+    color: #c0c0c0;
+    font-family: 'Roboto', sans-serif;
 }
 
 a {
-    color: #81D4FA; /* Neon blue for links */
-    text-decoration: none; /* Optional: removes underline from links */
+    color: #81D4FA;
+    text-decoration: none;
 }
 
 a:hover {
-    color: #29B6F6; /* A slightly different blue for hover effect */
+    color: #29B6F6;
 }
 
-/* If you want some elements to use the Orbitron font */
 .orbitron {
     font-family: 'Orbitron', sans-serif;
 }
 
-/* Button styling */
 .button {
-    background-color: #2979FF; /* Bright blue background */
-    color: #FFFFFF; /* White text */
+    background-color: #2979FF;
+    color: #FFFFFF;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -34,155 +30,138 @@ a:hover {
 }
 
 .button:hover {
-    background-color: #448AFF; /* Lighter blue on hover */
+    background-color: #448AFF;
 }
 
-/* For elements that should stand out with neon effect */
 .neon {
-    color: #76FF03; /* Bright neon green */
-    text-shadow: 0 0 5px #B2FF59, 0 0 10px #B2FF59, 0 0 20px #B2FF59, 0 0 40px #B2FF59; /* Neon glow effect */
+    color: #76FF03;
+    text-shadow: 0 0 5px #B2FF59, 0 0 10px #B2FF59, 0 0 20px #B2FF59, 0 0 40px #B2FF59;
 }
 
-/* Container for content sections */
 .container {
     padding: 20px;
     max-width: 1200px;
-    margin: 0 auto; /* Centering */
+    margin: 0 auto;
 }
 
-/* Adding some space between sections */
 .section {
     margin-bottom: 40px;
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
+    width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #333; /* Dark background for the track */
+    background: #333;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #2979FF; /* Neon color for the scrollbar thumb */
-    border-radius: 6px; /* Rounded corners for the thumb */
-    border: 3px solid #333; /* Matches the track to create a "floating" effect for the thumb */
+    background-color: #2979FF;
+    border-radius: 6px;
+    border: 3px solid #333;
 }
 
-/* Hover effects for the scrollbar thumb */
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #448AFF; /* A lighter shade for hover effect */
+    background-color: #448AFF;
 }
-/* Base styles for the form elements */
-form {
-    background-color: #222; /* Dark background for the form */
-    color: #fff; /* Light text color for contrast */
-    padding: 20px;
-    border-radius: 8px; /* Optional: rounded corners */
-  }
 
-  /* Styling for form inputs and textareas */
-  input[type="text"],
-  input[type="password"],
-  input[type="email"],
-  textarea {
-    background-color: #333; /* Darker background for inputs */
-    color: #fff; /* Light text color */
+form {
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+    background-color: #333;
+    color: #fff;
     border: none;
     outline: none;
     padding: 10px;
-    margin: 5px 0; /* Add some space between inputs */
-    width: calc(100% - 22px); /* Full width minus padding */
-    border-radius: 4px; /* Rounded corners for inputs */
-  }
+    margin: 5px 0;
+    width: calc(100% - 22px);
+    border-radius: 4px;
+}
 
-  /* Styling for select elements */
-  select {
+select {
     background-color: #333;
     color: #fff;
     padding: 10px;
     margin: 5px 0;
     width: 100%;
     border-radius: 4px;
-    -webkit-appearance: none; /* Removes default styling for select dropdown */
+    -webkit-appearance: none;
     appearance: none;
-  }
+}
 
-  /* Styling for labels */
-  label {
-    display: block; /* Ensure labels are block level for better layout */
+label {
+    display: block;
     margin-bottom: 5px;
-  }
+}
 
-  /* Styling for buttons */
-  button {
-    background-color: #2979FF; /* Neon color for buttons */
+button {
+    background-color: #2979FF;
     color: #fff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    border-radius: 4px; /* Rounded corners for buttons */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-  }
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
 
-  button:hover {
-    background-color: #448AFF; /* Lighter shade for hover effect */
-  }
+button:hover {
+    background-color: #448AFF;
+}
 
-  /* Optionally: style focus state for inputs and buttons for accessibility */
-  input[type="text"]:focus,
-  input[type="password"]:focus,
-  input[type="email"]:focus,
-  textarea:focus,
-  button:focus {
-    box-shadow: 0 0 0 2px #448AFF; /* Adds a neon glow effect */
-  }
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+button:focus {
+    box-shadow: 0 0 0 2px #448AFF;
+}
 
-  /* Base styles for the table */
 table {
     width: 100%;
-    border-collapse: collapse; /* Collapses border to avoid double borders */
-    background-color: #333; /* Dark background */
-    color: #fff; /* Light text color for readability */
-    border-radius: 8px; /* Rounded corners for the table */
-    overflow: hidden; /* Ensures the rounded corners include the first and last rows */
-    margin-bottom: 20px; /* Space below the table */
-  }
+    border-collapse: collapse;
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
 
-  /* Styles for table headers */
-  th {
-    background-color: #444; /* Slightly lighter than table background for distinction */
-    color: #ff00ff; /* Neon color for headers */
+th {
+    background-color: #444;
+    color: #00b7ff;
     text-align: left;
-    padding: 10px; /* Spacing inside header cells */
+    padding: 10px;
     font-size: 16px;
-  }
+}
 
-  /* Styles for table rows */
-  tr {
-    border-bottom: 1px solid #555; /* Subtle row separators */
-  }
+tr {
+    border-bottom: 1px solid #555;
+}
 
-  /* Styles for table data cells */
-  td {
-    padding: 8px; /* Spacing inside data cells */
+td {
+    padding: 8px;
     font-size: 14px;
-  }
+}
 
-  /* Hover effect for rows */
-  tr:hover {
-    background-color: #555; /* Dark hover state for better interactivity */
-  }
+tr:hover {
+    background-color: #555;
+}
 
-  /* Style for the table body to differentiate from the header */
-  tbody tr:nth-child(odd) {
-    background-color: #383838; /* Slightly varied background for odd rows */
-  }
+tbody tr:nth-child(odd) {
+    background-color: #383838;
+}
 
-  /* Responsive design for tables: Consider a mobile-friendly layout or using a wrapper for horizontal scrolling on smaller screens. */
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     .table-responsive {
-      overflow-x: auto; /* Allows horizontal scrolling on smaller screens */
+      overflow-x: auto;
     }
-  }
+}

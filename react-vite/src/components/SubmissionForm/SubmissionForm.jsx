@@ -70,8 +70,6 @@ const handleSubmit = async (e) => {
     }
 };
 
-
-
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -121,6 +119,7 @@ const handleSubmit = async (e) => {
           name="file"
           accept=".mp3, .wav"
           onChange={handleFileChange}
+          required
         />
       </div>
       <button type="submit" disabled={loading}>
