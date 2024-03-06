@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteOpportunity } from '../../redux/opportunities';
+import './Opportunity.css';
 
 const Opportunity = ({ opportunity }) => {
   const sessionUser = useSelector((state) => state.session.user);

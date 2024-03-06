@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createNewSubmission } from '../../redux/submissions';
 import { useLocation } from 'react-router-dom';
+import "./SubmissionForm.css";
 
 const SubmissionForm = ({ opportunityId }) => {
   const dispatch = useDispatch();
@@ -79,6 +80,7 @@ const handleSubmit = async (e) => {
           name="name"
           value={submissionDetails.name}
           onChange={handleChange}
+          type='text'
           required
         />
       </div>
@@ -122,7 +124,7 @@ const handleSubmit = async (e) => {
           required
         />
       </div>
-      <button type="submit" disabled={loading}>
+      <button className='submit-button' type="submit" disabled={loading}>
       {loading ? 'Submitting...' : 'Submit'}
     </button>
     {successMessage && <div>{successMessage}</div>}

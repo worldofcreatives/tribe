@@ -1,8 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #121212;
-    color: #c0c0c0;
+    /* background-color: #121212; */
+    color: #232323;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -50,16 +50,17 @@ a:hover {
 
 ::-webkit-scrollbar {
     width: 12px;
+
 }
 
 ::-webkit-scrollbar-track {
-    background: #333;
+    background: #e6e6e6;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #2979FF;
     border-radius: 6px;
     border: 3px solid #333;
+    background-color: #f4d600;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -67,15 +68,17 @@ a:hover {
 }
 
 form {
-    background-color: #222;
+    background-color: #1e1e1e;
     color: #fff;
     padding: 20px;
     border-radius: 8px;
+    border: 3px solid #333;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="number"],
 textarea {
     background-color: #333;
     color: #fff;
@@ -84,7 +87,7 @@ textarea {
     padding: 10px;
     margin: 5px 0;
     width: calc(100% - 22px);
-    border-radius: 4px;
+    /* border-radius: 4px; */
 }
 
 select {
@@ -104,25 +107,32 @@ label {
 }
 
 button {
-    background-color: #2979FF;
+    background-color: #000000;
     color: #fff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s;
+    font-size: 16px;
 }
 
 button:hover {
-    background-color: #448AFF;
+    background-color: #f4d600;
+    color:#000
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus,
-textarea:focus,
-button:focus {
-    box-shadow: 0 0 0 2px #448AFF;
+textarea:focus {
+    /* width: 100%; */
+    border-collapse: collapse;
+    background-color: #333;
+    color: #fff;
+    /* border-radius: 8px; */
+    overflow: hidden;
+    /* margin-bottom: 20px; */
 }
 
 table {
@@ -130,14 +140,14 @@ table {
     border-collapse: collapse;
     background-color: #333;
     color: #fff;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     overflow: hidden;
     margin-bottom: 20px;
 }
 
 th {
-    background-color: #444;
-    color: #00b7ff;
+    background-color: #000000;
+    color: #f4d600;
     text-align: left;
     padding: 10px;
     font-size: 16px;

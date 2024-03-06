@@ -47,7 +47,7 @@ const OpportunityUpdateForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='opp-form' onSubmit={handleSubmit} >
        <div>
          <label htmlFor="name">Name</label>
          <input
@@ -98,7 +98,7 @@ const OpportunityUpdateForm = () => {
           onChange={handleChange}
         />
       </div>
-      <button type="submit">Update Opportunity</button>
+      <button className='opp-button' type="submit">Update Opportunity</button>
     </form>
   );
 };

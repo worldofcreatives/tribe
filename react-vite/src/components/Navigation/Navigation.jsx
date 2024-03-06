@@ -19,25 +19,31 @@ function Navigation() {
 return (
   <nav className="navigation">
     <a href="/" className="logo-link">
-      <img className="logo" src="/logo-01.png" alt="PackTune Logo" />
+      <img className="logo" src="https://uploads-ssl.webflow.com/5d6dde2cb8496e3f669a4b75/65e8b7a32db811c3f6f252ac_logo.jpg" alt="PackTune Logo" />
     </a>
     <ul className="nav-links">
       {isAuthenticated && (
         <>
           <div className="content-nav">
-            <li>
+            {/* <li>
               <NavLink to="/" activeClassName="active">Home</NavLink>
+            </li> */}
+            <li>
+              <NavLink to="/myopps" activeClassName="active">
+              <i class="fas fa-th-large"></i>
+              Dashboard</NavLink>
             </li>
 
             <li>
-              <NavLink to="/opps" activeClassName="active">Opps</NavLink>
+              <NavLink to="/opps" activeClassName="active">
+              <i class="fas fa-music"></i>
+              Opps</NavLink>
             </li>
 
             <li>
-              <NavLink to="/opps/form" activeClassName="active">Add New Opp</NavLink>
-            </li>
-            <li>
-              <NavLink to="/myopps" activeClassName="active">My Opps</NavLink>
+              <NavLink to="/opps/form" activeClassName="active">
+              <i class="fas fa-plus"></i>
+              Add New Opp</NavLink>
             </li>
             <li>
 

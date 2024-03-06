@@ -5,7 +5,7 @@
 
   .opportunities-sidebar {
     width: 30%;
-    border-right: 1px solid #ccc;
+    border-right: 3px solid #eeeeee;
     overflow-y: auto; /* Enable vertical scroll */
     max-height: 900vh;
     padding: 0;

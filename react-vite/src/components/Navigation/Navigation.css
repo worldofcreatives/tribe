@@ -6,7 +6,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1A1A1D; /* Dark background */
+  /* background-color: #1A1A1D; */
   padding: 0 20px;
   height: 60px;
 }
@@ -16,7 +16,7 @@
 }
 
 .logo {
-  height: 50px; /* Adjust based on your logo's size */
+  width: 170px;
 }
 
 .nav-links {
@@ -31,25 +31,21 @@
 }
 
 .nav-links li a {
-  color: #C5C6C7; /* Light grey text */
+  color: #000; /* Light grey text */
   text-decoration: none;
   padding: 10px 15px;
   transition: background-color 0.3s ease;
 }
 
 .nav-links li a:hover, .nav-links li a.active {
-  background-color: #4E4E50;
+  background-color: #ffe600;
   border-radius: 5px;
+  border: 3px solid #000;
 }
 
 .logout-button {
-  background-color: #6B6E70; /* Lighter grey */
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  background-color: #fff; /* Lighter grey */
+  color: #bcbcbc;
 }
 
 .logout-button:hover {
@@ -72,4 +68,11 @@
 /* Extra styling for the content-nav section if needed */
 .content-nav {
   display: flex;
+  align-items: center;
 }
+
+.nav-links i {
+  margin-right: 5px;
+}
+
+

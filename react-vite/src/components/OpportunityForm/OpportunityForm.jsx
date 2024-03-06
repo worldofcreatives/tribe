@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createOpportunity } from '../../redux/opportunities';
 import { useNavigate } from 'react-router-dom';
+import './OpportunityForm.css';
 
 const OpportunityForm = () => {
   const dispatch = useDispatch();
@@ -71,8 +72,8 @@ const OpportunityForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} encType="multipart/form-data">
-      {/* Name input */}
+    <form className="opp-form" onSubmit={handleSubmit} encType="multipart/form-data">
+      <h2>Create a New Opportunity</h2>
       <div>
         <label htmlFor="name">Name</label>
         <input
@@ -126,7 +127,7 @@ const OpportunityForm = () => {
       {errors.description && <p className="error">{errors.description}</p>}
       {errors.budget && <p className="error">{errors.budget}</p>}
 
-      <button type="submit" disabled={loading}>
+      <button className='opp-button' type="submit" disabled={loading}>
         {loading ? 'Creating...' : 'Create Opportunity'}
       </button>
     </form>
