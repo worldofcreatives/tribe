@@ -39,7 +39,7 @@ def create_opportunity():
     if not current_user.is_company():
         return jsonify({"error": "Unauthorized"}), 403
 
-    company = Company.query.filter_by(user_id=current_user.id).first()
+    # company = Company.query.filter_by(user_id=current_user.id).first()
 
     form = OpportunityForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
@@ -50,7 +50,7 @@ def create_opportunity():
             target_audience=form.target_audience.data,
             budget=form.budget.data,
             guidelines=form.guidelines.data,
-            company_id=company.id,
+            # company_id=company.id,
             user_id=current_user.id
         )
         try:
