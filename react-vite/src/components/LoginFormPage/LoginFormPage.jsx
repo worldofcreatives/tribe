@@ -31,6 +31,32 @@ function LoginFormPage() {
     }
   };
 
+  const demoLogin1 = async () => {
+    await dispatch(
+      thunkLogin({
+        email: "demo@aa.io",
+        password: "password",
+      })
+    ).catch((res) => {
+      if (res.data && res.data.errors) setErrors(res.data.errors);
+    });
+
+    navigate("/opps");
+  };
+
+  const demoLogin2 = async () => {
+    await dispatch(
+      thunkLogin({
+        email: "charlie@example.com",
+        password: "password",
+      })
+    ).catch((res) => {
+      if (res.data && res.data.errors) setErrors(res.data.errors);
+    });
+
+    navigate("/opps");
+  };
+
   return (
     <>
       <h1>Log In</h1>
@@ -58,6 +84,10 @@ function LoginFormPage() {
         </label>
         {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
+        <div>
+        <button onClick={demoLogin1}>Demo User 1</button>
+        <button onClick={demoLogin2}>Demo User 2</button>
+        </div>
       </form>
     </>
   );
