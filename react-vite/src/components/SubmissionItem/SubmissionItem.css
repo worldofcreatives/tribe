@@ -1,9 +1,35 @@
 /* SubmissionItem.css */
 .submission-item {
     cursor: pointer;
-    /* Add more styles here */
   }
 
-  .submission-item:hover {
-    background-color: #f2f2f2; /* Example hover state */
-  }
+.submission-item:hover {
+  background-color: #f2f2f2; /* Example hover state */
+}
+
+.submission-item-container {
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin: 20px;
+  outline: 3px solid #e7e7e7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.submission-status-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.submission-item p {
+  margin: 2px;
+}
+
+.sub-left {
+  display: flex;
+  align-items: center;
+}
