@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchSubmissionsForOpportunity } from '../../redux/submissions';
 import SubmissionItem from '../SubmissionItem';
 import MusicPlayer from '../MusicPlayer/MusicPlayer';
+import './Submissions.css';
 
 const Submissions = () => {
   const { oppId } = useParams();
@@ -55,26 +56,10 @@ const Submissions = () => {
     ? submissions
     : submissions.filter((submission) => submission.creator_id === user.id);
 
-//   return (
-//     <div>
-//       <h2>Submissions for Opportunity {oppId}</h2>
-//       <MusicPlayer audioUrl={currentSong} />
-//       {visibleSubmissions.length > 0 ? (
-//         <ul>
-//           {visibleSubmissions.map((submission) => (
-//             <SubmissionItem key={submission.id} submission={submission} onPlay={playSong} />
-//           ))}
-//         </ul>
-//       ) : (
-//         <p>No submissions found.</p>
-//       )}
-//     </div>
-//   );
-// };
 return (
   <div>
+  <div className='sub-top'>
     <h2>Submissions for Opportunity {oppId}</h2>
-    <MusicPlayer audioUrl={currentSong} />
     {statusOrder.map(status => (
       organizedSubmissions[status] && organizedSubmissions[status].length > 0 && (
         <div key={status}>
@@ -88,6 +73,10 @@ return (
       )
     ))}
   </div>
+    <div className="music-player-wrapper">
+      <MusicPlayer audioUrl={currentSong} />
+    </div>
+    </div>
 );
 };
 

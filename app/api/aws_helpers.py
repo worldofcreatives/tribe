@@ -21,6 +21,17 @@ s3 = boto3.client(
     aws_secret_access_key=os.environ.get("S3_SECRET"),
 )
 
+def get_binary_file(bucket, key):
+    try:
+        response = s3.get_object(Bucket=bucket, Key=key)
+        object_content = response['Body'].read()
+
+        return object_content
+
+    except Exception as e:
+        return e
+
+
 file_url = s3.generate_presigned_url('get_object',
     Params={'Bucket': 'your-bucket-name',
             'Key': 'your-file-key',
@@ -74,3 +85,4 @@ def remove_file_from_s3(url):
     except Exception as e:
         return {"errors": str(e)}
     return True
+
