@@ -59,7 +59,7 @@ const Submissions = () => {
 return (
   <div>
   <div className='sub-top'>
-    <h2>Submissions for Opportunity {oppId}</h2>
+    <h2>Submissions</h2>
     {statusOrder.map(status => (
       organizedSubmissions[status] && organizedSubmissions[status].length > 0 && (
         <div key={status}>

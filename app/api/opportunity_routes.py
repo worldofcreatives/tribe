@@ -187,13 +187,17 @@ def get_submissions_for_opportunity(id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    # Query for the company associated with the current user
-    company = Company.query.filter_by(user_id=current_user.id).first()
-    if not company:
-        return jsonify({"error": "Access denied. User is not associated with any company."}), 403
+    # # Query for the company associated with the current user
+    # company = Company.query.filter_by(user_id=current_user.id).first()
+    # if not company:
+    #     return jsonify({"error": "Access denied. User is not associated with any company."}), 403
+
+    # # Ensure the current user is authorized to view submissions for the opportunity
+    # if opportunity.company_id != company.id:
+    #     return jsonify({"error": "Access denied. User did not create this opportunity."}), 403
 
     # Ensure the current user is authorized to view submissions for the opportunity
-    if opportunity.company_id != company.id:
+    if opportunity.user_id != current_user.id:
         return jsonify({"error": "Access denied. User did not create this opportunity."}), 403
 
     submissions = Submission.query.filter_by(opportunity_id=id).all()
@@ -237,12 +241,12 @@ def update_submission_status(opp_id, sub_id):
     if submission.opportunity_id != opp_id:
         return jsonify({"error": "Submission does not belong to the given opportunity"}), 400
 
-    company = Company.query.filter_by(user_id=current_user.id).first()
-    if not company:
-        return jsonify({"error": "Unauthorized to update submission status - User is not associated with any company"}), 403
+    # company = Company.query.filter_by(user_id=current_user.id).first()
+    # if not company:
+    #     return jsonify({"error": "Unauthorized to update submission status - User is not associated with any company"}), 403
 
     opportunity = Opportunity.query.get(opp_id)
-    if not opportunity or company.id != opportunity.company_id:
+    if not opportunity or current_user.id != opportunity.user_id:
         return jsonify({"error": "Unauthorized to update submission status"}), 403
 
     data = request.get_json()
@@ -273,14 +277,19 @@ def delete_submission(opp_id, sub_id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    creator = Creator.query.filter_by(user_id=current_user.id).first()
-    if creator and submission.creator_id == creator.id:
-        db.session.delete(submission)
-        db.session.commit()
-        return jsonify({"message": "Submission successfully deleted"}), 200
+    # creator = Creator.query.filter_by(user_id=current_user.id).first()
+    # if creator and submission.creator_id == creator.id:
+    #     db.session.delete(submission)
+    #     db.session.commit()
+    #     return jsonify({"message": "Submission successfully deleted"}), 200
 
-    company = Company.query.filter_by(user_id=current_user.id).first()
-    if company and opportunity.company_id == company.id:
+    # company = Company.query.filter_by(user_id=current_user.id).first()
+    # if company and opportunity.company_id == company.id:
+    #     db.session.delete(submission)
+    #     db.session.commit()
+    #     return jsonify({"message": "Submission successfully deleted"}), 200
+
+    if opportunity.user_id == current_user.id:
         db.session.delete(submission)
         db.session.commit()
         return jsonify({"message": "Submission successfully deleted"}), 200

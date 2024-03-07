@@ -38,7 +38,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
   useEffect(() => {
     const getDownload = async () => {
       const bucketName = 'packtune';
-      const fileName = submission.file_url; // Make sure this is the S3 key for the file
+      const fileName = '1c041d0ed38b444095468156a7d67742.mp3'; // Make sure this is the S3 key for the file
       const response = await fetch(`/api/aws/download/${bucketName}/${fileName}`);
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
@@ -72,13 +72,13 @@ return (
         <button onClick={handleDelete} title="Delete" className='delete' >
           <i className="fas fa-trash-alt"></i>
         </button>
-      {/* <a
+      <a
         href={submission.file_url}
         download={generateFileName(submission.file_url)}
         className="download-button"
       >
         Download Song
-      </a> */}
+      </a>
       <a id='download-link' href="#">Download</a>
     </div>
   </div>
