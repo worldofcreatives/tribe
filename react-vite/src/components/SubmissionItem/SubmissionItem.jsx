@@ -38,17 +38,37 @@ const SubmissionItem = ({ submission, onPlay }) => {
   useEffect(() => {
     const getDownload = async () => {
       const bucketName = 'packtune';
-      const fileName = '1c041d0ed38b444095468156a7d67742.mp3'; // Make sure this is the S3 key for the file
-      const response = await fetch(`/api/aws/download/${bucketName}/${fileName}`);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const downloadLink = document.getElementById('download-link');
-      downloadLink.href = url;
-      downloadLink.download = fileName; // Optional: Set download attribute to define filename
+      const fileKey = submission.file_url.split('/').pop();
+      try {
+        const response = await fetch(
+          `/api/aws/download/${bucketName}/${fileKey}`
+        );
+        console.log(`🦈 --------------------------------------🦈`);
+        console.log(`🦈 ~ getDownload ~ response:`, response);
+        console.log(`🦈 --------------------------------------🦈`);
+
+        if (!response.ok) {
+          throw new Error(
+            `Server responded with a status: ${response.status} ${response.statusText}`
+          );
+        }
+
+        const blob = await response.blob();
+        if (blob.size === 0) {
+          throw new Error('Downloaded file is empty.');
+        }
+
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.getElementById('download-link');
+        downloadLink.href = url;
+        downloadLink.download = fileKey;
+      } catch (error) {
+        console.error(`Error during file download: ${error.message}`);
+      }
     };
 
     getDownload();
-  }, []);
+  }, [submission.file_url]);
 
 return (
   <div className="submission-item-container">
@@ -72,13 +92,6 @@ return (
         <button onClick={handleDelete} title="Delete" className='delete' >
           <i className="fas fa-trash-alt"></i>
         </button>
-      <a
-        href={submission.file_url}
-        download={generateFileName(submission.file_url)}
-        className="download-button"
-      >
-        Download Song
-      </a>
       <a id='download-link' href="#">Download</a>
     </div>
   </div>
@@ -86,43 +99,3 @@ return (
 };
 
 export default SubmissionItem;
-
-
-
-
-//   return (
-//     <div className="submission-item-container">
-//       <div className='sub-left'>
-//       <button onClick={() => onPlay(submission.file_url)}>
-//         {submission.isPlaying ? 'Pause' : 'Play'}
-//       </button>
-//       <div className="submission-item" onClick={goToSubmissionDetails}>
-//         <p><strong>{submission.name}</strong></p>
-//         <p>by {submission.username}</p>
-//         <p><strong>Status:</strong> {submission.status}</p>
-//       </div>
-//       </div>
-
-//       <div className="submission-status-buttons">
-//         {statusOptions.map((status) => (
-//           <button
-//             key={status}
-//             onClick={() => handleStatusChange(status)}
-//             disabled={submission.status === status}
-//             className={submission.status === status ? 'active' : ''}
-//           >
-//             {status}
-//           </button>
-//         ))}
-//       <button onClick={handleDelete}>Delete</button>
-//         <a
-//           href={submission.file_url}
-//           download={submission.name}
-//           className="download-button"
-//         >
-//           Download Song
-//         </a>
-//       </div>
-//     </div>
-//   );
-// };
