@@ -128,7 +128,7 @@ const handleSubmit = async (e) => {
       {loading ? 'Submitting...' : 'Submit'}
     </button>
     {successMessage && <div>{successMessage}</div>}
-    {errorMessage && <div>{errorMessage}</div>}
+    {errorMessage && <div className="error">{errorMessage}</div>}
     </form>
   );
 };

@@ -73,11 +73,11 @@ def update_opportunity(id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    company = Company.query.filter_by(user_id=current_user.id).first()
-    if not company:
-        return jsonify({"error": "Unauthorized - User is not associated with any company"}), 403
+    # company = Company.query.filter_by(user_id=current_user.id).first()
+    # if not company:
+    #     return jsonify({"error": "Unauthorized - User is not associated with any company"}), 403
 
-    if opportunity.company_id != company.id:
+    if opportunity.user_id != current_user.id:
         return jsonify({"error": "Unauthorized"}), 403
 
     form = OpportunityForm()
@@ -108,11 +108,11 @@ def delete_opportunity(id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    company = Company.query.filter_by(user_id=current_user.id).first()
-    if not company:
-        return jsonify({"error": "Unauthorized - User is not associated with any company"}), 403
+    # company = Company.query.filter_by(user_id=current_user.id).first()
+    # if not company:
+    #     return jsonify({"error": "Unauthorized - User is not associated with any company"}), 403
 
-    if opportunity.company_id != company.id:
+    if opportunity.user_id != current_user.id:
         return jsonify({"error": "Unauthorized"}), 403
 
     try:
@@ -218,12 +218,15 @@ def get_specific_submission(opp_id, sub_id):
     if not opportunity:
         return jsonify({"error": "Opportunity not found"}), 404
 
-    creator = Creator.query.filter_by(user_id=current_user.id).first()
-    if creator and submission.creator_id == creator.id:
-        return jsonify(submission.to_dict()), 200
+    # creator = Creator.query.filter_by(user_id=current_user.id).first()
+    # if creator and submission.creator_id == creator.id:
+    #     return jsonify(submission.to_dict()), 200
 
-    company = Company.query.filter_by(user_id=current_user.id).first()
-    if company and opportunity.company_id == company.id:
+    # company = Company.query.filter_by(user_id=current_user.id).first()
+    # if company and opportunity.company_id == company.id:
+    #     return jsonify(submission.to_dict()), 200
+
+    if opportunity.user_id == current_user.id:
         return jsonify(submission.to_dict()), 200
 
     return jsonify({"error": "Access denied."}), 403

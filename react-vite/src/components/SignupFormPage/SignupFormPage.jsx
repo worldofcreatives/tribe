@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { thunkSignup } from "../../redux/session";
+import "./SignupForm.css";
 
 function SignupFormPage() {
   const dispatch = useDispatch();
@@ -15,14 +16,52 @@ function SignupFormPage() {
 
   if (sessionUser) return <Navigate to="/" replace={true} />;
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (password !== confirmPassword) {
+  //     return setErrors({
+  //       confirmPassword:
+  //         "Confirm Password field must be the same as the Password field",
+  //     });
+  //   }
+
+  //   const serverResponse = await dispatch(
+  //     thunkSignup({
+  //       email,
+  //       username,
+  //       password,
+  //     })
+  //   );
+
+  //   if (serverResponse) {
+  //     setErrors(serverResponse);
+  //   } else {
+  //     navigate("/opps");
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let newErrors = {};
     if (password !== confirmPassword) {
-      return setErrors({
-        confirmPassword:
-          "Confirm Password field must be the same as the Password field",
-      });
+      newErrors.confirmPassword = "Confirm Password field must be the same as the Password field";
+    }
+    if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+    if (!/^[\w\.-]+@[\w\.-]+\.\w+$/.test(email)) {
+      newErrors.email = "Invalid email format.";
+    }
+    if (username.length < 3 || username.length > 40) {
+      newErrors.username = "Username must be between 3 and 40 characters.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
 
     const serverResponse = await dispatch(
@@ -38,12 +77,13 @@ function SignupFormPage() {
     } else {
       navigate("/opps");
     }
-  };
+};
+
 
   return (
     <>
       <h1>Sign Up</h1>
-      {errors.server && <p>{errors.server}</p>}
+      {errors.server && <p className="error">{errors.server}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -54,7 +94,7 @@ function SignupFormPage() {
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className="error">{errors.email}</p>}
         <label>
           Username
           <input
@@ -64,7 +104,7 @@ function SignupFormPage() {
             required
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className="error">{errors.username}</p>}
         <label>
           Password
           <input
@@ -74,7 +114,7 @@ function SignupFormPage() {
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className="error">{errors.password}</p>}
         <label>
           Confirm Password
           <input
@@ -84,7 +124,7 @@ function SignupFormPage() {
             required
           />
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+        {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
         <button type="submit">Sign Up</button>
       </form>
     </>

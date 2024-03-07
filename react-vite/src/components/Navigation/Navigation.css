@@ -31,6 +31,7 @@
 }
 
 .nav-links li a {
+  color: #000; /* Light grey text */
   text-decoration: none;
   padding: 10px 15px;
   transition: background-color 0.3s ease;
@@ -53,8 +54,7 @@
 
 /* Styles for the log-in and sign-up links */
 .log-in, .sign-up {
-  background-color: #0B0C10; /* Very dark grey - almost black */
-  color: #ffffff; /* Bright cyan for buttons */
+  color: #66FCF1; /* Bright cyan for buttons */
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
@@ -62,7 +62,6 @@
 
 .log-in:hover, .sign-up:hover {
   background-color: #1F2833; /* Dark blue/grey shade for hover */
-  color: #000;
 }
 
 /* Extra styling for the content-nav section if needed */

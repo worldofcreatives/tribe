@@ -57,15 +57,13 @@ return (
       {!isAuthenticated && (
         <>
           <li>
-            <NavLink className="log-in" to="/login" activeClassName="active">
+            <NavLink className="log-in" to="/login">
               Login
             </NavLink>
           </li>
           <li>
             <NavLink
-              className="sign-up"
-              to="/signup"
-              activeClassName="active">
+              className="sign-up" to="/signup">
               Sign Up
             </NavLink>
           </li>
