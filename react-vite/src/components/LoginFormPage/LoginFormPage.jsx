@@ -58,11 +58,11 @@ function LoginFormPage() {
   };
 
   return (
-    <>
+    <div className="log-in-form">
       <h1>Log In</h1>
       {errors.length > 0 &&
         errors.map((message) => <p key={message} className="error">{message}</p>)}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} >
         <label>
           Email
           <input
@@ -89,7 +89,7 @@ function LoginFormPage() {
         <button onClick={demoLogin2}>Demo User 2</button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
 
