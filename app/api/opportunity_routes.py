@@ -132,7 +132,6 @@ def is_allowed_file(filename, allowed_extensions):
 @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
 @login_required
 def create_submission(id):
-    # return "The POST route works!"
 
     form = SubmissionForm()
     form['csrf_token'].data = request.cookies['csrf_token']
@@ -160,7 +159,7 @@ def create_submission(id):
             return jsonify({"errors": f"File upload failed: {error_message}"}), 500
 
         new_submission = Submission(
-            creator_id=current_user.id,
+            # creator_id=current_user.id,
             opportunity_id=opportunity.id,
             user_id=current_user.id,
             username=current_user.username,

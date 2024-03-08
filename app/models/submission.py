@@ -10,7 +10,7 @@ class Submission(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    creator_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
+    # creator_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('creators.id')), nullable=False)
     opportunity_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('opportunities.id')), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     username = db.Column(db.String(40), nullable=False)
@@ -35,7 +35,7 @@ class Submission(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'creator_id': self.creator_id,
+            # 'creator_id': self.creator_id,
             'opportunity_id': self.opportunity_id,
             'user_id': self.user_id,
             'username': self.username,
