@@ -24,7 +24,7 @@ class Submission(db.Model):
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship to Creator
-    creator = db.relationship('Creator', backref=db.backref('submissions', lazy=True))
+    # creator = db.relationship('Creator', backref=db.backref('submissions', lazy=True))
 
     # Relationship to Opportunity
     opportunity = db.relationship('Opportunity', backref=db.backref('submissions', lazy=True))
