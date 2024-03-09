@@ -3,11 +3,21 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 90vw;
     background: #000; /* Or any color you want */
     padding: 10px; /* Adjust padding as needed */
     box-shadow: 0 -2px 5px rgba(0,0,0,0.3); /* Optional: adds a slight shadow for better visibility */
     z-index: 1000; /* Ensure it stays above other content */
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+  }
+
+  .song-name {
+    margin-bottom: 10px;
   }
 
   .sub-top {
@@ -15,6 +25,13 @@
     justify-content: space-between;
     flex-direction: column;
     padding-bottom: 60px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .sub-top-2 {
+    display: flex;
+    justify-content: space-between;
     max-width: 800px;
     margin: 0 auto;
   }

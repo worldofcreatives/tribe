@@ -12,17 +12,18 @@ const Submissions = () => {
   const { user } = useSelector((state) => state.session);
   const { submissions, loading, error } = useSelector((state) => state.submissions);
   const isCompany = user && user.type === 'Company';
-  const [currentSong, setCurrentSong] = useState('');
+  const [currentSong, setCurrentSong] = useState({ url: '', name: '' });
   const [playing, setPlaying] = useState(false);
   const navigate = useNavigate();
 
-  const playSong = (songUrl) => {
-    if (currentSong !== songUrl) {
-      setCurrentSong(songUrl);
+  const playSong = (songUrl, songName) => {
+    if (currentSong.url !== songUrl) {
+      setCurrentSong({ url: songUrl, name: songName });
     } else {
-      setCurrentSong(''); // If the same song is clicked, stop playing
+      setCurrentSong({ url: '', name: '' }); // If the same song is clicked, stop playing
     }
   };
+
 
   useEffect(() => {
     if (isCompany || user) {
@@ -89,8 +90,10 @@ const Submissions = () => {
           {statusOrder.map(status => (
             organizedSubmissions[status] && organizedSubmissions[status].length > 0 && (
               <div key={status} className="status-section">
+                <div className='sub-top-2'>
                 <h3>{status}</h3>
                 <button onClick={() => downloadAllFiles(status)} className="download-all-button">Download All {status}</button>
+                </div>
                 <ul>
                   {organizedSubmissions[status].map(submission => (
                     <SubmissionItem key={submission.id} submission={submission} onPlay={playSong} />
@@ -101,7 +104,7 @@ const Submissions = () => {
           ))}
         </div>
         <div className="music-player-wrapper">
-          <MusicPlayer audioUrl={currentSong} />
+          <MusicPlayer audioUrl={currentSong.url} songName={currentSong.name} />
         </div>
       </div>
     );

@@ -69,7 +69,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
 return (
   <div className="submission-item-container">
     <div className='sub-left'>
-      <button onClick={() => onPlay(submission.file_url)}>
+      <button onClick={() => onPlay(submission.file_url, submission.name)}>
         {submission.isPlaying ? 'Pause' : 'Play'}
       </button>
       <div className="submission-item" onClick={goToSubmissionDetails}>

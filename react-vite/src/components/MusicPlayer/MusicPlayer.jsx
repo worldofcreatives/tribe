@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player';
 
 
 // MusicPlayer component
-const MusicPlayer = ({ audioUrl }) => {
+const MusicPlayer = ({ audioUrl, songName }) => {
     const [playing, setPlaying] = useState(false);
     const currentPlayerUrl = useRef(audioUrl);
 
@@ -17,6 +17,7 @@ const MusicPlayer = ({ audioUrl }) => {
 
     return (
       <div>
+        {songName && <div className="song-name">{songName}</div>}
         <ReactPlayer
           url={audioUrl}
           playing={playing}
