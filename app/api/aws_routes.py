@@ -14,10 +14,11 @@ def get_file_from_s3(bucket_name, obj_name):
 
 @aws_routes.route('/download-all/<bucket_name>', methods=['POST'])
 def bulk_download_from_s3(bucket_name):
-    keys = request.json.get('fileKeys', [])
-    if not keys:
-        return jsonify({'error': 'No file keys provided'}), 400
+    submissions_details = request.json
+    if not submissions_details:
+        return jsonify({'error': 'No submissions details provided'}), 400
 
-    zip_file = get_binary_files_and_zip(bucket_name, keys)
+    # Adjust get_binary_files_and_zip to use submissions_details for custom file naming
+    zip_file = get_binary_files_and_zip(bucket_name, submissions_details)
 
     return send_file(zip_file, mimetype='application/zip', as_attachment=True, download_name="bulk_download.zip"), 200

@@ -33,25 +33,25 @@ def get_binary_file(bucket, key):
     except Exception as e:
         return e
 
-def get_binary_files_and_zip(bucket, keys):
+def get_binary_files_and_zip(bucket, submissions_details):
     in_memory_zip = io.BytesIO()
 
-    # Create a zip file in memory
     with zipfile.ZipFile(in_memory_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
-        for key in keys:
+        for submission in submissions_details:
+            file_key = submission['file_url'].split('/').pop()
+            custom_name = f"{submission['name']}_{submission['bpm']} BPM_({submission['username']}, {submission['collaborators']}, Major7eague).mp3"
+
             try:
-                response = s3.get_object(Bucket=bucket, Key=key)
+                response = s3.get_object(Bucket=bucket, Key=file_key)
                 object_content = response['Body'].read()
-                # Use the S3 key as the file name within the ZIP
-                zf.writestr(key, object_content)
+                zf.writestr(custom_name, object_content)
             except Exception as e:
-                print(f"Error fetching {key} from S3: {e}")
+                print(f"Error fetching {file_key} from S3: {e}")
                 continue
 
-    # Go to the beginning of the StringIO buffer
     in_memory_zip.seek(0)
-
     return in_memory_zip
+
 
 
 file_url = s3.generate_presigned_url('get_object',
