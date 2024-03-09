@@ -6,6 +6,7 @@ import { deleteSubmission, updateSubmissionStatus } from '../../redux/submission
 
 
 const SubmissionItem = ({ submission, onPlay }) => {
+  console.log("🚀 ~ SubmissionItem ~ submission:", submission)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const statusOptions = ['Pending', 'Reviewing', 'Accepted', 'Rejected'];
@@ -31,7 +32,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
   const generateFileName = (url) => {
     const extension = url.split('.').pop();
     const date = new Date().toISOString().slice(0, 10);
-    const fileName = `${submission.name}_${date}.${extension}`;
+    const fileName = `${submission.name}_${submission.bpm} BPM_(${submission.username}, ${submission.collaborators}, Major7eague).${extension}`;
     return fileName;
   };
 
@@ -40,17 +41,9 @@ const SubmissionItem = ({ submission, onPlay }) => {
       const bucketName = 'packtune';
       const fileKey = submission.file_url.split('/').pop();
       try {
-        const response = await fetch(
-          `/api/aws/download/${bucketName}/${fileKey}`
-        );
-        console.log(`🦈 --------------------------------------🦈`);
-        console.log(`🦈 ~ getDownload ~ response:`, response);
-        console.log(`🦈 --------------------------------------🦈`);
-
+        const response = await fetch(`/api/aws/download/${bucketName}/${fileKey}`);
         if (!response.ok) {
-          throw new Error(
-            `Server responded with a status: ${response.status} ${response.statusText}`
-          );
+          throw new Error(`Server responded with a status: ${response.status} ${response.statusText}`);
         }
 
         const blob = await response.blob();
@@ -61,7 +54,9 @@ const SubmissionItem = ({ submission, onPlay }) => {
         const url = URL.createObjectURL(blob);
         const downloadLink = document.getElementById('download-link');
         downloadLink.href = url;
-        downloadLink.download = fileKey;
+        // Use generateFileName to dynamically set the file name
+        const dynamicFileName = generateFileName(submission.file_url);
+        downloadLink.download = dynamicFileName;
       } catch (error) {
         console.error(`Error during file download: ${error.message}`);
       }
@@ -69,6 +64,7 @@ const SubmissionItem = ({ submission, onPlay }) => {
 
     getDownload();
   }, [submission.file_url]);
+
 
 return (
   <div className="submission-item-container">
