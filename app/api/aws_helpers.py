@@ -6,6 +6,8 @@ import os
 import uuid
 import logging
 import mimetypes
+import io
+import zipfile
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -30,6 +32,26 @@ def get_binary_file(bucket, key):
 
     except Exception as e:
         return e
+
+def get_binary_files_and_zip(bucket, keys):
+    in_memory_zip = io.BytesIO()
+
+    # Create a zip file in memory
+    with zipfile.ZipFile(in_memory_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for key in keys:
+            try:
+                response = s3.get_object(Bucket=bucket, Key=key)
+                object_content = response['Body'].read()
+                # Use the S3 key as the file name within the ZIP
+                zf.writestr(key, object_content)
+            except Exception as e:
+                print(f"Error fetching {key} from S3: {e}")
+                continue
+
+    # Go to the beginning of the StringIO buffer
+    in_memory_zip.seek(0)
+
+    return in_memory_zip
 
 
 file_url = s3.generate_presigned_url('get_object',

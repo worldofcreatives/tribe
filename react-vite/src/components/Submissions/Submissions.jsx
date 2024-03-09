@@ -56,28 +56,87 @@ const Submissions = () => {
     ? submissions
     : submissions.filter((submission) => submission.creator_id === user.id);
 
-return (
-  <div>
-  <div className='sub-top'>
-    <h2>Submissions</h2>
-    {statusOrder.map(status => (
-      organizedSubmissions[status] && organizedSubmissions[status].length > 0 && (
-        <div key={status}>
-          <h3>{status}</h3>
-          <ul>
-            {organizedSubmissions[status].map(submission => (
-              <SubmissionItem key={submission.id} submission={submission} onPlay={playSong} />
-            ))}
-          </ul>
+    const downloadAllFiles = async (status) => {
+      const submissionsToDownload = organizedSubmissions[status];
+      console.log("🚀 ~ downloadAllFiles ~ submissionsToDownload:", submissionsToDownload)
+
+      const fileKeys = submissionsToDownload.map(submission => submission.file_url.split('/').pop());
+
+      try {
+        const response = await fetch(`/api/aws/download-all/packtune`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Include other headers as required, such as authorization headers
+          },
+          body: JSON.stringify({ fileKeys })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to download files: ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${status}-submissions.zip`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error(`Error during bulk file download: ${error.message}`);
+      }
+    };
+
+    return (
+      <div>
+        <div className='sub-top'>
+          <h2>Submissions</h2>
+          {statusOrder.map(status => (
+            organizedSubmissions[status] && organizedSubmissions[status].length > 0 && (
+              <div key={status} className="status-section">
+                <h3>{status}</h3>
+                <button onClick={() => downloadAllFiles(status)} className="download-all-button">Download All {status}</button>
+                <ul>
+                  {organizedSubmissions[status].map(submission => (
+                    <SubmissionItem key={submission.id} submission={submission} onPlay={playSong} />
+                  ))}
+                </ul>
+              </div>
+            )
+          ))}
         </div>
-      )
-    ))}
-  </div>
-    <div className="music-player-wrapper">
-      <MusicPlayer audioUrl={currentSong} />
-    </div>
-    </div>
-);
-};
+        <div className="music-player-wrapper">
+          <MusicPlayer audioUrl={currentSong} />
+        </div>
+      </div>
+    );
+  };
+
+
+// return (
+//   <div>
+//   <div className='sub-top'>
+//     <h2>Submissions</h2>
+//     {statusOrder.map(status => (
+//       organizedSubmissions[status] && organizedSubmissions[status].length > 0 && (
+//         <div key={status}>
+//           <h3>{status}</h3>
+//           <ul>
+//             {organizedSubmissions[status].map(submission => (
+//               <SubmissionItem key={submission.id} submission={submission} onPlay={playSong} />
+//             ))}
+//           </ul>
+//         </div>
+//       )
+//     ))}
+//   </div>
+//     <div className="music-player-wrapper">
+//       <MusicPlayer audioUrl={currentSong} />
+//     </div>
+//     </div>
+// );
+// };
 
 export default Submissions;
