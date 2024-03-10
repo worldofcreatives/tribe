@@ -10,10 +10,8 @@ class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False, unique=True)
     name = db.Column(db.String(255), nullable=False)
-    company_name = db.Column(db.String(255), nullable=False)
     bio = db.Column(db.Text, nullable=True)
     logo = db.Column(db.String(255), nullable=True)
-    status = db.Column(db.String(50), default='Pre-Apply', nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -22,10 +20,8 @@ class Company(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'name': self.name,
-            'company_name': self.company_name,
             'bio': self.bio,
             'logo': self.logo,
-            'status': self.status,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }

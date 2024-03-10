@@ -6,6 +6,7 @@ from app.forms.submission_form import SubmissionForm
 from app.forms.feedback_form import FeedbackForm
 from sqlalchemy.exc import IntegrityError
 from ..api.aws_helpers import get_unique_filename, upload_file_to_s3
+import os
 
 opportunity_routes = Blueprint('opportunities', __name__)
 
@@ -129,52 +130,58 @@ def delete_opportunity(id):
 def is_allowed_file(filename, allowed_extensions):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in allowed_extensions
 
+# Assuming MAX_FILE_SIZE is defined at the top of your file
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB in bytes
+
+def file_size_under_limit(file):
+    file.seek(0, os.SEEK_END)  # Go to the end of the file
+    file_size = file.tell()  # Get the position of EOF
+    file.seek(0)  # Reset the file position to the beginning
+    return file_size <= MAX_FILE_SIZE
+
 @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
 @login_required
 def create_submission(id):
-
     form = SubmissionForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     opportunity = Opportunity.query.get(id)
 
     if form.validate_on_submit():
-
         file = form.file.data
-        print("🚀 ~ file:", file)
 
+        # Check both file type and file size
+        if file and is_allowed_file(file.filename, {"mp3", "wav"}) and file_size_under_limit(file):
+            file_name = get_unique_filename(file.filename)
+            file_url_response = upload_file_to_s3(file, file_name)
 
-        allowed_extensions = set(["mp3", "wav"])
+            if "url" in file_url_response:
+                new_submission = Submission(
+                    # creator_id=current_user.id,
+                    opportunity_id=opportunity.id,
+                    user_id=current_user.id,
+                    username=current_user.username,
+                    name=form.name.data,
+                    notes=form.notes.data,
+                    bpm=form.bpm.data,
+                    collaborators=form.collaborators.data,
+                    file_url=file_url_response["url"],
+                )
+                db.session.add(new_submission)
+                db.session.commit()
+                return jsonify(new_submission.to_dict()), 201
+            else:
+                error_message = file_url_response.get("errors", "Unknown error during file upload.")
+                return jsonify({"errors": f"File upload failed: {error_message}"}), 500
+        else:
+            # Return an appropriate error message if the file type is not allowed or file size exceeds the limit
+            if not is_allowed_file(file.filename, {"mp3", "wav"}):
+                return jsonify({"error": "File type not allowed"}), 400
+            if not file_size_under_limit(file):
+                return jsonify({"error": "File size exceeds limit"}), 400
 
-        if not is_allowed_file(file.filename, allowed_extensions):
-            return jsonify({"error": "File type not allowed"}), 400
-
-        file_name = get_unique_filename(file.filename)
-
-        file_url_response = upload_file_to_s3(file, file_name)
-
-        if "errors" in file_url_response:
-            error_message = file_url_response.get(
-                "errors", "Unknown error during file upload."
-            )
-            return jsonify({"errors": f"File upload failed: {error_message}"}), 500
-
-        new_submission = Submission(
-            # creator_id=current_user.id,
-            opportunity_id=opportunity.id,
-            user_id=current_user.id,
-            username=current_user.username,
-            name=form.name.data,
-            notes=form.notes.data,
-            bpm=form.bpm.data,
-            collaborators=form.collaborators.data,
-            file_url=file_url_response["url"],
-        )
-        db.session.add(new_submission)
-        db.session.commit()
-
-        return jsonify(new_submission.to_dict()), 201
     else:
         return jsonify({'errors': form.errors}), 400
+
 
 # GET /api/opportunities/:id/submissions - Get all submissions for an opportunity
 

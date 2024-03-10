@@ -16,7 +16,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
-    type = db.Column(db.String(50), default='Company', nullable=False)
+    type = db.Column(db.String(50), default='Creator', nullable=False)
+    status = db.Column(db.String(50), default='Pre-Apply', nullable=False)
     # company_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=True)
     # creator_id = db.Column(db.Integer, db.ForeignKey('creators.id'), nullable=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -51,6 +52,7 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email,
             'type': self.type,
+            'status': self.status,
             # 'company_id': self.company_id,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),

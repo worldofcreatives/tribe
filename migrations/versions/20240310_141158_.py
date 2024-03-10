@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: eb77325054f5
+Revision ID: ee98b4b91170
 Revises: 
-Create Date: 2024-03-08 09:45:39.012505
+Create Date: 2024-03-10 14:11:58.422236
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'eb77325054f5'
+revision = 'ee98b4b91170'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,9 +26,9 @@ def upgrade():
     )
     op.create_table('types',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('type_name', sa.String(length=255), nullable=False),
+    sa.Column('name', sa.String(length=255), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('type_name')
+    sa.UniqueConstraint('name')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -37,6 +37,7 @@ def upgrade():
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
     sa.Column('salt', sa.String(length=255), nullable=False),
     sa.Column('type', sa.String(length=50), nullable=False),
+    sa.Column('status', sa.String(length=50), nullable=False),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('updated_date', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -60,10 +61,28 @@ def upgrade():
     op.create_table('creators',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('status', sa.String(length=50), nullable=False),
+    sa.Column('first_name', sa.String(length=255), nullable=True),
+    sa.Column('last_name', sa.String(length=255), nullable=True),
+    sa.Column('stage_name', sa.String(length=255), nullable=True),
     sa.Column('profile_pic', sa.String(length=255), nullable=True),
     sa.Column('bio', sa.Text(), nullable=True),
+    sa.Column('phone', sa.String(length=20), nullable=True),
+    sa.Column('address_1', sa.String(length=255), nullable=True),
+    sa.Column('address_2', sa.String(length=255), nullable=True),
+    sa.Column('city', sa.String(length=100), nullable=True),
+    sa.Column('state', sa.String(length=100), nullable=True),
+    sa.Column('postal_code', sa.String(length=20), nullable=True),
+    sa.Column('portfolio_url', sa.String(length=255), nullable=True),
+    sa.Column('previous_projects', sa.Text(), nullable=True),
+    sa.Column('instagram', sa.String(length=255), nullable=True),
+    sa.Column('twitter', sa.String(length=255), nullable=True),
+    sa.Column('facebook', sa.String(length=255), nullable=True),
+    sa.Column('youtube', sa.String(length=255), nullable=True),
+    sa.Column('other_social_media', sa.Text(), nullable=True),
+    sa.Column('reference_name', sa.String(length=255), nullable=True),
+    sa.Column('reference_email', sa.String(length=255), nullable=True),
+    sa.Column('reference_phone', sa.String(length=20), nullable=True),
+    sa.Column('reference_relationship', sa.String(length=100), nullable=True),
     sa.Column('created_date', sa.DateTime(), nullable=False),
     sa.Column('updated_date', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
