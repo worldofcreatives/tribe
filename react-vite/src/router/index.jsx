@@ -10,6 +10,8 @@ import SubmissionDetails from '../components/SubmissionDetails/SubmissionDetails
 import OpportunityUpdateForm from '../components/OpportunityUpdateForm/OpportunityUpdateForm';
 import UserOpportunitiesTable from '../components/OpportunitiesChart/OpportunitiesChart';
 import LandingPage from '../components/LandingPage/LandingPage';
+import ProfileForm from '../components/ProfileForm';
+import ProfilePage from '../components/ProfilePage/ProfilePage';
 
 
 export const router = createBrowserRouter([
@@ -59,6 +61,14 @@ export const router = createBrowserRouter([
         path: "/myopps",
         element: <UserOpportunitiesTable />,
       },
+      {
+        path: "/profile/edit",
+        element: <ProfileForm />,
+      },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      }
     ],
   },
 ]);

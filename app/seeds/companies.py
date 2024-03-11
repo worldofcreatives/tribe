@@ -6,19 +6,15 @@ def seed_companies():
     company1 = Company(
         user_id=1,
         name='Demo Corp',
-        company_name='Demo Corporation',
         bio='A demo company for demonstration purposes.',
         logo='path/to/demo/logo.png',
-        status='Approved'
     )
 
     company2 = Company(
         user_id=5,
         name='Tech Innovations',
-        company_name='Innovative Tech Solutions',
         bio='Innovating the future of technology.',
         logo='path/to/tech/innovations/logo.png',
-        status='Pending'
     )
 
     # Add companies to the session

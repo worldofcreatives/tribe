@@ -9,7 +9,7 @@ class Company(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False, unique=True)
-    name = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), nullable=True)
     bio = db.Column(db.Text, nullable=True)
     logo = db.Column(db.String(255), nullable=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

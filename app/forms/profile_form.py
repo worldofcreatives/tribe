@@ -43,18 +43,18 @@ class ProfileForm(FlaskForm):
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!'),
         Optional()
     ])
-    name = StringField('Name', validators=[DataRequired(), Length(max=255)])
+    name = StringField('Name', validators=[Optional(), Length(max=255)])
 
 
-    def __init__(self, *args, user_type=None, **kwargs):
+    def __init__(self, *args, type=None, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         # Adjusting form fields based on user type
-        if user_type == 'Creator':
+        if type == 'Creator':
             del self.logo
             del self.name
             self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
             self.types.choices = [(type.id, type.name) for type in Type.query.all()]
-        elif user_type == 'Company':
+        elif type == 'Company':
             del self.profile_pic
             del self.genres
             del self.types

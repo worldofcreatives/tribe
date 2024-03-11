@@ -51,7 +51,8 @@ def sign_up():
             username=form.data['username'],
             email=form.data['email'],
             password=form.data['password'],
-            type='Creator'
+            type='Creator',
+            status='Pre-Apply'
         )
         db.session.add(user)
         db.session.commit()

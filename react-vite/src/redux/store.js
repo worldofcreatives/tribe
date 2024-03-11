@@ -11,9 +11,11 @@ import submissionReducer from "./submissions";
 import feedbackReducer from "./feedback";
 import mediaReducer from "./media";
 import userOpportunitiesReducer from "./useropps";
+import profileReducer from "./profile";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  profile: profileReducer,
   opportunities: opportunitiesReducer,
   submissions: submissionReducer,
   feedback: feedbackReducer,

@@ -108,7 +108,6 @@ def get_current_user_profile():
                 "first_name": creator.first_name,
                 "last_name": creator.last_name,
                 "stage_name": creator.stage_name,
-                "status": creator.status,
                 "bio": creator.bio,
                 "profile_pic": creator.profile_pic,
                 "phone": creator.phone,
