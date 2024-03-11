@@ -45,8 +45,14 @@ return (
               <i class="fas fa-plus"></i>
               Add New Opp</NavLink>
             </li>
-            <li>
 
+            <li>
+              <NavLink to="/profile" activeClassName="active">
+              <i class="fas fa-user"></i>
+              Profile</NavLink>
+            </li>
+
+            <li>
               <button onClick={logout} className="logout-button">
                 Logout
               </button>
