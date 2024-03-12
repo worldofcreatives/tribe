@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from app.models import db, User, Company, Creator, Genre, Type
+from app.models import db, User, Company, Creator
 from app.forms.profile_form import ProfileForm
 from werkzeug.utils import secure_filename
 import os
@@ -60,18 +60,6 @@ def update_profile():
         if user.type == 'Creator':
             creator = Creator.query.filter_by(user_id=user.id).first()
 
-            # Process genres
-            genre_ids = request.form.getlist('genres')  # Directly from the request
-            if genre_ids:
-                selected_genres = Genre.query.filter(Genre.id.in_(genre_ids)).all()
-                creator.genres = selected_genres
-
-            # Process types
-            type_ids = request.form.getlist('types')  # Directly from the request
-            if type_ids:
-                selected_types = Type.query.filter(Type.id.in_(type_ids)).all()
-                creator.types = selected_types
-
             creator.first_name = form.first_name.data if form.first_name.data else creator.first_name
             creator.last_name = form.last_name.data if form.last_name.data else creator.last_name
             creator.stage_name = form.stage_name.data if form.stage_name.data else creator.stage_name
@@ -93,6 +81,8 @@ def update_profile():
             creator.reference_email = form.reference_email.data if form.reference_email.data else creator.reference_email
             creator.reference_phone = form.reference_phone.data if form.reference_phone.data else creator.reference_phone
             creator.reference_relationship = form.reference_relationship.data if form.reference_relationship.data else creator.reference_relationship
+            creator.genres = request.form.getlist('genres') or creator.genres
+            creator.types = request.form.getlist('types') or creator.types
 
         elif user.type == 'Company':
             company = Company.query.filter_by(user_id=user.id).first()
@@ -139,8 +129,8 @@ def get_current_user_profile():
                 "reference_email": creator.reference_email,
                 "reference_phone": creator.reference_phone,
                 "reference_relationship": creator.reference_relationship,
-                "genres": [genre.name for genre in creator.genres],
-                "types": [type.name for type in creator.types],
+                "genres": creator.genres,
+                "types": creator.types,
                 "created_date": creator.created_date.isoformat(),
                 "updated_date": creator.updated_date.isoformat(),
             }

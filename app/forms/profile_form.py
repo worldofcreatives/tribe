@@ -3,7 +3,6 @@ from wtforms import StringField, TextAreaField, FileField, SelectMultipleField, 
 from wtforms.validators import DataRequired, Email, Length, Optional, NumberRange
 from flask_wtf.file import FileAllowed
 from wtforms.widgets import ListWidget, CheckboxInput
-from app.models import Genre, Type
 
 class ProfileForm(FlaskForm):
     # Shared fields
@@ -35,9 +34,6 @@ class ProfileForm(FlaskForm):
     reference_phone = StringField('Reference Phone', validators=[Optional(), Length(max=20)])
     reference_relationship = StringField('Reference Relationship', validators=[Optional(), Length(max=100)])
 
-    # genres = SelectMultipleField('Genres', choices=[], validators=[Optional()], coerce=int)
-    # types = SelectMultipleField('Types', choices=[], validators=[Optional()], coerce=int)
-
     # Company-specific fields
     logo = FileField('Company Logo', validators=[
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!'),
@@ -52,8 +48,7 @@ class ProfileForm(FlaskForm):
         if type == 'Creator':
             del self.logo
             del self.name
-            # self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
-            # self.types.choices = [(type.id, type.name) for type in Type.query.all()]
+
         elif type == 'Company':
             del self.profile_pic
             del self.genres

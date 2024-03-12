@@ -131,7 +131,7 @@ def is_allowed_file(filename, allowed_extensions):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in allowed_extensions
 
 # Assuming MAX_FILE_SIZE is defined at the top of your file
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB in bytes
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 5MB in bytes
 
 def file_size_under_limit(file):
     file.seek(0, os.SEEK_END)  # Go to the end of the file

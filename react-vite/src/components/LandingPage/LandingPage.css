@@ -48,4 +48,12 @@
     text-align: center;
   }
 
+  /* center this on the page */
+  .landing-page a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #006ef4;
+  }
+
   /* Add more styling as needed */

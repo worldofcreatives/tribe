@@ -1,6 +1,17 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
-from . import creator_genre_table, creator_type_table
+from sqlalchemy import JSON
+
+VALID_GENRES = [
+    "Afro", "Country", "Dancehall", "Disco", "Funk",
+    "Hip Hop", "Latin", "Neo Soul", "Pop", "R&B",
+    "Reggae", "Rock", "Other"
+]
+
+VALID_TYPES = [
+    "Songwriter", "Musician", "Producer", "Artist"
+]
+
 
 class Creator(db.Model):
     __tablename__ = 'creators'
@@ -32,15 +43,18 @@ class Creator(db.Model):
     reference_email = db.Column(db.String(255), nullable=True)
     reference_phone = db.Column(db.String(20), nullable=True)
     reference_relationship = db.Column(db.String(100), nullable=True)
+    genres = db.Column(JSON, default=list, nullable=True)
+    types = db.Column(JSON, default=list, nullable=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Many-to-Many Relationship for Genres
-    genres = db.relationship('Genre', secondary=creator_genre_table, backref=db.backref('creators', lazy='dynamic'))
+    def validate_genres(self):
+        if not all(genre in VALID_GENRES for genre in self.genres):
+            raise ValueError("One or more genres are invalid")
 
-    # Many-to-Many Relationship for Types
-    types = db.relationship('Type', secondary=creator_type_table, backref=db.backref('creators', lazy='dynamic'))
-
+    def validate_types(self):
+        if not all(type_ in VALID_TYPES for type_ in self.types):
+            raise ValueError("One or more types are invalid")
 
     def to_dict(self):
         return {
@@ -68,8 +82,8 @@ class Creator(db.Model):
             'reference_email': self.reference_email,
             'reference_phone': self.reference_phone,
             'reference_relationship': self.reference_relationship,
-            'types': [type.to_dict() for type in self.types],
-            'genres': [genre.to_dict() for genre in self.genres],
+            'types': self.types,
+            'genres': self.genres,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }

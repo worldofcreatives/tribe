@@ -10,7 +10,6 @@ from .api.auth_routes import auth_routes
 from .api.profile_routes import profile_routes
 from .api.opportunity_routes import opportunity_routes
 from .api.aws_routes import aws_routes
-from .api.filter_routes import filter_routes
 from .seeds import seed_commands
 from .config import Config
 
@@ -40,7 +39,6 @@ app.register_blueprint(auth_routes, url_prefix="/api/auth")
 app.register_blueprint(profile_routes, url_prefix="/api/profiles")
 app.register_blueprint(opportunity_routes, url_prefix="/api/opportunities")
 app.register_blueprint(aws_routes, url_prefix="/api/aws")
-app.register_blueprint(filter_routes, url_prefix="/api/filter")
 db.init_app(app)
 Migrate(app, db)
 

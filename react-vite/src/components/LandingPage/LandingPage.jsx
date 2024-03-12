@@ -10,6 +10,8 @@ const LandingPage = () => {
     navigate('/signup');
   };
 
+
+
   return (
     <div className="landing-page">
       <header className="landing-header">
@@ -18,6 +20,7 @@ const LandingPage = () => {
         <p>Explore the ultimate platform for artists, producers, and music lovers.</p>
         <button onClick={navigateToSignup}>Sign Up</button>
       </header>
+        <a href="https://www.linkedin.com/in/ipaintidraw">👉 Connect with the guy who built this</a>
     </div>
   );
 };

@@ -1,7 +1,19 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
-from . import opp_media_table, opp_genre_table, opp_type_table
+from . import opp_media_table
 from .submission import Submission
+from sqlalchemy import JSON
+
+
+VALID_GENRES = [
+    "Afro", "Country", "Dancehall", "Disco", "Funk",
+    "Hip Hop", "Latin", "Neo Soul", "Pop", "R&B",
+    "Reggae", "Rock", "Other"
+]
+
+VALID_TYPES = [
+    "Songwriter", "Musician", "Producer", "Artist"
+]
 
 class Opportunity(db.Model):
     __tablename__ = 'opportunities'
@@ -17,6 +29,8 @@ class Opportunity(db.Model):
     guidelines = db.Column(db.Text, nullable=True)
     company_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('companies.id')), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
+    genres = db.Column(JSON, default=list, nullable=True)
+    types = db.Column(JSON, default=list, nullable=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -26,11 +40,13 @@ class Opportunity(db.Model):
     # Many-to-Many Relationship with Media
     opp_media = db.relationship('Media', secondary=opp_media_table, backref=db.backref('opportunities', lazy='dynamic'))
 
-    # Many-to-Many Relationship with Genres
-    genres = db.relationship('Genre', secondary=opp_genre_table, backref='opportunities')
+    def validate_genres(self):
+        if not all(genre in VALID_GENRES for genre in self.genres):
+            raise ValueError("One or more genres are invalid")
 
-    # Many-to-Many Relationship with Types
-    types = db.relationship('Type', secondary=opp_type_table, backref='opportunities')
+    def validate_types(self):
+        if not all(type_ in VALID_TYPES for type_ in self.types):
+            raise ValueError("One or more types are invalid")
 
     def count_pending_submissions(self):
         return Submission.query.filter(Submission.opportunity_id == self.id, Submission.status == 'Pending').count()
@@ -39,8 +55,8 @@ class Opportunity(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'genres': [genre.to_dict() for genre in self.genres],
-            'types': [type.to_dict() for type in self.types],
+            'genres': self.genres,
+            'types': self.types,
             'description': self.description,
             'target_audience': self.target_audience,
             'budget': str(self.budget),
