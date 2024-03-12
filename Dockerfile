@@ -22,6 +22,21 @@ RUN pip install psycopg2
 
 COPY . .
 
+
+# Install psycopg2 if not already included in requirements.txt
+RUN pip install psycopg2
+
+# Run the script to drop all tables and recreate them
+RUN python reset_db.py
+
+# Apply any further migrations (this might be optional if reset_db.py already creates the schema as needed)
 RUN flask db upgrade
+
+# Seed the database
 RUN flask seed all
+
 CMD gunicorn app:app
+
+# RUN flask db upgrade
+# RUN flask seed all
+# CMD gunicorn app:app
