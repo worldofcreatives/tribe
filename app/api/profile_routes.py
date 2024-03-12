@@ -60,6 +60,18 @@ def update_profile():
         if user.type == 'Creator':
             creator = Creator.query.filter_by(user_id=user.id).first()
 
+            # Process genres
+            genre_ids = request.form.getlist('genres')  # Directly from the request
+            if genre_ids:
+                selected_genres = Genre.query.filter(Genre.id.in_(genre_ids)).all()
+                creator.genres = selected_genres
+
+            # Process types
+            type_ids = request.form.getlist('types')  # Directly from the request
+            if type_ids:
+                selected_types = Type.query.filter(Type.id.in_(type_ids)).all()
+                creator.types = selected_types
+
             creator.first_name = form.first_name.data if form.first_name.data else creator.first_name
             creator.last_name = form.last_name.data if form.last_name.data else creator.last_name
             creator.stage_name = form.stage_name.data if form.stage_name.data else creator.stage_name

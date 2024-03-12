@@ -35,8 +35,8 @@ class ProfileForm(FlaskForm):
     reference_phone = StringField('Reference Phone', validators=[Optional(), Length(max=20)])
     reference_relationship = StringField('Reference Relationship', validators=[Optional(), Length(max=100)])
 
-    genres = SelectMultipleField('Genres', choices=[], validators=[Optional()], coerce=int)
-    types = SelectMultipleField('Types', choices=[], validators=[Optional()], coerce=int)
+    # genres = SelectMultipleField('Genres', choices=[], validators=[Optional()], coerce=int)
+    # types = SelectMultipleField('Types', choices=[], validators=[Optional()], coerce=int)
 
     # Company-specific fields
     logo = FileField('Company Logo', validators=[
@@ -52,8 +52,8 @@ class ProfileForm(FlaskForm):
         if type == 'Creator':
             del self.logo
             del self.name
-            self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
-            self.types.choices = [(type.id, type.name) for type in Type.query.all()]
+            # self.genres.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
+            # self.types.choices = [(type.id, type.name) for type in Type.query.all()]
         elif type == 'Company':
             del self.profile_pic
             del self.genres

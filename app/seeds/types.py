@@ -4,9 +4,7 @@ from sqlalchemy.sql import text
 def seed_types():
     # List of genre names
     type_names = [
-        "Afro", "Country", "Dancehall", "Disco", "Funk",
-        "Hip Hop", "Latin", "Neo Soul", "Pop", "R&B",
-        "Reggae", "Rock", "Other"
+        "Songwriter", "Musician", "Producer", "Artist"
     ]
 
     # Create Genre instances

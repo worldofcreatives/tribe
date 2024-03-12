@@ -1,107 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchUserProfile, updateProfile } from '../../redux/profile';
-// import "./ProfileForm.css";
-// import { useNavigate } from 'react-router-dom';
-
-// const ProfileForm = () => {
-//   const dispatch = useDispatch();
-//   const userProfile = useSelector((state) => state.profile.userProfile);
-//   const navigate = useNavigate();
-//   const [profileData, setProfileData] = useState({
-//     bio: '',
-//     profile_pic: null,
-//     logo: null,
-//     // Add other fields as necessary
-//   });
-
-//   console.log("🚀 ~ ProfileForm ~ userProfile:", userProfile)
-
-//   useEffect(() => {
-//     dispatch(fetchUserProfile()).then((userProfile) => {
-//       if (userProfile) {
-//         setProfileData({
-//           bio: userProfile.creator.bio || '',
-//           // Initialize other fields based on the fetched user profile
-//         });
-//       }
-//     });
-//   }, [dispatch]);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setProfileData({
-//       ...profileData,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleFileChange = (e) => {
-//     setProfileData({
-//       ...profileData,
-//       [e.target.name]: e.target.files[0],
-//     });
-//   };
-
-//     const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const formData = new FormData();
-//     Object.keys(profileData).forEach((key) => {
-//       if (profileData[key] !== null) formData.append(key, profileData[key]);
-//     });
-
-//     const result = await dispatch(updateProfile(formData));
-//     // Optionally, handle success or error feedback
-//     // Redirect to the profile page after successful submission
-//     navigate('/profile');
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit} className="profile-form">
-//       <div>
-//         <label htmlFor="bio">Bio:</label>
-//         <textarea
-//           id="bio"
-//           name="bio"
-//           value={profileData.bio}
-//           onChange={handleChange}
-//         />
-//       </div>
-//       {/* Conditionally render input for profile_pic or logo based on user type */}
-//       {userProfile.type === 'Creator' && (
-//         <div>
-//           <label htmlFor="profile_pic">Profile Picture:</label>
-//           <input
-//             type="file"
-//             id="profile_pic"
-//             name="profile_pic"
-//             onChange={handleFileChange}
-//             accept="image/*"
-//           />
-//         </div>
-//       )}
-//       {userProfile.type === 'Company' && (
-//         <div>
-//           <label htmlFor="logo">Company Logo:</label>
-//           <input
-//             type="file"
-//             id="logo"
-//             name="logo"
-//             onChange={handleFileChange}
-//             accept="image/*"
-//           />
-//         </div>
-//       )}
-//       <button type="submit">Update Profile</button>
-//     </form>
-//   );
-// };
-
-// export default ProfileForm;
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserProfile, updateProfile } from '../../redux/profile';
@@ -110,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ProfileForm = () => {
   const dispatch = useDispatch();
-  const userProfile = useSelector((state) => state.profile.userProfile); // Ensure this matches your state structure
+  const userProfile = useSelector((state) => state.profile.userProfile);
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState({
     bio: '',
@@ -136,10 +32,16 @@ const ProfileForm = () => {
     reference_email: '',
     reference_phone: '',
     reference_relationship: '',
-    // Initialize other fields as necessary
+    genres: [],
+    types: [],
   });
 
+  const [allGenres, setAllGenres] = useState([]);
+  const [allTypes, setAllTypes] = useState([]);
+
   useEffect(() => {
+
+
     if (!userProfile) {
       dispatch(fetchUserProfile());
     } else {
@@ -165,10 +67,54 @@ const ProfileForm = () => {
         reference_email: userProfile?.creator?.reference_email || '',
         reference_phone: userProfile?.creator?.reference_phone || '',
         reference_relationship: userProfile?.creator?.reference_relationship || '',
-        // Set other fields based on the fetched user profile
+        types: userProfile.creator.types.map(t => t.id),
+        genres: userProfile.creator.genres.map(g => g.id),
+          // Set other fields based on the fetched user profile
+      });
+
+          // Fetch all available genres and types
+      Promise.all([
+        fetch('/api/filter/genres').then(response => response.json()),
+        fetch('/api/filter/types').then(response => response.json())
+      ]).then(([genresData, typesData]) => {
+        setAllGenres(genresData);
+        setAllTypes(typesData);
       });
     }
+
+  // Fetch genres
+  fetch('/api/filter/genres')
+    .then(response => response.json())
+    .then(data => setAllGenres(data));
+
+  // Fetch types
+  fetch('/api/filter/types')
+    .then(response => response.json())
+    .then(data => setAllTypes(data));
+
+
   }, [dispatch, userProfile]);
+
+  const handleGenreChange = (e) => {
+    const value = parseInt(e.target.value);
+    setProfileData(prev => ({
+        ...prev,
+        genres: e.target.checked
+            ? [...(prev.genres || []), value] // Use empty array as fallback
+            : (prev.genres || []).filter(id => id !== value) // Use empty array as fallback
+    }));
+};
+
+const handleTypeChange = (e) => {
+    const value = parseInt(e.target.value);
+    setProfileData(prev => ({
+        ...prev,
+        types: e.target.checked
+            ? [...(prev.types || []), value] // Use empty array as fallback
+            : (prev.types || []).filter(id => id !== value) // Use empty array as fallback
+    }));
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -188,17 +134,32 @@ const ProfileForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+
     Object.keys(profileData).forEach(key => {
-      formData.append(key, profileData[key]);
+        if (!Array.isArray(profileData[key])) {
+            formData.append(key, profileData[key]);
+        }
     });
 
-    await dispatch(updateProfile(formData));
-    navigate('/profile');
-  };
+    // Safely iterate over genres and types with fallback to empty array
+    profileData.genres?.forEach(genre => formData.append('genres', genre)) || [];
+    profileData.types?.forEach(type => formData.append('types', type)) || [];
 
-  if (!userProfile) {
-    return <div>Loading...</div>;
-  }
+    try {
+        await dispatch(updateProfile(formData));
+        navigate('/profile');
+    } catch (error) {
+        console.error("Error submitting profile form: ", error);
+    }
+};
+
+if (!userProfile) {
+  return <div>Loading...</div>;
+}
+
+console.log("🚀 allGenres: ", allGenres);
+console.log("🚀 profileData: ", profileData);
+
 
   return (
     <form onSubmit={handleSubmit} className="profile-form">
@@ -301,6 +262,45 @@ const ProfileForm = () => {
           <input type="file" id="logo" name="logo" onChange={handleFileChange} accept="image/*" />
         </div>
       )}
+
+<div>
+  <label>Genres:</label>
+  <div>
+    {allGenres.map((genre) => (
+      <div key={genre.id}>
+        <input
+          type="checkbox"
+          id={`genre-${genre.id}`}
+          name="genres"
+          value={genre.id}
+          checked={profileData.genres?.includes(genre.id) || false}
+          onChange={handleGenreChange}
+        />
+        <label htmlFor={`genre-${genre.id}`}>{genre.name}</label>
+      </div>
+    ))}
+  </div>
+</div>
+
+<div>
+  <label>Types:</label>
+  <div>
+    {allTypes.map((type) => (
+      <div key={type.id}>
+        <input
+          type="checkbox"
+          id={`type-${type.id}`}
+          name="types"
+          value={type.id}
+          checked={profileData.types?.includes(type.id) || false}
+          onChange={handleTypeChange}
+        />
+        <label htmlFor={`type-${type.id}`}>{type.name}</label>
+      </div>
+    ))}
+  </div>
+</div>
+
       <button type="submit">Update Profile</button>
     </form>
   );
