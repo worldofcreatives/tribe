@@ -13,10 +13,6 @@ const UserOpportunitiesTable = () => {
     const opportunities = useSelector((state) => state.userOpportunities.opportunities);
     console.log("🚀 ~ UserOpportunitiesTable ~ opportunities:", opportunities)
 
-
-
-
-
   return (
     <table>
       <thead>

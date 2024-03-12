@@ -16,32 +16,6 @@ function SignupFormPage() {
 
   if (sessionUser) return <Navigate to="/" replace={true} />;
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (password !== confirmPassword) {
-  //     return setErrors({
-  //       confirmPassword:
-  //         "Confirm Password field must be the same as the Password field",
-  //     });
-  //   }
-
-  //   const serverResponse = await dispatch(
-  //     thunkSignup({
-  //       email,
-  //       username,
-  //       password,
-  //     })
-  //   );
-
-  //   if (serverResponse) {
-  //     setErrors(serverResponse);
-  //   } else {
-  //     navigate("/opps");
-  //   }
-  // };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
