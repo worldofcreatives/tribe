@@ -2,16 +2,17 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 from sqlalchemy import JSON
 
-VALID_GENRES = [
-    "Afro", "Country", "Dancehall", "Disco", "Funk",
-    "Hip Hop", "Latin", "Neo Soul", "Pop", "R&B",
-    "Reggae", "Rock", "Other"
-]
+# Association table for Creators and Genres
+user_genre_table = db.Table('creator_genres',
+    db.Column('creator_id', db.Integer, db.ForeignKey('creators.id'), primary_key=True),
+    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'), primary_key=True)
+)
 
-VALID_TYPES = [
-    "Songwriter", "Musician", "Producer", "Artist"
-]
-
+# Association table for Creators and Types
+user_type_table = db.Table('creator_types',
+    db.Column('creator_id', db.Integer, db.ForeignKey('creators.id'), primary_key=True),
+    db.Column('type_id', db.Integer, db.ForeignKey('types.id'), primary_key=True)
+)
 
 class Creator(db.Model):
     __tablename__ = 'creators'
@@ -43,18 +44,10 @@ class Creator(db.Model):
     reference_email = db.Column(db.String(255), nullable=True)
     reference_phone = db.Column(db.String(20), nullable=True)
     reference_relationship = db.Column(db.String(100), nullable=True)
-    genres = db.Column(JSON, default=list, nullable=True)
-    types = db.Column(JSON, default=list, nullable=True)
+    genres = db.relationship('Genre', secondary=user_genre_table, backref=db.backref('creators', lazy=True))
+    types = db.relationship('Type', secondary=user_type_table, backref=db.backref('creators', lazy=True))
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def validate_genres(self):
-        if not all(genre in VALID_GENRES for genre in self.genres):
-            raise ValueError("One or more genres are invalid")
-
-    def validate_types(self):
-        if not all(type_ in VALID_TYPES for type_ in self.types):
-            raise ValueError("One or more types are invalid")
 
     def to_dict(self):
         return {
@@ -82,8 +75,8 @@ class Creator(db.Model):
             'reference_email': self.reference_email,
             'reference_phone': self.reference_phone,
             'reference_relationship': self.reference_relationship,
-            'types': self.types,
-            'genres': self.genres,
+            'genres': [genre.to_dict() for genre in self.genres],
+            'types': [type_.to_dict() for type_ in self.types],
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }

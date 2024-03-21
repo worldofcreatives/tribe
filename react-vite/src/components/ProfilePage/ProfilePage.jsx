@@ -23,6 +23,7 @@ const ProfilePage = () => {
     <div className="profile-page">
       <h1>Profile Information</h1>
       <button onClick={() => navigate('/profile/edit')}>Edit Profile</button>
+      <button onClick={() => navigate('/profile/update')}>Update Genre or Type</button>
       {userProfile.type === 'Creator' && creator && (
         <div>
           <h2>Creator Profile</h2>

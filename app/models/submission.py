@@ -3,6 +3,18 @@ from datetime import datetime
 from sqlalchemy import Enum
 from . import sub_media_table
 
+# Association table for Submissions and Genres
+submission_genre_table = db.Table('submission_genres',
+    db.Column('submission_id', db.Integer, db.ForeignKey('submissions.id'), primary_key=True),
+    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'), primary_key=True)
+)
+
+# Association table for Submissions and Types
+submission_type_table = db.Table('submission_types',
+    db.Column('submission_id', db.Integer, db.ForeignKey('submissions.id'), primary_key=True),
+    db.Column('type_id', db.Integer, db.ForeignKey('types.id'), primary_key=True)
+)
+
 class Submission(db.Model):
     __tablename__ = 'submissions'
 
@@ -20,6 +32,8 @@ class Submission(db.Model):
     bpm = db.Column(db.Integer, nullable=True)
     file_url = db.Column(db.String(500), nullable=True)
     collaborators = db.Column(db.String(500), nullable=True)
+    genres = db.relationship('Genre', secondary=submission_genre_table, backref=db.backref('submissions', lazy=True))
+    types = db.relationship('Type', secondary=submission_type_table, backref=db.backref('submissions', lazy=True))
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -45,6 +59,8 @@ class Submission(db.Model):
             'bpm': self.bpm,
             'file_url': self.file_url,
             'collaborators': self.collaborators,
+            'genres': [genre.to_dict() for genre in self.genres],
+            'types': [type_.to_dict() for type_ in self.types],
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
             'subMedia': [media.to_dict() for media in self.subMedia],

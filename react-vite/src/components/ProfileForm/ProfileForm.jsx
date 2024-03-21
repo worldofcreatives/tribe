@@ -121,27 +121,16 @@ const ProfileForm = () => {
     e.preventDefault();
     const formData = new FormData();
     Object.keys(profileData).forEach((key) => {
-      if (profileData[key] !== null) formData.append(key, profileData[key]);
+        if (Array.isArray(profileData[key])) {
+            profileData[key].forEach(value => formData.append(key, value));
+        } else if (profileData[key] !== null) {
+            formData.append(key, profileData[key]);
+        }
     });
 
     await dispatch(updateProfile(formData));
     navigate('/profile');
-  };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formData = new FormData();
-  //   Object.keys(profileData).forEach((key) => {
-  //     if (Array.isArray(profileData[key])) {
-  //       profileData[key].forEach(value => formData.append(`${key}[]`, value));
-  //     } else if (profileData[key] !== null) {
-  //       formData.append(key, profileData[key]);
-  //     }
-  //   });
-
-  //   await dispatch(updateProfile(formData));
-  //   navigate('/profile');
-  // };
+};
 
 
   if (!userProfile) {

@@ -33,3 +33,5 @@ from .opportunity import Opportunity
 from .media import Media
 from .submission import Submission
 from .feedback import Feedback
+from .genre import Genre
+from .type import Type

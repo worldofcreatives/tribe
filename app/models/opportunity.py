@@ -4,16 +4,17 @@ from . import opp_media_table
 from .submission import Submission
 from sqlalchemy import JSON
 
+# Association table for Opportunities and Genres
+opportunity_genre_table = db.Table('opportunity_genres',
+    db.Column('opportunity_id', db.Integer, db.ForeignKey('opportunities.id'), primary_key=True),
+    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'), primary_key=True)
+)
 
-VALID_GENRES = [
-    "Afro", "Country", "Dancehall", "Disco", "Funk",
-    "Hip Hop", "Latin", "Neo Soul", "Pop", "R&B",
-    "Reggae", "Rock", "Other"
-]
-
-VALID_TYPES = [
-    "Songwriter", "Musician", "Producer", "Artist"
-]
+# Association table for Opportunities and Types
+opportunity_type_table = db.Table('opportunity_types',
+    db.Column('opportunity_id', db.Integer, db.ForeignKey('opportunities.id'), primary_key=True),
+    db.Column('type_id', db.Integer, db.ForeignKey('types.id'), primary_key=True)
+)
 
 class Opportunity(db.Model):
     __tablename__ = 'opportunities'
@@ -29,8 +30,8 @@ class Opportunity(db.Model):
     guidelines = db.Column(db.Text, nullable=True)
     company_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('companies.id')), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
-    genres = db.Column(JSON, default=list, nullable=True)
-    types = db.Column(JSON, default=list, nullable=True)
+    genres = db.relationship('Genre', secondary=opportunity_genre_table, backref=db.backref('opportunities', lazy=True))
+    types = db.relationship('Type', secondary=opportunity_type_table, backref=db.backref('opportunities', lazy=True))
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -55,8 +56,6 @@ class Opportunity(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'genres': self.genres,
-            'types': self.types,
             'description': self.description,
             'target_audience': self.target_audience,
             'budget': str(self.budget),
@@ -67,4 +66,6 @@ class Opportunity(db.Model):
             'pending_submissions': self.count_pending_submissions(),
             'updated_date': self.updated_date.isoformat(),
             'opp_media': [media.to_dict() for media in self.opp_media],
+            'genres': [genre.to_dict() for genre in self.genres],
+            'types': [type_.to_dict() for type_ in self.types],
         }

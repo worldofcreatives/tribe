@@ -3,6 +3,8 @@ from .users import seed_users, undo_users
 from .companies import seed_companies, undo_companies
 from .creators import seed_creators, undo_creators
 from .opportunities import seed_opportunities, undo_opportunities
+from .genres import seed_genres, undo_genres
+from .types import seed_types, undo_types
 
 from app.models.db import db, environment, SCHEMA
 
@@ -23,6 +25,10 @@ def seed():
         undo_creators()
         undo_companies()
         undo_users()
+        undo_types()
+        undo_genres()
+    seed_genres()
+    seed_types()
     seed_users()
     seed_companies()
     seed_creators()
@@ -37,4 +43,6 @@ def undo():
     undo_creators()
     undo_companies()
     undo_users()
+    undo_types()
+    undo_genres()
     # Add other undo functions here

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from app.models import db, User, Company, Creator
+from app.models import db, User, Company, Creator, Genre, Type
 from app.forms.profile_form import ProfileForm
 from werkzeug.utils import secure_filename
 import os
@@ -81,8 +81,17 @@ def update_profile():
             creator.reference_email = form.reference_email.data if form.reference_email.data else creator.reference_email
             creator.reference_phone = form.reference_phone.data if form.reference_phone.data else creator.reference_phone
             creator.reference_relationship = form.reference_relationship.data if form.reference_relationship.data else creator.reference_relationship
-            creator.genres = request.form.getlist('genres') or creator.genres
-            creator.types = request.form.getlist('types') or creator.types
+
+             # Fetch and assign genres
+            genre_ids = request.form.getlist('genres')
+            if genre_ids:
+                creator.genres = db.session.query(Genre).filter(Genre.id.in_(genre_ids)).all()
+
+            # Fetch and assign types
+            type_ids = request.form.getlist('types')
+            if type_ids:
+                creator.types = db.session.query(Type).filter(Type.id.in_(type_ids)).all()
+
 
         elif user.type == 'Company':
             company = Company.query.filter_by(user_id=user.id).first()
@@ -129,11 +138,11 @@ def get_current_user_profile():
                 "reference_email": creator.reference_email,
                 "reference_phone": creator.reference_phone,
                 "reference_relationship": creator.reference_relationship,
-                "genres": creator.genres,
-                "types": creator.types,
                 "created_date": creator.created_date.isoformat(),
                 "updated_date": creator.updated_date.isoformat(),
             }
+            user_data['creator']['genres'] = [{'id': genre.id, 'name': genre.name} for genre in creator.genres]
+            user_data['creator']['types'] = [{'id': type_.id, 'name': type_.name} for type_ in creator.types]
     elif user.type == 'Company':
         company = Company.query.filter_by(user_id=user.id).first()
         if company:
@@ -146,3 +155,38 @@ def get_current_user_profile():
             }
 
     return jsonify(user_data), 200
+
+
+@profile_routes.route('/update_genres_types', methods=['PUT'])
+@login_required
+def update_genres_types():
+    user = current_user
+    data = request.json
+
+    # Fetch and validate genres and types from the request
+    genre_ids = data.get('genres', [])
+    type_ids = data.get('types', [])
+
+    if user.type == 'Creator':
+        creator = Creator.query.filter_by(user_id=user.id).first()
+        if not creator:
+            return jsonify({"errors": "Creator profile not found"}), 404
+
+        # Update genres
+        if genre_ids:
+            existing_genres = db.session.query(Genre).filter(Genre.id.in_(genre_ids)).all()
+            if len(existing_genres) != len(genre_ids):
+                return jsonify({"errors": "One or more genres not found"}), 400
+            creator.genres = existing_genres
+
+        # Update types
+        if type_ids:
+            existing_types = db.session.query(Type).filter(Type.id.in_(type_ids)).all()
+            if len(existing_types) != len(type_ids):
+                return jsonify({"errors": "One or more types not found"}), 400
+            creator.types = existing_types
+
+        db.session.commit()
+        return jsonify(creator.to_dict()), 200
+
+    return jsonify({"errors": "This route is only available for creators"}), 403
