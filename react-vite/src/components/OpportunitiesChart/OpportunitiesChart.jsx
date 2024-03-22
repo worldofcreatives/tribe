@@ -22,6 +22,8 @@ const UserOpportunitiesTable = () => {
           <th>Date Updated</th>
           <th># of Submissions</th>
           <th># of Pending Submissions</th>
+          <th>Genre(s)</th>
+          <th>Type(s)</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -33,10 +35,12 @@ const UserOpportunitiesTable = () => {
             <td>{new Date(opportunity.updated_at).toLocaleDateString()}</td>
             <td>{opportunity.submissions_count}</td>
             <td>{opportunity.pending_submissions}</td>
+            <td>{(opportunity.genres?.map(genre => genre.name) || []).join(', ') || 'N/A'}</td>
+            <td>{(opportunity.types?.map(type => type.name) || []).join(', ') || 'N/A'}</td>
             <td>
-              <Link to={`/opps/${opportunity.id}/subs`}>View Submissions</Link>
+              <Link to={`/opps/${opportunity.id}/subs`}>View Subs</Link>
               {' | '}
-              <Link to={`/opps/${opportunity.id}`}>View Opportunity</Link>
+              <Link to={`/opps/${opportunity.id}`}>View Opps</Link>
             </td>
           </tr>
         ))}

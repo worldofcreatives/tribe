@@ -122,6 +122,7 @@ const ProfileForm = () => {
   }
 
   return (
+    <div className="profile-form-container">
     <form onSubmit={handleSubmit} className="profile-form">
       <div>
         <label htmlFor="bio">Bio:</label>
@@ -227,6 +228,7 @@ const ProfileForm = () => {
             )}
             <button type="submit">Update Profile</button>
     </form>
+    </div>
   );
 };
 

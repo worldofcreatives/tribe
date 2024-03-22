@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpecificSubmission } from '../../redux/submissions';
+import './SubmissionDetails.css';
 
 const SubmissionDetails = () => {
   const { oppId, subId } = useParams();
@@ -20,7 +21,8 @@ const SubmissionDetails = () => {
   if (!submission) return <div>Submission not found</div>;
 
   return (
-    <div className="submission-details">
+    <div className="submission-details-container">
+      <div className='submission-details'>
       <h2>Submission Details</h2>
       <p><strong>Name:</strong> {submission.name}</p>
       <p><strong>Status:</strong> {submission.status}</p>
@@ -28,6 +30,7 @@ const SubmissionDetails = () => {
       <p><strong>BPM:</strong> {submission.bpm}</p>
       <p><strong>Collaborators:</strong> {submission.collaborators}</p>
       {/* Add more details you want to display */}
+      </div>
     </div>
   );
 };

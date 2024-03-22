@@ -22,10 +22,12 @@ const ProfilePage = () => {
   return (
     <div className="profile-page">
       <h1>Profile Information</h1>
+      <div className='buttons-list'>
       <button onClick={() => navigate('/profile/edit')}>Edit Profile</button>
       <button onClick={() => navigate('/profile/update')}>Update Genre or Type</button>
+      </div>
       {userProfile.type === 'Creator' && creator && (
-        <div>
+        <div className='profile-info'>
           <h2>Creator Profile</h2>
           {creator.profile_pic && <img src={creator.profile_pic} alt="Profile" className='profile-pic'/>}
           <p><strong>Stage Name:</strong> {creator.stage_name}</p>
@@ -74,7 +76,7 @@ const ProfilePage = () => {
         </div>
       )}
       {userProfile.type === 'Company' && company && (
-        <div>
+        <div className='profile-info'>
           <h2>Company Profile</h2>
           {company.logo && <img src={company.logo} alt="Logo" className='profile-pic'/>}
           <p><strong>Name:</strong> {company.name}</p>

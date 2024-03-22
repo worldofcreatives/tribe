@@ -3,3 +3,8 @@
     margin: 0 auto;
     margin-top: 20px;
 }
+
+.log-button {
+    margin-bottom: 10px;
+    width: 100%;
+}
