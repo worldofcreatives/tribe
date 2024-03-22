@@ -18,3 +18,11 @@
     overflow-y: auto; /* Enable vertical scroll for content area */
   }
 
+  .search-container {
+    position: sticky;
+    top: 0;
+    z-index: 10; /* Ensure it stays above other content */
+    background-color: white; /* Match your background or use a contrasting color */
+    padding: 10px; /* Optional for spacing */
+    border-bottom: 1px solid #ccc; /* Optional for visual separation */
+  }
