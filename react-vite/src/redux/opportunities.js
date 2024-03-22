@@ -14,6 +14,9 @@ export const UPDATE_OPPORTUNITY_FAILURE = 'opportunities/updateOpportunityFailur
 export const DELETE_OPPORTUNITY_REQUEST = 'opportunities/deleteOpportunityRequest';
 export const DELETE_OPPORTUNITY_SUCCESS = 'opportunities/deleteOpportunitySuccess';
 export const DELETE_OPPORTUNITY_FAILURE = 'opportunities/deleteOpportunityFailure';
+export const UPDATE_OPPORTUNITY_GENRES_TYPES_REQUEST = 'opportunities/updateOpportunityGenresTypesRequest';
+export const UPDATE_OPPORTUNITY_GENRES_TYPES_SUCCESS = 'opportunities/updateOpportunityGenresTypesSuccess';
+export const UPDATE_OPPORTUNITY_GENRES_TYPES_FAILURE = 'opportunities/updateOpportunityGenresTypesFailure';
 
 
 //*====> Action Creators <====
@@ -84,6 +87,20 @@ const deleteOpportunitySuccess = (oppId) => ({
 
 const deleteOpportunityFailure = (error) => ({
   type: DELETE_OPPORTUNITY_FAILURE,
+  payload: error,
+});
+
+const updateOpportunityGenresTypesRequest = () => ({
+  type: UPDATE_OPPORTUNITY_GENRES_TYPES_REQUEST,
+});
+
+const updateOpportunityGenresTypesSuccess = (genresTypes) => ({
+  type: UPDATE_OPPORTUNITY_GENRES_TYPES_SUCCESS,
+  payload: genresTypes,
+});
+
+const updateOpportunityGenresTypesFailure = (error) => ({
+  type: UPDATE_OPPORTUNITY_GENRES_TYPES_FAILURE,
   payload: error,
 });
 
@@ -196,6 +213,34 @@ export const deleteOpportunity = (oppId) => async (dispatch) => {
     }
   };
 
+// Update genres and types of an opportunity
+
+  export const updateOpportunityGenresAndTypes = (oppId, genresTypes) => async (dispatch) => {
+    dispatch(updateOpportunityGenresTypesRequest());
+    try {
+      const response = await fetch(`/api/opportunities/${oppId}/update_genres_types`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(genresTypes),
+      });
+      if (response.ok) {
+        const updatedData = await response.json();
+        dispatch(updateOpportunityGenresTypesSuccess(updatedData));
+        return updatedData;
+      } else {
+        const error = await response.json();
+        dispatch(updateOpportunityGenresTypesFailure(error));
+        return Promise.reject(error);
+      }
+    } catch (error) {
+      dispatch(updateOpportunityGenresTypesFailure(error.toString()));
+      return Promise.reject(error);
+    }
+  };
+
 
 
 //*====> Reducers <====
@@ -303,6 +348,22 @@ switch (action.type) {
           loading: false,
           error: action.payload,
         };
+      case UPDATE_OPPORTUNITY_GENRES_TYPES_REQUEST:
+        return { ...state, loading: true };
+      case UPDATE_OPPORTUNITY_GENRES_TYPES_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          // Assuming you want to update the singleOpportunity object in state
+          singleOpportunity: {
+            ...state.singleOpportunity,
+            // Directly updating genres and types might depend on the structure of updatedData
+            genres: action.payload.genres,
+            types: action.payload.types,
+          },
+        };
+      case UPDATE_OPPORTUNITY_GENRES_TYPES_FAILURE:
+        return { ...state, loading: false, error: action.payload };
       default:
         return state;
     }

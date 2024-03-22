@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateGenresAndTypes, fetchUserProfile } from '../../redux/profile'; // Adjust the import path as necessary
+import { updateGenresAndTypes, fetchUserProfile } from '../../redux/profile';
 import { useNavigate } from 'react-router-dom';
 
 const GENRE_CHOICES = [
@@ -17,7 +17,6 @@ const GENRE_CHOICES = [
   { id: 11, name: "Reggae" },
   { id: 12, name: "Rock" },
   { id: 13, name: "Other" },
-  // Add other genres with their corresponding IDs
 ];
 
 const TYPE_CHOICES = [
@@ -25,7 +24,6 @@ const TYPE_CHOICES = [
   { id: 2, name: "Musician" },
   { id: 3, name: "Producer" },
   { id: 4, name: "Artist" },
-  // Add other types with their corresponding IDs
 ];
 
 const GenreTypeForm = () => {
@@ -34,7 +32,7 @@ const GenreTypeForm = () => {
   const userProfile = useSelector((state) => state.profile.userProfile);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
-  const [isInitialized, setIsInitialized] = useState(false); // Track if initialization is done
+  const [isInitialized, setIsInitialized] = useState(false);
 
 
   useEffect(() => {
@@ -46,7 +44,7 @@ const GenreTypeForm = () => {
           setSelectedGenres(genreIds);
           setSelectedTypes(typeIds);
         }
-        setIsInitialized(true); // Prevent further executions
+        setIsInitialized(true);
       });
     }
   }, [dispatch, isInitialized, userProfile]);
@@ -73,7 +71,6 @@ const GenreTypeForm = () => {
       genres: selectedGenres,
       types: selectedTypes
     }));
-    // Add navigation or feedback logic as needed
     navigate('/profile');
   };
 
@@ -87,7 +84,7 @@ const GenreTypeForm = () => {
               type="checkbox"
               id={`genre-${genre.id}`}
               name="genres"
-              value={genre.id} // Use genre ID as value
+              value={genre.id}
               checked={selectedGenres.includes(genre.id)}
               onChange={handleGenreChange}
             />
@@ -105,7 +102,7 @@ const GenreTypeForm = () => {
               type="checkbox"
               id={`type-${type.id}`}
               name="types"
-              value={type.id} // Use type ID as value
+              value={type.id}
               checked={selectedTypes.includes(type.id)}
               onChange={handleTypeChange}
             />

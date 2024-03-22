@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask_login import login_required, current_user
-from app.models import db, Opportunity, Submission, Feedback, Company, Creator
+from app.models import db, Opportunity, Submission, Feedback, Company, Creator, Genre, Type
 from app.forms.opportunity_form import OpportunityForm
 from app.forms.submission_form import SubmissionForm
 from app.forms.feedback_form import FeedbackForm
@@ -375,3 +375,36 @@ def user_opportunities():
     created_opportunities_data = [opportunity.to_dict() for opportunity in created_opportunities]
 
     return jsonify(created_opportunities_data)
+
+
+@opportunity_routes.route('/<int:opportunity_id>/update_genres_types', methods=['PUT'])
+@login_required
+def update_opportunity_genres_types(opportunity_id):
+    opportunity = Opportunity.query.get(opportunity_id)
+    if not opportunity:
+        return jsonify({"error": "Opportunity not found"}), 404
+
+    # Ensure the current user is authorized to update this opportunity
+    if opportunity.user_id != current_user.id:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    data = request.json
+    genre_ids = data.get('genres', [])
+    type_ids = data.get('types', [])
+
+    # Update genres
+    if genre_ids:
+        existing_genres = db.session.query(Genre).filter(Genre.id.in_(genre_ids)).all()
+        if len(existing_genres) != len(genre_ids):
+            return jsonify({"error": "One or more genres not found"}), 400
+        opportunity.genres = existing_genres
+
+    # Update types
+    if type_ids:
+        existing_types = db.session.query(Type).filter(Type.id.in_(type_ids)).all()
+        if len(existing_types) != len(type_ids):
+            return jsonify({"error": "One or more types not found"}), 400
+        opportunity.types = existing_types
+
+    db.session.commit()
+    return jsonify(opportunity.to_dict()), 200

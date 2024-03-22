@@ -45,6 +45,32 @@ const ProfilePage = () => {
           <p><strong>Reference Email:</strong> {creator.reference_email}</p>
           <p><strong>Reference Phone:</strong> {creator.reference_phone}</p>
           <p><strong>Reference Relationship:</strong> {creator.reference_relationship}</p>
+          {/* Display Genres */}
+          <div>
+            <strong>Genres:</strong>
+            {creator.genres && creator.genres.length > 0 ? (
+              <ul>
+                {creator.genres.map((genre) => (
+                  <li key={genre.id}>{genre.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No genres listed.</p>
+            )}
+          </div>
+          {/* Display Types */}
+          <div>
+            <strong>Types:</strong>
+            {creator.types && creator.types.length > 0 ? (
+              <ul>
+                {creator.types.map((type) => (
+                  <li key={type.id}>{type.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No types listed.</p>
+            )}
+          </div>
         </div>
       )}
       {userProfile.type === 'Company' && company && (

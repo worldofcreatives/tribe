@@ -4,17 +4,6 @@ import { fetchUserProfile, updateProfile } from '../../redux/profile';
 import "./ProfileForm.css";
 import { useNavigate } from 'react-router-dom';
 
-const GENRE_CHOICES = [
-  "Afro", "Country", "Dancehall", "Disco", "Funk",
-  "Hip Hop", "Latin", "Neo Soul", "Pop", "R&B",
-  "Reggae", "Rock", "Other"
-];
-
-const TYPE_CHOICES = [
-  "Songwriter", "Musician", "Producer", "Artist"
-];
-
-
 const ProfileForm = () => {
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.profile.userProfile); // Make sure the path matches your Redux state
@@ -43,8 +32,6 @@ const ProfileForm = () => {
     reference_email: '',
     reference_phone: '',
     reference_relationship: '',
-    genres: [],
-    types: [],
   });
 
   useEffect(() => {
@@ -73,9 +60,6 @@ const ProfileForm = () => {
           reference_email: creator.reference_email || '',
           reference_phone: creator.reference_phone || '',
           reference_relationship: creator.reference_relationship || '',
-          genres: creator.genres || [],
-          types: creator.types || [],
-          // Initialize other fields as necessary
         });
       }
     });
@@ -195,87 +179,53 @@ const ProfileForm = () => {
             <textarea id="previous_projects" name="previous_projects" value={profileData.previous_projects} onChange={handleChange} />
           </div>
               {/* Social Media Links */}
-    <div>
-      <label htmlFor="instagram">Instagram:</label>
-      <input type="text" id="instagram" name="instagram" value={profileData.instagram} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="twitter">Twitter:</label>
-      <input type="text" id="twitter" name="twitter" value={profileData.twitter} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="facebook">Facebook:</label>
-      <input type="text" id="facebook" name="facebook" value={profileData.facebook} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="youtube">YouTube:</label>
-      <input type="text" id="youtube" name="youtube" value={profileData.youtube} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="other_social_media">Other Social Media:</label>
-      <textarea id="other_social_media" name="other_social_media" value={profileData.other_social_media} onChange={handleChange} />
-    </div>
+          <div>
+            <label htmlFor="instagram">Instagram:</label>
+            <input type="text" id="instagram" name="instagram" value={profileData.instagram} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="twitter">Twitter:</label>
+            <input type="text" id="twitter" name="twitter" value={profileData.twitter} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="facebook">Facebook:</label>
+            <input type="text" id="facebook" name="facebook" value={profileData.facebook} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="youtube">YouTube:</label>
+            <input type="text" id="youtube" name="youtube" value={profileData.youtube} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="other_social_media">Other Social Media:</label>
+            <textarea id="other_social_media" name="other_social_media" value={profileData.other_social_media} onChange={handleChange} />
+          </div>
 
-    {/* Reference Information */}
-    <div>
-      <label htmlFor="reference_name">Reference Name:</label>
-      <input type="text" id="reference_name" name="reference_name" value={profileData.reference_name} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="reference_email">Reference Email:</label>
-      <input type="email" id="reference_email" name="reference_email" value={profileData.reference_email} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="reference_phone">Reference Phone:</label>
-      <input type="text" id="reference_phone" name="reference_phone" value={profileData.reference_phone} onChange={handleChange} />
-    </div>
-    <div>
-      <label htmlFor="reference_relationship">Reference Relationship:</label>
-      <input type="text" id="reference_relationship" name="reference_relationship" value={profileData.reference_relationship} onChange={handleChange} />
-    </div>
-    <div>
-  <label>Genres:</label>
-  {GENRE_CHOICES.map((genre, index) => (
-    <div key={index}>
-      <input
-        type="checkbox"
-        id={`genre-${genre}`}
-        name="genres"
-        value={genre}
-        checked={profileData.genres ? profileData.genres.includes(genre) : false}
-        onChange={handleGenreChange}
-      />
-      <label htmlFor={`genre-${genre}`}>{genre}</label>
-    </div>
-  ))}
-</div>
-
-<div>
-  <label>Types:</label>
-  {TYPE_CHOICES.map((type, index) => (
-    <div key={index}>
-      <input
-        type="checkbox"
-        id={`type-${type}`}
-        name="types"
-        value={type}
-        checked={profileData.types ? profileData.types.includes(type) : false}
-        onChange={handleTypeChange}
-      />
-      <label htmlFor={`type-${type}`}>{type}</label>
-    </div>
-  ))}
-</div>
-
-        </>
-      )}
-      {userProfile.type === 'Company' && (
-        <div>
-          <label htmlFor="logo">Company Logo:</label>
-          <input type="file" id="logo" name="logo" onChange={handleFileChange} accept="image/*" />
-        </div>
-      )}
-      <button type="submit">Update Profile</button>
+          {/* Reference Information */}
+          <div>
+            <label htmlFor="reference_name">Reference Name:</label>
+            <input type="text" id="reference_name" name="reference_name" value={profileData.reference_name} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="reference_email">Reference Email:</label>
+            <input type="email" id="reference_email" name="reference_email" value={profileData.reference_email} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="reference_phone">Reference Phone:</label>
+            <input type="text" id="reference_phone" name="reference_phone" value={profileData.reference_phone} onChange={handleChange} />
+          </div>
+          <div>
+            <label htmlFor="reference_relationship">Reference Relationship:</label>
+            <input type="text" id="reference_relationship" name="reference_relationship" value={profileData.reference_relationship} onChange={handleChange} />
+          </div>
+              </>
+            )}
+            {userProfile.type === 'Company' && (
+              <div>
+                <label htmlFor="logo">Company Logo:</label>
+                <input type="file" id="logo" name="logo" onChange={handleFileChange} accept="image/*" />
+              </div>
+            )}
+            <button type="submit">Update Profile</button>
     </form>
   );
 };
