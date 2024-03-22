@@ -26,3 +26,15 @@
     padding: 10px; /* Optional for spacing */
     border-bottom: 1px solid #ccc; /* Optional for visual separation */
   }
+
+  .search-second-row {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+    justify-content: space-between; /* Distributes space between items */
+    gap: 10px; /* Adjust the gap between items */
+  }
+
+  .search-second-row select, .search-second-row button {
+    flex: 1; /* Allows each item to grow and fill the space */
+    /* Additional styling for selects and button */
+  }

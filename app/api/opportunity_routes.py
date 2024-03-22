@@ -364,6 +364,7 @@ def list_feedback_for_submission(opp_id, sub_id):
 
     return jsonify(feedback_data), 200
 
+# GET /api/opportunities/myopps - Get opportunities created by the current user
 
 @opportunity_routes.route('/myopps', methods=['GET'])
 @login_required
@@ -376,6 +377,7 @@ def user_opportunities():
 
     return jsonify(created_opportunities_data)
 
+# GET /api/opportunities/:id/genres_types - Get genres and types for an opportunity
 
 @opportunity_routes.route('/<int:opportunity_id>/update_genres_types', methods=['PUT'])
 @login_required
@@ -408,3 +410,30 @@ def update_opportunity_genres_types(opportunity_id):
 
     db.session.commit()
     return jsonify(opportunity.to_dict()), 200
+
+# GET /api/opportunities/submissions - Get all submissions
+
+@opportunity_routes.route('/submissions', methods=['GET'])
+@login_required
+def get_all_submissions():
+    # Fetch all submissions
+    submissions = Submission.query.all()
+
+    # Prepare data for each submission, including related Opportunity, Genres, and Types
+    submissions_data = []
+    for submission in submissions:
+        opportunity = Opportunity.query.get(submission.opportunity_id)
+        genres = [genre.name for genre in submission.genres]
+        types = [type.name for type in submission.types]
+
+        submissions_data.append({
+            "id": submission.id,
+            "name": submission.name,
+            "opportunity": opportunity.name if opportunity else "N/A",
+            "opp_id": submission.opportunity_id,
+            "created_date": submission.created_date.strftime("%Y-%m-%d"),
+            "genres": genres,
+            "types": types
+        })
+
+    return jsonify(submissions_data), 200

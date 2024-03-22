@@ -76,9 +76,9 @@ const ProfilePage = () => {
       {userProfile.type === 'Company' && company && (
         <div>
           <h2>Company Profile</h2>
+          {company.logo && <img src={company.logo} alt="Logo" className='profile-pic'/>}
           <p><strong>Name:</strong> {company.name}</p>
           <p><strong>Bio:</strong> {company.bio}</p>
-          {company.logo && <img src={company.logo} alt="Logo" />}
           {/* Display other company-specific information here */}
         </div>
       )}

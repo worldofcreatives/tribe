@@ -14,6 +14,9 @@ export const UPDATE_SUBMISSION_STATUS_FAILURE = 'submissions/updateSubmissionSta
 export const DELETE_SUBMISSION_REQUEST = 'submissions/deleteSubmissionRequest';
 export const DELETE_SUBMISSION_SUCCESS = 'submissions/deleteSubmissionSuccess';
 export const DELETE_SUBMISSION_FAILURE = 'submissions/deleteSubmissionFailure';
+export const FETCH_ALL_SUBMISSIONS_REQUEST = 'submissions/fetchAllSubmissionsRequest';
+export const FETCH_ALL_SUBMISSIONS_SUCCESS = 'submissions/fetchAllSubmissionsSuccess';
+export const FETCH_ALL_SUBMISSIONS_FAILURE = 'submissions/fetchAllSubmissionsFailure';
 
 
 //*====> Action Creators <====
@@ -83,6 +86,21 @@ const deleteSubmissionFailure = (error) => ({
   type: DELETE_SUBMISSION_FAILURE,
   payload: error,
 });
+
+const fetchAllSubmissionsRequest = () => ({
+  type: FETCH_ALL_SUBMISSIONS_REQUEST,
+});
+
+const fetchAllSubmissionsSuccess = (submissions) => ({
+  type: FETCH_ALL_SUBMISSIONS_SUCCESS,
+  payload: submissions,
+});
+
+const fetchAllSubmissionsFailure = (error) => ({
+  type: FETCH_ALL_SUBMISSIONS_FAILURE,
+  payload: error,
+});
+
 
 
 //*====> Thunk Action Creators <====
@@ -177,6 +195,21 @@ export const deleteSubmission = (oppId, subId) => async (dispatch) => {
     dispatch(deleteSubmissionFailure(error.toString()));
   }
 };
+
+// Fetch all submissions sitewide
+export const fetchAllSubmissions = () => async (dispatch) => {
+  dispatch(fetchAllSubmissionsRequest());
+  try {
+    const response = await fetch('/api/opportunities/submissions'); // Adjust the URL to your API endpoint
+    if (!response.ok) throw new Error('Failed to fetch submissions');
+
+    const data = await response.json();
+    dispatch(fetchAllSubmissionsSuccess(data));
+  } catch (error) {
+    dispatch(fetchAllSubmissionsFailure(error.toString()));
+  }
+};
+
 
 
 //*====> Reducer <====
@@ -297,6 +330,12 @@ const submissionReducer = (state = initialState, action) => {
         deleting: false,
         deleteError: action.payload,
       };
+    case FETCH_ALL_SUBMISSIONS_REQUEST:
+      return { ...state, loading: true };
+    case FETCH_ALL_SUBMISSIONS_SUCCESS:
+      return { ...state, loading: false, submissions: action.payload };
+    case FETCH_ALL_SUBMISSIONS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

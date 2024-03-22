@@ -13,6 +13,7 @@ import LandingPage from '../components/LandingPage/LandingPage';
 import ProfileForm from '../components/ProfileForm';
 import ProfilePage from '../components/ProfilePage/ProfilePage';
 import GenreTypeForm from '../components/GenreTypeForm/GenreTypeForm';
+import Charts from '../components/Charts';
 
 
 export const router = createBrowserRouter([
@@ -59,8 +60,8 @@ export const router = createBrowserRouter([
         element: <OpportunityUpdateForm />,
       },
       {
-        path: "/myopps",
-        element: <UserOpportunitiesTable />,
+        path: "/charts",
+        element: <Charts />,
       },
       {
         path: "/profile/edit",
