@@ -79,7 +79,7 @@ const GenreTypeForm = () => {
       <fieldset>
         <legend>Choose Your Genres:</legend>
         {GENRE_CHOICES.map(genre => (
-          <div key={genre.id}>
+          <div key={genre.id} className="check-item">
             <input
               type="checkbox"
               id={`genre-${genre.id}`}
@@ -97,7 +97,7 @@ const GenreTypeForm = () => {
       <fieldset>
         <legend>Choose Your Types:</legend>
         {TYPE_CHOICES.map(type => (
-          <div key={type.id}>
+          <div key={type.id} className="check-item">
             <input
               type="checkbox"
               id={`type-${type.id}`}

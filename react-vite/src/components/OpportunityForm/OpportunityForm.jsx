@@ -174,7 +174,7 @@ const OpportunityForm = () => {
       <div>
         <label>Genres</label>
         {GENRE_CHOICES.map((genre) => (
-          <div key={genre.id}>
+          <div key={genre.id} className="check-item">
             <input
               type="checkbox"
               id={`genre-${genre.id}`}
@@ -191,7 +191,7 @@ const OpportunityForm = () => {
       <div>
         <label>Types</label>
         {TYPE_CHOICES.map((type) => (
-          <div key={type.id}>
+          <div key={type.id} className="check-item">
             <input
               type="checkbox"
               id={`type-${type.id}`}

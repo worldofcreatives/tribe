@@ -173,3 +173,12 @@ tbody tr:nth-child(odd) {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
 }
+
+.check-item {
+    display: flex;
+    align-items: center;
+  }
+
+.check-item input[type="checkbox"] {
+    margin-right: 8px; /* Adjust space between checkbox and label as needed */
+}
