@@ -14,6 +14,7 @@ import ProfileForm from '../components/ProfileForm';
 import ProfilePage from '../components/ProfilePage/ProfilePage';
 import GenreTypeForm from '../components/GenreTypeForm/GenreTypeForm';
 import Charts from '../components/Charts';
+import OnboardingApplication from '../components/OnboardingApplication';
 
 
 export const router = createBrowserRouter([
@@ -74,7 +75,11 @@ export const router = createBrowserRouter([
       {
         path: "/profile/update",
         element: <GenreTypeForm />,
-      }
+      },
+      {
+        path: "/apply",
+        element: <OnboardingApplication />,
+      },
     ],
   },
 ]);
