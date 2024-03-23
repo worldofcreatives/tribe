@@ -31,6 +31,7 @@ const OnboardingApplication = () => {
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.profile.userProfile);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.session.user);
 
   const [profileData, setProfileData] = useState({
     bio: '',
@@ -64,7 +65,8 @@ const OnboardingApplication = () => {
 
   useEffect(() => {
     dispatch(fetchUserProfile()).then((userProfile) => {
-        if (userProfile && userProfile.status !== "Pre-Apply") {
+        console.log("🚀 ~ dispatch ~ userProfile:", userProfile)
+        if (user && user.status !== "Pre-Apply") {
             navigate('/profile'); // Redirect if status is not Pre-Apply
           } else {
       if (userProfile && userProfile.type === 'Creator') {

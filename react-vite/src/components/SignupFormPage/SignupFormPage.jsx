@@ -49,7 +49,7 @@ function SignupFormPage() {
     if (serverResponse) {
       setErrors(serverResponse);
     } else {
-      navigate("/opps");
+      navigate("/apply");
     }
 };
 

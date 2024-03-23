@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { fetchOpportunities } from '../../redux/opportunities';
 import OpportunityBox from '../OpportunitiesBox/OpportunitiesBox';
 import './OpportunitiesLayout.css';
@@ -30,7 +30,11 @@ const TYPE_CHOICES = [
 
 const OpportunitiesLayout = () => {
   const dispatch = useDispatch();
-  const { opportunities } = useSelector((state) => state.opportunities);
+  const navigate = useNavigate(); // Use navigate for redirection
+  const { opportunities, userStatus } = useSelector((state) => ({
+    opportunities: state.opportunities.opportunities,
+    userStatus: state.session.user.status // Assuming you have user status in your redux state
+  }));
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredOpportunities, setFilteredOpportunities] = useState([]);
   const [selectedGenreId, setSelectedGenreId] = useState('');
@@ -39,6 +43,13 @@ const OpportunitiesLayout = () => {
   useEffect(() => {
     dispatch(fetchOpportunities());
   }, [dispatch]);
+
+  useEffect(() => {
+    // Redirect to "/apply" if user status is "Pre-Apply"
+    if (userStatus === "Pre-Apply") {
+      navigate('/apply');
+    }
+  }, [userStatus, navigate]); // Depend on userStatus and navigate
 
 
   useEffect(() => {
