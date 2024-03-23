@@ -95,6 +95,7 @@ def get_all_users():
             "username": user.username,
             "status": user.status,
             "type": user.type,
+            "created_date": user.created_date,
             "profile_link": f"/profile/{user.id}",  # Assuming profile link is structured like this
         }
 

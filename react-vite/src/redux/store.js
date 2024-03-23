@@ -12,6 +12,7 @@ import feedbackReducer from "./feedback";
 import mediaReducer from "./media";
 import userOpportunitiesReducer from "./useropps";
 import profileReducer from "./profile";
+import usersReducer from "./users";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   feedback: feedbackReducer,
   media: mediaReducer,
   userOpportunities: userOpportunitiesReducer,
+  users: usersReducer,
 });
 
 let enhancer;
