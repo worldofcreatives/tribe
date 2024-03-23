@@ -5,7 +5,7 @@ from sqlalchemy.sql import text
 def seed_users():
     # Existing users
     demo = User(
-        username='Demo', email='demo@aa.io', password='password', type='Company')
+        username='Demo', email='demo@aa.io', password='password', type='Company', status = 'Accepted')
     marnie = User(
         username='marnie', email='marnie@aa.io', password='password')
     bobbie = User(
