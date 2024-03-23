@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateGenresAndTypes, fetchUserProfile } from '../../redux/profile';
 import { useNavigate } from 'react-router-dom';

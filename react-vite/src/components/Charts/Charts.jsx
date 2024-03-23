@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import OpportunitiesChart from '../OpportunitiesChart';
 import SubmissionsChart from '../SubmissionsChart';
 import './Charts.css'; // Assuming your styles are here
