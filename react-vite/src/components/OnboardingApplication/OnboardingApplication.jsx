@@ -64,8 +64,9 @@ const OnboardingApplication = () => {
 
   useEffect(() => {
     dispatch(fetchUserProfile()).then((userProfile) => {
-
-      console.log("🚀 ~ dispatch ~ userProfile:", userProfile)
+        if (userProfile && userProfile.status !== "Pre-Apply") {
+            navigate('/profile'); // Redirect if status is not Pre-Apply
+          } else {
       if (userProfile && userProfile.type === 'Creator') {
         const { creator } = userProfile;
         setProfileData({
@@ -93,7 +94,7 @@ const OnboardingApplication = () => {
         });
         setSelectedGenres(creator.genres.map(genre => genre.id));
         setSelectedTypes(creator.types.map(type => type.id));
-      }
+      }}
     });
   }, [dispatch]);
 
