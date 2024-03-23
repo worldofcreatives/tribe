@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OpportunitiesChart from '../OpportunitiesChart';
 import SubmissionsChart from '../SubmissionsChart';
 import './Charts.css'; // Assuming your styles are here
@@ -6,7 +6,11 @@ import UsersChart from '../UsersChart';
 
 const Charts = () => {
   // State to track which chart is currently selected
-  const [selectedChart, setSelectedChart] = useState('opportunities');
+  const [selectedChart, setSelectedChart] = useState(localStorage.getItem('selectedChart') || 'opportunities');
+
+  useEffect(() => {
+    localStorage.setItem('selectedChart', selectedChart);
+  }, [selectedChart]);
 
   return (
     <div>
