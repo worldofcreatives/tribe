@@ -4,7 +4,6 @@ import { fetchUserProfile, updateProfile, updateGenresAndTypes } from '../../red
 import { useNavigate } from 'react-router-dom';
 import "./OnboardingApplication.css";
 
-// Assume GENRE_CHOICES and TYPE_CHOICES are imported or defined here
 const GENRE_CHOICES = [
     { id: 1, name: "Afro" },
     { id: 2, name: "Country" },
@@ -136,17 +135,17 @@ const handleTypeChange = (e) => {
 const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Custom validation for genres and types
+    // Check for selected genres and types
     if (selectedGenres.length === 0 || selectedTypes.length === 0) {
         alert("Please select at least one genre and one type.");
-        return; // Stop the form submission
+        return; // Prevent form submission
     }
 
-    // Prepare formData for profile update
+    // Prepare formData for profile and preferences update
     const formData = new FormData();
     Object.keys(profileData).forEach(key => {
         // Append all profile data except selectedGenres and selectedTypes
-        if (key !== "selectedGenres" && key !== "selectedTypes" && profileData[key] !== null) {
+        if (key !== "selectedGenres" && key !== "selectedTypes") {
             formData.append(key, profileData[key]);
         }
     });
@@ -156,14 +155,30 @@ const handleSubmit = async (e) => {
     selectedTypes.forEach(typeId => formData.append("types", typeId));
 
     try {
-        // Call the profile update action
+        // Update the profile
         await dispatch(updateProfile(formData));
-        // Call the genres and types update action
+        // Update genres and types preferences
         await dispatch(updateGenresAndTypes({ genres: selectedGenres, types: selectedTypes }));
-        navigate('/profile'); // Redirect to profile page after successful update
+
+        // Upon successful profile and preferences update, update the user's status to "Applied"
+        const response = await fetch('/api/users/update_status/applied', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include other headers as necessary, like authorization tokens
+            },
+        });
+
+        if (response.ok) {
+            console.log('Status updated to Applied successfully');
+            // Navigate to profile or another page as needed after the update
+            navigate('/profile');
+        } else {
+            throw new Error('Failed to update status to Applied');
+        }
     } catch (error) {
-        console.error("Failed to update profile:", error);
-        // Handle error (e.g., show an error message)
+        console.error("Failed to update profile or status:", error);
+        // Handle error (e.g., show an error message to the user)
     }
 };
 

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.profile.userProfile);
+  const user = useSelector((state) => state.session.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const ProfilePage = () => {
         <div className='profile-info'>
           <h2>Creator Profile</h2>
           {creator.profile_pic && <img src={creator.profile_pic} alt="Profile" className='profile-pic'/>}
+          <p><strong>Status:</strong> {user.status}</p>
           <p><strong>Stage Name:</strong> {creator.stage_name}</p>
           <p><strong>Bio:</strong> {creator.bio}</p>
           <p><strong>First Name:</strong> {creator.first_name}</p>

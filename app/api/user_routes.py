@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
-from flask_login import login_required
-from app.models import User
+from flask_login import login_required, current_user
+from app.models import User, db
+from sqlalchemy.exc import SQLAlchemyError
 
 user_routes = Blueprint('users', __name__)
 
@@ -23,3 +24,19 @@ def user(id):
     """
     user = User.query.get(id)
     return user.to_dict()
+
+@user_routes.route('/update_status/applied', methods=['PUT'])
+@login_required
+def update_status_to_applied():
+    try:
+        # Assuming current_user gives you the user object of the logged-in user
+        user = User.query.get(current_user.id)
+        if user:
+            user.status = "Applied"
+            db.session.commit()
+            return jsonify(user.to_dict()), 200
+        else:
+            return jsonify({"error": "User not found"}), 404
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
