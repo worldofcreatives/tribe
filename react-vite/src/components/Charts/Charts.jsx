@@ -2,6 +2,7 @@ import { useState } from 'react';
 import OpportunitiesChart from '../OpportunitiesChart';
 import SubmissionsChart from '../SubmissionsChart';
 import './Charts.css'; // Assuming your styles are here
+import UsersChart from '../UsersChart';
 
 const Charts = () => {
   // State to track which chart is currently selected
@@ -21,9 +22,16 @@ const Charts = () => {
       >
         Submissions Chart
       </button>
+      <button
+        onClick={() => setSelectedChart('users')}
+        className={selectedChart === 'users' ? 'active' : ''}
+      >
+        Users Chart
+      </button>
 
       {selectedChart === 'opportunities' && <OpportunitiesChart />}
       {selectedChart === 'submissions' && <SubmissionsChart />}
+      {selectedChart === 'users' && <UsersChart />}
     </div>
   );
 };
