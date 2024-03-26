@@ -1,6 +1,7 @@
 // src/store/users.js
 const SET_ALL_USERS = 'users/setAllUsers';
 const UPDATE_USER_STATUS = 'users/updateUserStatus';
+const SET_CURRENT_USER = 'users/setCurrentUser';
 
 // Action Creators
 const setAllUsers = (users) => ({
@@ -12,6 +13,11 @@ const updateUserStatusAction = (userId, status) => ({
   type: UPDATE_USER_STATUS,
   payload: { userId, status },
 });
+
+const setCurrentUser = (user) => ({
+    type: SET_CURRENT_USER,
+    user,
+  });
 
 // Thunks
 
@@ -44,22 +50,37 @@ export const updateUserStatus = (userId, status) => async (dispatch) => {
   }
 };
 
+// Thunk for fetching a user's information by ID
+export const fetchUserById = (userId) => async (dispatch) => {
+    const response = await fetch(`/api/users/${userId}`, {
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const user = await response.json();
+      dispatch(setCurrentUser(user));
+      return user;
+    }
+  };
+
 // Reducer
-const initialState = { users: [] };
+const initialState = { users: [], currentUser: null };
 
 const usersReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SET_ALL_USERS:
-      return { ...state, users: action.users };
-    case UPDATE_USER_STATUS:
-      // Find the user and update their status
-      const updatedUsers = state.users.map(user =>
-        user.id === action.payload.userId ? { ...user, status: action.payload.status } : user
-      );
-      return { ...state, users: updatedUsers };
-    default:
-      return state;
-  }
-};
+    switch (action.type) {
+      case SET_ALL_USERS:
+        return { ...state, users: action.users };
+      case UPDATE_USER_STATUS:
+        // Find the user and update their status
+        const updatedUsers = state.users.map(user =>
+          user.id === action.payload.userId ? { ...user, status: action.payload.status } : user
+        );
+        return { ...state, users: updatedUsers };
+      case SET_CURRENT_USER:
+        // Set the current user
+        return { ...state, currentUser: action.user };
+      default:
+        return state;
+    }
+  };
 
 export default usersReducer;

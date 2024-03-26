@@ -16,14 +16,14 @@ def users():
     return {'users': [user.to_dict() for user in users]}
 
 
-@user_routes.route('/<int:id>')
-@login_required
-def user(id):
-    """
-    Query for a user by id and returns that user in a dictionary
-    """
-    user = User.query.get(id)
-    return user.to_dict()
+# @user_routes.route('/<int:id>')
+# @login_required
+# def user(id):
+#     """
+#     Query for a user by id and returns that user in a dictionary
+#     """
+#     user = User.query.get(id)
+#     return user.to_dict()
 
 @user_routes.route('/update_status/applied', methods=['PUT'])
 @login_required
@@ -64,23 +64,6 @@ def update_user_status(user_id):
         db.session.rollback()
         return jsonify({'error': 'Could not update user status', 'details': str(e)}), 500
 
-# @user_routes.route('/all', methods=['GET'])
-# @login_required
-# def get_all_users():
-#     if not current_user.is_company():
-#         return jsonify({"error": "Unauthorized access"}), 403
-
-#     users = User.query.all()
-#     users_list = [{
-#         "email": user.email,
-#         "username": user.username,
-#         "status": user.status,
-#         "type": user.type,
-#         "profile_link": f"/profile/{user.id}"  # Assuming profile link is structured like this
-#     } for user in users]
-
-#     return jsonify(users_list)
-
 @user_routes.route('/all', methods=['GET'])
 @login_required
 def get_all_users():
@@ -96,7 +79,7 @@ def get_all_users():
             "status": user.status,
             "type": user.type,
             "created_date": user.created_date,
-            "profile_link": f"/profile/{user.id}",  # Assuming profile link is structured like this
+            "profile_link": f"/user/{user.id}",  # Assuming profile link is structured like this
         }
 
         # Fetch creator information if exists
@@ -136,3 +119,25 @@ def get_all_users():
         users_list.append(user_data)
 
     return jsonify(users_list)
+
+#    Query for a user by id and returns that user in a dictionary, including creator info if available
+@user_routes.route('/<int:id>')
+@login_required
+def get_user(id):
+    user = User.query.get(id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    user_dict = user.to_dict()
+
+    # Check if the user has associated creator information and include it
+    creator = Creator.query.filter_by(user_id=id).first()
+    if creator:
+        # If you have a to_dict method for Creator, you can just call it
+        creator_dict = creator.to_dict()
+        user_dict["creator"] = creator_dict
+    else:
+        # Optionally handle the case where the user has no creator information
+        user_dict["creator"] = "No creator information available"
+
+    return jsonify(user_dict), 200

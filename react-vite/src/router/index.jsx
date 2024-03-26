@@ -16,6 +16,7 @@ import GenreTypeForm from '../components/GenreTypeForm/GenreTypeForm';
 import Charts from '../components/Charts';
 import OnboardingApplication from '../components/OnboardingApplication';
 import UsersChart from '../components/UsersChart';
+import UserInfo from '../components/UserInfo/UserInfo';
 
 
 export const router = createBrowserRouter([
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
       {
         path: "/userchart",
         element: <UsersChart />,
+      },
+      {
+        path: "/user/:userId",
+        element: <UserInfo />,
       },
     ],
   },
