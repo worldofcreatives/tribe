@@ -27,8 +27,8 @@ const OpportunityBox = ({ opportunity }) => {
     <div className={`opportunity-details ${isSelected ? 'selected' : ''}`} ref={boxRef}>
       <h3 className='opp-name'>{opportunity.name}</h3>
       <div className='bubble-box'>
-        <p className='bubble'><strong>${opportunity.budget}</strong></p>
-        <p className='bubble'><strong>{new Date(opportunity.created_date).toLocaleDateString()}</strong></p>
+        {/* <p className='bubble'><strong>${opportunity.budget}</strong></p> */}
+        <p className='bubble'><strong>Deadline: {new Date(opportunity.created_date).toLocaleDateString()}</strong></p>
       </div>
       <p className='description'>{opportunity.description}</p>
       <button onClick={goToOpportunityPage} className='main-button'>View Details</button>

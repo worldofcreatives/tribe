@@ -35,7 +35,7 @@ export const fetchAllUsers = () => async (dispatch) => {
 
 // Updates the status of a user
 export const updateUserStatus = (userId, status) => async (dispatch) => {
-  const response = await fetch(`/api/users/${userId}/status`, {
+  const response = await fetch(`/api/users/${userId}/update-status`, {
     method: 'PUT',
     credentials: 'include',
     headers: {

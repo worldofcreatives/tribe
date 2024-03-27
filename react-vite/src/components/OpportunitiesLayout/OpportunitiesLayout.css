@@ -38,3 +38,43 @@
     flex: 1; /* Allows each item to grow and fill the space */
     /* Additional styling for selects and button */
   }
+
+  .search-container input[type="text"] {
+    background-color: #F2F1F0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: #333;
+  }
+
+  .search-container input[type="text"]:focus {
+    border-collapse: collapse;
+    background-color: #333;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .search-container select {
+    background-color: #F2F1F0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: #333;
+    border-color: #fff;
+  }
+
+  .search-container button {
+    background-color: #fff;
+    color: #bcbcbc;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #dcdcdc;
+  }
+
+  .search-container button:hover {
+
+    border: 2px solid;
+  }

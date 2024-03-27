@@ -25,6 +25,8 @@ def users():
 #     user = User.query.get(id)
 #     return user.to_dict()
 
+#  Update the status of the logged-in user to "Applied"
+
 @user_routes.route('/update_status/applied', methods=['PUT'])
 @login_required
 def update_status_to_applied():
@@ -40,6 +42,8 @@ def update_status_to_applied():
     except SQLAlchemyError as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+#   Update the status of a user by id
 
 @user_routes.route('/<int:user_id>/update-status', methods=['PUT'])
 @login_required
