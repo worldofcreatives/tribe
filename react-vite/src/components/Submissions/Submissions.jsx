@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchSubmissionsForOpportunity } from '../../redux/submissions';
+import { fetchSubmissionsForOpportunity, updateSubmissionStatus } from '../../redux/submissions';
 import SubmissionItem from '../SubmissionItem';
 import MusicPlayer from '../MusicPlayer/MusicPlayer';
 import './Submissions.css';
@@ -61,6 +61,89 @@ const Submissions = () => {
     const prevSong = filteredSubmissions[prevIndex];
     playSong(prevSong.file_url, prevSong.name, prevSong.id);
   };
+
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     switch (event.key) {
+  //       case 'ArrowLeft':
+  //         handleBack();
+  //         break;
+  //       case 'ArrowRight':
+  //         handleSkip();
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   };
+
+  //   document.addEventListener('keydown', handleKeyDown);
+
+  //   // Cleanup function to remove event listener
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, [handleBack, handleSkip]); // Depend on handleBack and handleSkip to ensure the latest handlers are used
+
+// Inside the Submissions component
+
+console.log(playingSubmissionId)
+console.log(currentSong)
+
+
+useEffect(() => {
+  const handleKeyDown = (event) => {
+    switch (event.key) {
+      case 'ArrowLeft':
+        handleBack();
+        break;
+      case 'ArrowRight':
+        handleSkip();
+        break;
+      case 'ArrowUp':
+        if (playingSubmissionId) {
+          event.preventDefault(); // Prevent scrolling
+          // Change status to "Accepted"
+          dispatch(updateSubmissionStatus(oppId, playingSubmissionId, 'Accepted')).then(() => {
+            // After updating, you may need to refresh the submissions list or handle UI update
+            // This is just a placeholder, replace it with actual logic as needed
+            console.log('Status updated to Accepted');
+          });
+        }
+        break;
+      case 'ArrowDown':
+        if (playingSubmissionId) {
+          event.preventDefault(); // Prevent scrolling
+          // Change status to "Rejected"
+          dispatch(updateSubmissionStatus(oppId, playingSubmissionId, 'Rejected')).then(() => {
+            // After updating, you may need to refresh the submissions list or handle UI update
+            // This is just a placeholder, replace it with actual logic as needed
+            console.log('Status updated to Rejected');
+          });
+        }
+        break;
+      case ' ':
+        event.preventDefault(); // Prevent the default space bar action (page scroll)
+        // Toggle play/pause state here
+        setCurrentSong(prevState => ({
+          ...prevState,
+          isPlaying: !prevState.isPlaying
+        }));
+        break;
+      default:
+        break;
+    }
+  };
+
+  document.addEventListener('keydown', handleKeyDown);
+
+  // Cleanup function to remove the event listener
+  return () => {
+    document.removeEventListener('keydown', handleKeyDown);
+  };
+}, [dispatch, oppId, playingSubmissionId, handleBack, handleSkip]); // Make sure to include all dependencies here
+
+
+
 
   const statusButtons = ['Show All', 'Pending', 'Reviewing', 'Accepted', 'Rejected'].map(status => (
     <button key={status} onClick={() => playStatus(status === 'Show All' ? '' : status)}>{status}</button>
