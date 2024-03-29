@@ -5,11 +5,13 @@ import { useDispatch } from 'react-redux';
 import { deleteSubmission, updateSubmissionStatus } from '../../redux/submissions';
 
 
-const SubmissionItem = ({ submission, onPlay }) => {
+const SubmissionItem = ({ submission, onPlay, isPlaying }) => {
+  // Use the isPlaying prop to conditionally apply a class
   console.log("🚀 ~ SubmissionItem ~ submission:", submission)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const statusOptions = ['Pending', 'Reviewing', 'Accepted', 'Rejected'];
+  const submissionClassName = `submission-item ${isPlaying ? 'playing' : ''}`;
 
 
   const handleStatusChange = (newStatus) => {
@@ -68,12 +70,12 @@ const SubmissionItem = ({ submission, onPlay }) => {
 
 return (
   <div className="submission-item-container">
-    <div className='sub-left'>
-      <button onClick={() => onPlay(submission.file_url, submission.name)}>
-        {submission.isPlaying ? 'Pause' : 'Play'}
-      </button>
-      <div className="submission-item" onClick={goToSubmissionDetails}>
-        <p><strong>{submission.name}</strong></p>
+      <div className='sub-left'>
+        <button onClick={onPlay}>
+          {isPlaying ? 'Stop' : 'Play'}
+        </button>
+        <div className={submissionClassName} onClick={goToSubmissionDetails}>
+        <p><strong>{submission.id} {submission.name}</strong></p>
         <p>by {submission.username}</p>
         <p><strong>Status:</strong> {submission.status}</p>
       </div>

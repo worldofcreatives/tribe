@@ -38,3 +38,8 @@
   background-color: red;
   cursor: pointer;
 }
+
+.submission-item.playing {
+  background-color: #f0f0f0; /* Light grey, adjust as needed */
+  border-left: 4px solid #007bff; /* Blue, adjust as needed */
+}
