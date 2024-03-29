@@ -121,14 +121,6 @@ useEffect(() => {
           });
         }
         break;
-      case ' ':
-        event.preventDefault(); // Prevent the default space bar action (page scroll)
-        // Toggle play/pause state here
-        setCurrentSong(prevState => ({
-          ...prevState,
-          isPlaying: !prevState.isPlaying
-        }));
-        break;
       default:
         break;
     }
