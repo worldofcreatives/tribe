@@ -109,7 +109,7 @@ const handleStatusChange = (status) => {
   }
 
   return (
-    <div>
+    <div className='sub-page'>
       <div className='sub-top'>
         <h2>Submissions</h2>
         <div>
