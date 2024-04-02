@@ -16,6 +16,7 @@ const Submissions = () => {
   const [currentStatusFilter, setCurrentStatusFilter] = useState('');
   const navigate = useNavigate();
   const [playingSubmissionId, setPlayingSubmissionId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (isCompany || user) dispatch(fetchSubmissionsForOpportunity(oppId));
@@ -33,10 +34,17 @@ const Submissions = () => {
     }
   };
 
+  // Update your filteredSubmissions logic to include search filtering
+  const filteredSubmissions = submissions.filter(submission => {
+    const matchesStatus = currentStatusFilter ? submission.status === currentStatusFilter : true;
+    const matchesSearch = submission.username.toLowerCase().includes(searchQuery.toLowerCase()) || submission.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
 
-  const filteredSubmissions = currentStatusFilter
-    ? submissions.filter(submission => submission.status === currentStatusFilter)
-    : submissions;
+  // Function to handle search input changes
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   const playStatus = (status) => {
     setCurrentStatusFilter(status);
@@ -61,30 +69,6 @@ const Submissions = () => {
     const prevSong = filteredSubmissions[prevIndex];
     playSong(prevSong.file_url, prevSong.name, prevSong.id);
   };
-
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     switch (event.key) {
-  //       case 'ArrowLeft':
-  //         handleBack();
-  //         break;
-  //       case 'ArrowRight':
-  //         handleSkip();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   };
-
-  //   document.addEventListener('keydown', handleKeyDown);
-
-  //   // Cleanup function to remove event listener
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeyDown);
-  //   };
-  // }, [handleBack, handleSkip]); // Depend on handleBack and handleSkip to ensure the latest handlers are used
-
-// Inside the Submissions component
 
 console.log(playingSubmissionId)
 console.log(currentSong)
@@ -190,11 +174,17 @@ const handleStatusChange = (status) => {
         <div>
           {['Show All', 'Pending', 'Reviewing', 'Accepted', 'Rejected'].map(status => (
             <button key={status} onClick={() => handleStatusChange(status)}>{status}</button>
-          ))}
+            ))}
         </div>
         <button onClick={downloadAllFiles} className="download-all-button">
           Download All {currentStatusFilter || 'Submissions'}
         </button>
+            <input
+              type="text"
+              placeholder="Search by name or username..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
         {filteredSubmissions.map(submission => (
           <SubmissionItem
             key={submission.id}
@@ -221,6 +211,3 @@ const handleStatusChange = (status) => {
 };
 
 export default Submissions;
-
-
-// Test commit
