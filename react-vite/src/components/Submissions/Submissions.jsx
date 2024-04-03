@@ -17,6 +17,8 @@ const Submissions = () => {
   const navigate = useNavigate();
   const [playingSubmissionId, setPlayingSubmissionId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [minBpm, setMinBpm] = useState(0);
+  const [maxBpm, setMaxBpm] = useState(200);
 
   useEffect(() => {
     if (isCompany || user) dispatch(fetchSubmissionsForOpportunity(oppId));
@@ -35,11 +37,32 @@ const Submissions = () => {
   };
 
   // Update your filteredSubmissions logic to include search filtering
+  // const filteredSubmissions = submissions.filter(submission => {
+  //   const matchesStatus = currentStatusFilter ? submission.status === currentStatusFilter : true;
+  //   const matchesSearch = submission.username.toLowerCase().includes(searchQuery.toLowerCase()) || submission.name.toLowerCase().includes(searchQuery.toLowerCase());
+  //   const matchesBpm = submission.bpm >= minBpm && (!maxBpm || submission.bpm <= maxBpm);
+  //   return matchesStatus && matchesSearch && matchesBpm;
+  // });
   const filteredSubmissions = submissions.filter(submission => {
     const matchesStatus = currentStatusFilter ? submission.status === currentStatusFilter : true;
-    const matchesSearch = submission.username.toLowerCase().includes(searchQuery.toLowerCase()) || submission.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
+    // Ensure username and name are not undefined before calling toLowerCase
+    const username = submission.username || '';
+    const name = submission.name || '';
+    const matchesSearch = username.toLowerCase().includes(searchQuery.toLowerCase()) || name.toLowerCase().includes(searchQuery.toLowerCase());
+    const bpm = parseInt(submission.bpm, 10) || 0; // Ensure bpm is a number and provide a default if undefined
+    const matchesBpm = bpm >= minBpm && (!maxBpm || bpm <= maxBpm);
+    return matchesStatus && matchesSearch && matchesBpm;
   });
+
+
+  // Function to handle BPM input changes
+  const handleMinBpmChange = (e) => {
+    setMinBpm(e.target.value ? parseInt(e.target.value, 10) : 0);
+  };
+
+  const handleMaxBpmChange = (e) => {
+    setMaxBpm(e.target.value ? parseInt(e.target.value, 10) : 200);
+  };
 
   // Function to handle search input changes
   const handleSearchChange = (e) => {
@@ -184,6 +207,18 @@ const handleStatusChange = (status) => {
               placeholder="Search by name or username..."
               value={searchQuery}
               onChange={handleSearchChange}
+            />
+            <input
+              type="number"
+              placeholder="Min BPM"
+              value={minBpm}
+              onChange={handleMinBpmChange}
+            />
+            <input
+              type="number"
+              placeholder="Max BPM"
+              value={maxBpm}
+              onChange={handleMaxBpmChange}
             />
         {filteredSubmissions.map(submission => (
           <SubmissionItem
