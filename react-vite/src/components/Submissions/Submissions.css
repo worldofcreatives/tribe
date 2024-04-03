@@ -18,6 +18,8 @@
     border: 3px solid #e0e0e0;
   }
 
+
+
   .song-name {
     margin-bottom: 10px;
   }
@@ -27,7 +29,7 @@
     justify-content: space-between;
     flex-direction: column;
     padding-bottom: 60px;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
   }
 
@@ -41,4 +43,38 @@
 
 .sub-page {
   padding-bottom: 140px;
+}
+
+.tab-active {
+  background-color: #000000;
+  color: #FFE600; /* Active text color */
+  border-bottom: 3px solid #FFE600;
+  border-radius: 0px;
+  font-weight: bold;
+}
+
+.tab-inactive {
+  background-color: #ffffff; /* Inactive background color */
+  color: black; /* Inactive text color */
+  border-radius: 0px;
+}
+
+.tab-bar {
+  margin-bottom: 10px;
+}
+
+.search-download-sec {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.search-download-sec
+input[type="text"] {
+  max-width: 300px;
+  margin: 0px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 16px;
+  background-color: #F2F1F0;
 }

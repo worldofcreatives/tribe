@@ -36,13 +36,6 @@ const Submissions = () => {
     }
   };
 
-  // Update your filteredSubmissions logic to include search filtering
-  // const filteredSubmissions = submissions.filter(submission => {
-  //   const matchesStatus = currentStatusFilter ? submission.status === currentStatusFilter : true;
-  //   const matchesSearch = submission.username.toLowerCase().includes(searchQuery.toLowerCase()) || submission.name.toLowerCase().includes(searchQuery.toLowerCase());
-  //   const matchesBpm = submission.bpm >= minBpm && (!maxBpm || submission.bpm <= maxBpm);
-  //   return matchesStatus && matchesSearch && matchesBpm;
-  // });
   const filteredSubmissions = submissions.filter(submission => {
     const matchesStatus = currentStatusFilter ? submission.status === currentStatusFilter : true;
     // Ensure username and name are not undefined before calling toLowerCase
@@ -144,8 +137,8 @@ useEffect(() => {
 
 
 
-  const statusButtons = ['Show All', 'Pending', 'Reviewing', 'Accepted', 'Rejected'].map(status => (
-    <button key={status} onClick={() => playStatus(status === 'Show All' ? '' : status)}>{status}</button>
+  const statusButtons = ['All Submissions', 'Pending', 'Reviewing', 'Accepted', 'Rejected'].map(status => (
+    <button key={status} onClick={() => playStatus(status === 'All Submissions' ? '' : status)}>{status}</button>
   ));
 
 const downloadAllFiles = async () => {
@@ -181,7 +174,13 @@ const downloadAllFiles = async () => {
 
 
 const handleStatusChange = (status) => {
-  setCurrentStatusFilter(status === 'Show All' ? '' : status);
+  setCurrentStatusFilter(status === 'All Submissions' ? '' : status);
+};
+
+// Dynamically apply a 'highlighted' class to the active tab
+const getButtonClass = (status) => {
+  const isActive = (status === 'All Submissions' && currentStatusFilter === '') || currentStatusFilter === status;
+  return isActive ? 'tab-active' : 'tab-inactive';
 };
 
   if (loading) return <div>Loading submissions...</div>;
@@ -194,35 +193,44 @@ const handleStatusChange = (status) => {
     <div className='sub-page'>
       <div className='sub-top'>
         <h2>Submissions</h2>
-        <div>
-          {['Show All', 'Pending', 'Reviewing', 'Accepted', 'Rejected'].map(status => (
-            <button key={status} onClick={() => handleStatusChange(status)}>{status}</button>
-            ))}
+        <div className='tab-bar'>
+          {['All Submissions', 'Pending', 'Accepted', 'Rejected'].map(status => (
+            <button
+              key={status}
+              onClick={() => handleStatusChange(status)}
+              className={getButtonClass(status)} // Apply the dynamic class here
+            >
+              {status}
+            </button>
+          ))}
         </div>
-        <button onClick={downloadAllFiles} className="download-all-button">
-          Download All {currentStatusFilter || 'Submissions'}
-        </button>
-            <input
-              type="text"
-              placeholder="Search by name or username..."
-              value={searchQuery}
-              onChange={handleSearchChange}
+        <div className='search-download-sec'>
+          <input
+            type="text"
+            placeholder="Search by name or username..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className='sub-search'
             />
-            <input
+          <button onClick={downloadAllFiles} className="download-all-button">
+            Download All {currentStatusFilter || 'Submissions'}
+          </button>
+        </div>
+            {/* <input
               type="number"
               placeholder="Min BPM"
               value={minBpm}
               onChange={handleMinBpmChange}
-            />
-            <input
+              />
+              <input
               type="number"
               placeholder="Max BPM"
               value={maxBpm}
               onChange={handleMaxBpmChange}
-            />
+            /> */}
         {filteredSubmissions.map(submission => (
           <SubmissionItem
-            key={submission.id}
+            key={`${submission.id}-${submission.status}`} // Change here
             submission={submission}
             onPlay={() => playSong(submission.file_url, submission.name, submission.id)}
             isPlaying={submission.id === playingSubmissionId}
