@@ -19,6 +19,14 @@ const Submissions = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [minBpm, setMinBpm] = useState(0);
   const [maxBpm, setMaxBpm] = useState(200);
+  const [currentSubmissionStatus, setCurrentSubmissionStatus] = useState('');
+
+  // Whenever the playingSubmissionId changes, update the currentSubmissionStatus
+  useEffect(() => {
+    const currentSubmission = submissions.find(sub => sub.id === playingSubmissionId);
+    setCurrentSubmissionStatus(currentSubmission ? currentSubmission.status : '');
+  }, [playingSubmissionId, submissions]);
+
 
   useEffect(() => {
     if (isCompany || user) dispatch(fetchSubmissionsForOpportunity(oppId));
@@ -26,11 +34,9 @@ const Submissions = () => {
 
   const playSong = (songUrl, songName, submissionId) => {
     if (currentSong.url === songUrl && playingSubmissionId === submissionId) {
-      // If the same song is clicked and it is currently playing, stop the music
       setCurrentSong({ url: '', name: '' });
       setPlayingSubmissionId(null); // Reset the playing ID
     } else {
-      // Otherwise, play the selected song
       setCurrentSong({ url: songUrl, name: songName });
       setPlayingSubmissionId(submissionId);
     }
@@ -84,6 +90,38 @@ const Submissions = () => {
     const prevIndex = getNextSubmissionIndex('prev');
     const prevSong = filteredSubmissions[prevIndex];
     playSong(prevSong.file_url, prevSong.name, prevSong.id);
+  };
+
+  const handleAccept = () => {
+    if (playingSubmissionId) {
+      const newStatus = currentSubmissionStatus === 'Accepted' ? 'Pending' : 'Accepted';
+      dispatch(updateSubmissionStatus(oppId, playingSubmissionId, newStatus))
+        .then(() => {
+          setCurrentSubmissionStatus(newStatus);
+          console.log("Status updated to:", newStatus);
+        });
+    }
+  };
+
+  const handleReject = () => {
+    if (playingSubmissionId) {
+      const newStatus = currentSubmissionStatus === 'Rejected' ? 'Pending' : 'Rejected';
+      dispatch(updateSubmissionStatus(oppId, playingSubmissionId, newStatus))
+        .then(() => {
+          setCurrentSubmissionStatus(newStatus);
+          console.log("Status updated to:", newStatus);
+        });
+    }
+  };
+
+
+  const handleDownloadCurrentSong = () => {
+    const currentSubmission = submissions.find(submission => submission.id === playingSubmissionId);
+    if (currentSubmission) {
+      // Trigger the download for the current submission
+      // This will use the logic you've already defined in SubmissionItem for downloads
+      // You might need to abstract that logic into a utility function that both components can use
+    }
   };
 
 console.log(playingSubmissionId)
@@ -245,6 +283,10 @@ const getButtonClass = (status) => {
             songName={currentSong.name}
             onBack={handleBack}
             onSkip={handleSkip}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            onDownload={handleDownloadCurrentSong}
+            currentStatus={currentSubmissionStatus}
           />
         </div>
       )}

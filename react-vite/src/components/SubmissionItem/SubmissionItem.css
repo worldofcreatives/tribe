@@ -30,7 +30,7 @@
   /* margin-bottom: 20px; */
   /* margin: 5px; */
   /* outline: 3px solid #e7e7e7; */
-  border-bottom: 3px solid #e7e7e7;
+  border-top: 3px solid #e7e7e7;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,7 +63,8 @@
 
 .submission-item-container.playing {
   background-color: #fff9c5;
-  outline: 3px solid #FFE600;
+  /* outline: 3px solid #FFE600; */
+  border-top: 3px solid #e7e7e7;
   outline-offset: -3px;
 }
 
