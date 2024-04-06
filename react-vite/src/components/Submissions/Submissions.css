@@ -4,10 +4,10 @@
     bottom: 0;
     left: 0;
     width: 100vw;
-    /* background: #f1f3f4; */
-    background: #ff1515;
-    padding: 10px; /* Adjust padding as needed */
-    /* box-shadow: 0 -2px 5px rgba(0,0,0,0.3);  */
+    background: #f1f3f4;
+    /* background: #ff1515; */
+    padding: 15px; /* Adjust padding as needed */
+    /* box-shadow: 0 -2px 5px rgba(0,0,0,0.3); */
     z-index: 1000; /* Ensure it stays above other content */
     left: 50%;
     transform: translateX(-50%);
@@ -78,4 +78,8 @@ input[type="text"] {
   padding-bottom: 15px;
   font-size: 16px;
   background-color: #F2F1F0;
+}
+
+.download-all-button {
+  margin-right: 0px;
 }

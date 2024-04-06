@@ -73,7 +73,7 @@ const SubmissionItem = ({ submission, onPlay, isPlaying }) => {
           {isPlaying ? <i className="fa fa-stop" aria-hidden="true"></i> : <i className="fas fa-play"></i>}
         </button>
         <div className='submission-item'>
-          <p><strong>{submission.id} {submission.name}</strong></p>
+          <p><strong>{submission.name}</strong></p>
           <p>by {submission.username}</p>
         </div>
       </div>

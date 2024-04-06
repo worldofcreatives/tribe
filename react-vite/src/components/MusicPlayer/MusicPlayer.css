@@ -5,7 +5,8 @@
 }
 
 .player-left, .player-right {
-    flex-grow: 1; /* Allow these sections to grow but less aggressively than the middle */
+    width: 250px; /* Set a fixed width for these sections */
+    min-width: 150px; /* Ensure they do not shrink below this width */
 }
 
 .player-middle {
@@ -13,27 +14,24 @@
     display: flex;
     flex-direction: column; /* Stack the player and controls vertically */
     align-items: center; /* Center-align the player controls */
+    gap: 5px; /* Add some space between the player and controls */
 }
 
-.player-middle {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  .progress-container {
+.progress-container {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-  }
+    justify-content: space-between; /* Updated for alignment */
+}
+
+
+.progress-bar {
+    width: calc(100% - 240px); /* Adjust this width based on the fixed width of the left and right panels */
+    margin: 0 10px;
+}
+
 
   .time-display-left,
   .time-display-right {
     flex: 1;
-  }
-
-  .progress-bar {
-    width: calc(100% - 120px); /* Adjust based on your needs */
-    margin: 0 10px;
   }

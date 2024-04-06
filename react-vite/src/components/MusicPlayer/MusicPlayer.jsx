@@ -49,7 +49,7 @@ const MusicPlayer = ({ audioUrl, songName, onBack, onSkip, onAccept, onReject, o
   return (
     <div className="music-player">
       <div className='player-left'>
-        {songName && <div className="song-name">{songName}</div>}
+        {songName && <div className="song-name"><i className="fas fa-music"></i> {songName}</div>}
       </div>
 
       <div className='player-middle'>
