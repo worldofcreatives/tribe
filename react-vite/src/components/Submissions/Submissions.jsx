@@ -5,6 +5,7 @@ import { fetchSubmissionsForOpportunity, updateSubmissionStatus } from '../../re
 import SubmissionItem from '../SubmissionItem';
 import MusicPlayer from '../MusicPlayer/MusicPlayer';
 import './Submissions.css';
+import Waveform from '../Waveform';
 
 const Submissions = () => {
   const { oppId } = useParams();
@@ -254,18 +255,6 @@ const getButtonClass = (status) => {
             Download All {currentStatusFilter || 'Submissions'}
           </button>
         </div>
-            {/* <input
-              type="number"
-              placeholder="Min BPM"
-              value={minBpm}
-              onChange={handleMinBpmChange}
-              />
-              <input
-              type="number"
-              placeholder="Max BPM"
-              value={maxBpm}
-              onChange={handleMaxBpmChange}
-            /> */}
         {filteredSubmissions.map(submission => (
           <SubmissionItem
             key={`${submission.id}-${submission.status}`} // Change here
@@ -275,7 +264,7 @@ const getButtonClass = (status) => {
           />
         ))}
       </div>
-      {/* Only render the music player if there is a current song */}
+      {/* <Waveform audioUrl={currentSong.url} /> */}
       {currentSong.url && (
         <div className="music-player-wrapper">
           <MusicPlayer

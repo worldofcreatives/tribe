@@ -1,3 +1,104 @@
+// import React, { useEffect, useRef, useState } from 'react';
+// import WaveSurfer from 'wavesurfer.js';
+// import './MusicPlayer.css';
+
+// const MusicPlayer = ({ audioUrl, songName, onBack, onSkip, onAccept, onReject, currentStatus }) => {
+//   const waveformRef = useRef(null);
+//   const wavesurfer = useRef(null);
+//   const [isPlaying, setIsPlaying] = useState(false);
+//   const [currentTime, setCurrentTime] = useState(0);
+//   const [duration, setDuration] = useState(0);
+//   const [autoSkip, setAutoSkip] = useState(true);
+
+//   useEffect(() => {
+//     if (waveformRef.current && audioUrl) {
+//       wavesurfer.current = WaveSurfer.create({
+//         container: waveformRef.current,
+//         waveColor: '#424242',
+//         progressColor: '#000000',
+//         cursorColor: '#D9D9D9',
+//         barWidth: 3,
+//         barRadius: 3,
+//         cursorWidth: 1,
+//         height: 50,
+//         barGap: 3,
+//         backend: 'MediaElement',
+//       });
+
+//       wavesurfer.current.load(audioUrl);
+
+//       wavesurfer.current.on('ready', () => {
+//         setDuration(wavesurfer.current.getDuration());
+//         setIsPlaying(true);
+//         wavesurfer.current.play();
+//       });
+
+//       wavesurfer.current.on('audioprocess', () => {
+//         setCurrentTime(wavesurfer.current.getCurrentTime());
+//       });
+
+//       wavesurfer.current.on('finish', () => {
+//         setIsPlaying(false);
+//         if (autoSkip) {
+//           onSkip();
+//         }
+//       });
+
+//       return () => wavesurfer.current.destroy();
+//     }
+//   }, [audioUrl, onSkip, autoSkip]);
+
+//   const togglePlayback = () => {
+//     setIsPlaying(!isPlaying);
+//     wavesurfer.current.playPause();
+//   };
+
+//   const formatTime = (seconds) => {
+//     return new Date(seconds * 1000).toISOString().substr(11, 8);
+//   };
+
+//   return (
+//     <div className="music-player">
+//       <div className='player-left'>
+//         {songName && <div className="song-name"><i className="fas fa-music"></i> {songName}</div>}
+//       </div>
+//       <div className='player-middle'>
+//       <div className="progress-container">
+//       <div className="time-display-left">{formatTime(currentTime)}</div>
+
+//         <div className='waveform' id="waveform" ref={waveformRef}></div>
+//       <div className="time-display-right">{formatTime(duration)}</div>
+//         </div>
+//         <div className="player-controls">
+//           <button onClick={onBack}><i className="fa fa-arrow-left" aria-hidden="true"></i></button>
+//           <button onClick={togglePlayback}>
+//             <i className={isPlaying ? "fa fa-pause" : "fa fa-play"} aria-hidden="true"></i>
+//           </button>
+//           <button onClick={onSkip}><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
+//           <label>
+//             Auto-Skip <input type="checkbox" checked={autoSkip} onChange={() => setAutoSkip(!autoSkip)} />
+//           </label>
+//         </div>
+//       </div>
+//       <div className='player-right'>
+//         <button onClick={onAccept} title="Accept" className={currentStatus === 'Accepted' ? 'highlighted' : ''}>
+//           <i className="fas fa-heart"></i>
+//         </button>
+//         <button onClick={onReject} title="Reject" className={currentStatus === 'Rejected' ? 'highlighted' : ''}>
+//           <i className="fas fa-archive"></i>
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default MusicPlayer;
+
+
+
+
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import ReactPlayer from 'react-player';
 import './MusicPlayer.css';

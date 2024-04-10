@@ -22,6 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between; /* Updated for alignment */
+    gap: 20px; /* Add some space between the progress bar and time displays */
 }
 
 
@@ -34,4 +35,11 @@
   .time-display-left,
   .time-display-right {
     flex: 1;
+  }
+
+  .waveform {
+    width: 100%;
+    height: 50px;
+    background-color: #f0f0f0;
+    position: relative;
   }

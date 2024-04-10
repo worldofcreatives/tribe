@@ -47,7 +47,7 @@
 }
 
 .tab-active {
-  background-color: #000000;
+  /* background-color: #f0f0f0; */
   color: #FFE600; /* Active text color */
   border-bottom: 3px solid #FFE600;
   border-radius: 0px;
