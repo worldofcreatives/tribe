@@ -6,6 +6,7 @@ import SubmissionItem from '../SubmissionItem';
 import MusicPlayer from '../MusicPlayer/MusicPlayer';
 import './Submissions.css';
 import Waveform from '../Waveform';
+import WithCompanyGuard from '../WithCompanyGuard/WithCompanyGuard';
 
 const Submissions = () => {
   const { oppId } = useParams();
@@ -284,4 +285,4 @@ const getButtonClass = (status) => {
 
 };
 
-export default Submissions;
+export default WithCompanyGuard(Submissions); // Wrap the component with the HOC

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSpecificSubmission } from '../../redux/submissions';
 import './SubmissionDetails.css';
+import WithCompanyGuard from '../WithCompanyGuard/WithCompanyGuard';
 
 const SubmissionDetails = () => {
   const { oppId, subId } = useParams();
@@ -35,4 +36,5 @@ const SubmissionDetails = () => {
   );
 };
 
-export default SubmissionDetails;
+export default WithCompanyGuard(SubmissionDetails);
+
