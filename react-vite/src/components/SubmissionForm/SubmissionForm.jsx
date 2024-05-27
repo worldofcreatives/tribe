@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewSubmission } from '../../redux/submissions';
@@ -20,6 +21,19 @@ const SubmissionForm = ({ opportunityId }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const user = useSelector((state) => state.session.user);
+  const [submissionCount, setSubmissionCount] = useState(0);
+
+  useEffect(() => {
+    const fetchSubmissionCount = async () => {
+      const response = await fetch(`/api/opportunities/${opportunityId}/submissions/count`);
+      const data = await response.json();
+      setSubmissionCount(data.submission_count);
+    };
+
+    if (user.status === 'Accepted') {
+      fetchSubmissionCount();
+    }
+  }, [user.status, opportunityId]);
 
   useEffect(() => {
     setSuccessMessage('');
@@ -41,7 +55,7 @@ const SubmissionForm = ({ opportunityId }) => {
     });
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSuccessMessage('');
@@ -57,9 +71,14 @@ const handleSubmit = async (e) => {
     }
 
     try {
-        const actionResult = await dispatch(createNewSubmission(formData, opportunityId));
+        if (user.status === 'Accepted' && submissionCount >= 3) {
+            setErrorMessage('Submission limit reached for the current month.');
+            setLoading(false);
+            return;
+        }
+
+        await dispatch(createNewSubmission(formData, opportunityId));
         setSuccessMessage('Submission created successfully!');
-        // Reset submissionDetails state to clear the form
         setSubmissionDetails({
             name: '',
             notes: '',
@@ -72,7 +91,7 @@ const handleSubmit = async (e) => {
     } finally {
         setLoading(false);
     }
-};
+  };
 
   const renderSubmitButton = () => {
     if (user.type === 'Company' || user.status === 'Accepted' || user.status === 'Premium') {
@@ -146,8 +165,8 @@ const handleSubmit = async (e) => {
         />
       </div>
       {renderSubmitButton()}
-    {successMessage && <div>{successMessage}</div>}
-    {errorMessage && <div className="error">{errorMessage}</div>}
+      {successMessage && <div>{successMessage}</div>}
+      {errorMessage && <div className="error">{errorMessage}</div>}
     </form>
   );
 };
@@ -155,10 +174,16 @@ const handleSubmit = async (e) => {
 export default SubmissionForm;
 
 
+
+
+
+
+
 // import { useEffect, useState } from 'react';
-// import { useDispatch } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 // import { createNewSubmission } from '../../redux/submissions';
 // import { useLocation } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 // import "./SubmissionForm.css";
 
 // const SubmissionForm = ({ opportunityId }) => {
@@ -171,9 +196,26 @@ export default SubmissionForm;
 //     file: null,
 //   });
 //   const location = useLocation();
+//   const navigate = useNavigate();
 //   const [loading, setLoading] = useState(false);
 //   const [successMessage, setSuccessMessage] = useState('');
 //   const [errorMessage, setErrorMessage] = useState('');
+//   const user = useSelector((state) => state.session.user);
+//   const [submissionCount, setSubmissionCount] = useState(0);
+
+//   useEffect(() => {
+//     const fetchSubmissionCount = async () => {
+//       const response = await fetch(`/api/opportunities/${opportunityId}/submissions/count`);
+//       const data = await response.json();
+//       setSubmissionCount(data.submission_count);
+//     };
+
+//     if (user.status === 'Accepted') {
+//       fetchSubmissionCount();
+
+//     }
+
+//   }, [user.status, opportunityId]);
 
 //   useEffect(() => {
 //     setSuccessMessage('');
@@ -228,6 +270,24 @@ export default SubmissionForm;
 //     }
 // };
 
+//   const renderSubmitButton = () => {
+//     if (user.type === 'Company' || user.status === 'Accepted' || user.status === 'Premium') {
+//       return <button className='submit-button' type="submit">Submit</button>;
+//     } else if (user.status === 'Pre-Apply' || user.status === 'Denied') {
+//       return (
+//         <button className='submit-button' type="button" onClick={() => navigate('/apply')}>
+//           Want to submit your music? Click here to apply to 7packs
+//         </button>
+//       );
+//     } else if (user.status === 'Applied') {
+//       return (
+//         <button className='submit-button' type="button" disabled onClick={() => navigate('/apply')}>
+//           Want to submit your music? Your 7packs application is pending
+//         </button>
+//       );
+//     }
+//   };
+
 //   return (
 //     <form onSubmit={handleSubmit}>
 //       <div>
@@ -281,9 +341,7 @@ export default SubmissionForm;
 //           required
 //         />
 //       </div>
-//       <button className='submit-button' type="submit" disabled={loading}>
-//       {loading ? 'Submitting...' : 'Submit'}
-//     </button>
+//       {renderSubmitButton()}
 //     {successMessage && <div>{successMessage}</div>}
 //     {errorMessage && <div className="error">{errorMessage}</div>}
 //     </form>
@@ -291,3 +349,5 @@ export default SubmissionForm;
 // };
 
 // export default SubmissionForm;
+
+

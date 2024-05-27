@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask_login import login_required, current_user
+from datetime import datetime
 from app.models import db, Opportunity, Submission, Feedback, Company, Creator, Genre, Type
 from app.forms.opportunity_form import OpportunityForm
 from app.forms.submission_form import SubmissionForm
@@ -139,12 +140,66 @@ def file_size_under_limit(file):
     file.seek(0)  # Reset the file position to the beginning
     return file_size <= MAX_FILE_SIZE
 
+# @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
+# @login_required
+# def create_submission(id):
+#     form = SubmissionForm()
+#     form['csrf_token'].data = request.cookies['csrf_token']
+#     opportunity = Opportunity.query.get(id)
+
+#     if form.validate_on_submit():
+#         file = form.file.data
+
+#         # Check both file type and file size
+#         if file and is_allowed_file(file.filename, {"mp3", "wav"}) and file_size_under_limit(file):
+#             file_name = get_unique_filename(file.filename)
+#             file_url_response = upload_file_to_s3(file, file_name)
+
+#             if "url" in file_url_response:
+#                 new_submission = Submission(
+#                     # creator_id=current_user.id,
+#                     opportunity_id=opportunity.id,
+#                     user_id=current_user.id,
+#                     username=current_user.username,
+#                     name=form.name.data,
+#                     notes=form.notes.data,
+#                     bpm=form.bpm.data,
+#                     collaborators=form.collaborators.data,
+#                     file_url=file_url_response["url"],
+#                 )
+#                 db.session.add(new_submission)
+#                 db.session.commit()
+#                 return jsonify(new_submission.to_dict()), 201
+#             else:
+#                 error_message = file_url_response.get("errors", "Unknown error during file upload.")
+#                 return jsonify({"errors": f"File upload failed: {error_message}"}), 500
+#         else:
+#             # Return an appropriate error message if the file type is not allowed or file size exceeds the limit
+#             if not is_allowed_file(file.filename, {"mp3", "wav"}):
+#                 return jsonify({"error": "File type not allowed"}), 400
+#             if not file_size_under_limit(file):
+#                 return jsonify({"error": "File size exceeds limit"}), 400
+
+#     else:
+#         return jsonify({'errors': form.errors}), 400
+
 @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
 @login_required
 def create_submission(id):
     form = SubmissionForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     opportunity = Opportunity.query.get(id)
+
+    current_month = datetime.utcnow().month
+    current_year = datetime.utcnow().year
+    submission_count = Submission.query.filter(
+        Submission.user_id == current_user.id,
+        db.extract('month', Submission.created_date) == current_month,
+        db.extract('year', Submission.created_date) == current_year
+    ).count()
+
+    if current_user.status == 'Accepted' and submission_count >= 3:
+        return jsonify({'error': 'Submission limit reached for the current month.'}), 403
 
     if form.validate_on_submit():
         file = form.file.data
@@ -181,6 +236,25 @@ def create_submission(id):
 
     else:
         return jsonify({'errors': form.errors}), 400
+
+
+# GET /api/opportunities/:opportunity_id/submissions/count - Get the number of submissions made by the current user in the current month
+
+@opportunity_routes.route('/<int:opportunity_id>/submissions/count', methods=['GET'])
+@login_required
+def get_monthly_submission_count(opportunity_id):
+    """
+    Gets the number of submissions made by the current user in the current month.
+    """
+    current_month = datetime.utcnow().month
+    current_year = datetime.utcnow().year
+    submission_count = Submission.query.filter(
+        Submission.user_id == current_user.id,
+        db.extract('month', Submission.created_date) == current_month,
+        db.extract('year', Submission.created_date) == current_year
+    ).count()
+
+    return jsonify({'submission_count': submission_count})
 
 
 # GET /api/opportunities/:id/submissions - Get all submissions for an opportunity
