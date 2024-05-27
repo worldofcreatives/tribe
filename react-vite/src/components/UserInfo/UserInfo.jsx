@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserById } from '../../redux/users'; // Adjust the import path according to your project structure
 import { thunkUpdateUserStatus } from '../../redux/users';
-
+import WithCompanyGuard from '../WithCompanyGuard/WithCompanyGuard';
 
 const UserInfo = () => {
   const { userId } = useParams(); // Get the user ID from URL
@@ -67,4 +67,4 @@ const UserInfo = () => {
   );
 };
 
-export default UserInfo;
+export default WithCompanyGuard(UserInfo); // Wrap the component with the HOC
