@@ -50,6 +50,25 @@ export const updateUserStatus = (userId, status) => async (dispatch) => {
   }
 };
 
+// Thunk for updating a user's status
+export const thunkUpdateUserStatus = (userId, status) => async (dispatch) => {
+  const response = await fetch(`/api/auth/update_status/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ status })
+  });
+
+  if (response.ok) {
+    dispatch(updateUserStatusAction(userId, status));
+  } else {
+    // Handle errors as needed
+    console.error('Failed to update user status');
+  }
+};
+
+
 // Thunk for fetching a user's information by ID
 export const fetchUserById = (userId) => async (dispatch) => {
     const response = await fetch(`/api/users/${userId}`, {
@@ -66,21 +85,21 @@ export const fetchUserById = (userId) => async (dispatch) => {
 const initialState = { users: [], currentUser: null };
 
 const usersReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case SET_ALL_USERS:
-        return { ...state, users: action.users };
-      case UPDATE_USER_STATUS:
-        // Find the user and update their status
-        const updatedUsers = state.users.map(user =>
+  switch (action.type) {
+    case SET_ALL_USERS:
+      return { ...state, users: action.users };
+    case UPDATE_USER_STATUS:
+      return {
+        ...state,
+        users: state.users.map(user =>
           user.id === action.payload.userId ? { ...user, status: action.payload.status } : user
-        );
-        return { ...state, users: updatedUsers };
-      case SET_CURRENT_USER:
-        // Set the current user
-        return { ...state, currentUser: action.user };
-      default:
-        return state;
-    }
-  };
+        )
+      };
+    case SET_CURRENT_USER:
+      return { ...state, currentUser: action.user };
+    default:
+      return state;
+  }
+};
 
 export default usersReducer;

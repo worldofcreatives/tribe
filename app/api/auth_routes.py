@@ -81,6 +81,29 @@ def update_status():
         return {'status': 'Updated', 'user': current_user.to_dict()}
     return {'status': 'No Change', 'user': current_user.to_dict()}
 
+@auth_routes.route('/update_status/<int:user_id>', methods=['PUT'])
+@login_required
+def update_user_status(user_id):
+    """
+    Updates the specified user's status to 'Accepted' or 'Denied'.
+    Only accessible by users with the type 'Company'.
+    """
+    if current_user.type != 'Company':
+        return {'errors': ['Unauthorized. Only companies can perform this action.']}, 403
+
+    data = request.get_json()
+    status = data.get('status')
+    if status not in ['Accepted', 'Denied', 'Applied']:
+        return {'errors': ['Invalid status.']}, 400
+
+    user = User.query.get(user_id)
+    if not user:
+        return {'errors': ['User not found.']}, 404
+
+    user.status = status
+    db.session.commit()
+    return {'status': 'Updated', 'user': user.to_dict()}
+
 @auth_routes.route('/unauthorized')
 def unauthorized():
     """

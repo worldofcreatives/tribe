@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserById } from '../../redux/users'; // Adjust the import path according to your project structure
+import { thunkUpdateUserStatus } from '../../redux/users';
+
 
 const UserInfo = () => {
   const { userId } = useParams(); // Get the user ID from URL
@@ -13,8 +15,13 @@ const UserInfo = () => {
     }
   }, [dispatch, userId]);
 
+
   // Select the current user from the Redux store
   const user = useSelector(state => state.users.currentUser);
+
+  const handleStatusUpdate = (status) => {
+    dispatch(thunkUpdateUserStatus(userId, status));
+  };
 
   if (!user) {
     return <div>Loading user information...</div>;
@@ -26,6 +33,11 @@ const UserInfo = () => {
       <p><strong>Username:</strong> {user.username}</p>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Status:</strong> {user.status}</p>
+
+      <button onClick={() => handleStatusUpdate('Accepted')}>Accept</button>
+      <button onClick={() => handleStatusUpdate('Denied')}>Deny</button>
+      <button onClick={() => handleStatusUpdate('Applied')}>Applied</button>
+
       <p><strong>Type:</strong> {user.type}</p>
       {user.creator && (
         <>
