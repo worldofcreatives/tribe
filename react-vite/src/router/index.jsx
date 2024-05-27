@@ -17,6 +17,7 @@ import Charts from '../components/Charts';
 import OnboardingApplication from '../components/OnboardingApplication';
 import UsersChart from '../components/UsersChart';
 import UserInfo from '../components/UserInfo/UserInfo';
+import Unauthorized from '../components/Unauthorized';
 
 
 export const router = createBrowserRouter([
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
       {
         path: "/user/:userId",
         element: <UserInfo />,
+      },
+      {
+        path: "/unauthorized",
+        element: <Unauthorized />,
       },
     ],
   },
