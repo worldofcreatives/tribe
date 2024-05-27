@@ -2,6 +2,20 @@
 
 This is the starter for the Flask React project.
 
+My notes:
+
+pipenv install -r requirements.txt
+pipenv shell
+Flask db migrate
+flask db upgrade
+flask seed all
+flask run
+
+In the frontend (react-vite folder):
+npm i
+npm run build : to create the dist folder
+Npm run dev
+
 ## Getting started
 
 1. Clone this repository (only this branch).

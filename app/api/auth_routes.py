@@ -69,6 +69,18 @@ def sign_up():
     else:
         return jsonify({'errors': form.errors}), 401
 
+@auth_routes.route('/update_status', methods=['PUT'])
+@login_required
+def update_status():
+    """
+    Updates the current user's status to 'Applied'.
+    """
+    if current_user.status == 'Pre-Apply':
+        current_user.status = 'Applied'
+        db.session.commit()
+        return {'status': 'Updated', 'user': current_user.to_dict()}
+    return {'status': 'No Change', 'user': current_user.to_dict()}
+
 @auth_routes.route('/unauthorized')
 def unauthorized():
     """

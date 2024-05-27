@@ -1,5 +1,6 @@
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
+const UPDATE_USER_STATUS = 'session/updateUserStatus';
 
 const setUser = (user) => ({
   type: SET_USER,
@@ -8,6 +9,11 @@ const setUser = (user) => ({
 
 const removeUser = () => ({
   type: REMOVE_USER
+});
+
+const updateUserStatus = (status) => ({
+  type: UPDATE_USER_STATUS,
+  payload: status,
 });
 
 export const thunkAuthenticate = () => async (dispatch) => {
@@ -63,6 +69,22 @@ export const thunkLogout = () => async (dispatch) => {
   dispatch(removeUser());
 };
 
+// Thunk to update user status
+export const thunkUpdateUserStatus = () => async (dispatch) => {
+  const response = await fetch('/api/auth/update_status', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(updateUserStatus(data.user.status));
+  } else {
+    // Handle errors as needed
+    console.error('Failed to update user status');
+  }
+};
+
 const initialState = { user: null };
 
 function sessionReducer(state = initialState, action) {
@@ -71,6 +93,8 @@ function sessionReducer(state = initialState, action) {
       return { ...state, user: action.payload };
     case REMOVE_USER:
       return { ...state, user: null };
+    case UPDATE_USER_STATUS:
+      return { ...state, user: { ...state.user, status: action.payload } };
     default:
       return state;
   }
