@@ -100,6 +100,14 @@ export const router = createBrowserRouter([
         path: "/subscribe",
         element: <SubscriptionComponent />,
       },
+      {
+        path: "/success",
+        element: <SubscriptionComponent />,
+      },
+      {
+        path: "/cancel",
+        element: <ProfilePage />,
+      },
     ],
   },
 ]);
