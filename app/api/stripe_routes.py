@@ -119,7 +119,7 @@ def create_portal_session():
     try:
         session = stripe.billing_portal.Session.create(
             customer=customer_id,
-            return_url=request.host_url + 'profile'
+            return_url=request.host_url + 'manage-subscription-return'
         )
         return jsonify({'url': session.url})
     except Exception as e:

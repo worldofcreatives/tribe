@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchUserProfile } from '../../redux/profile';
 import './SubscriptionComponent.css';
 
 const stripePromise = loadStripe('pk_test_51O1YnuBIxhjYY7P2cloS3EG1c3Bv84hHkvSJz331km8OA1VmhhRH0BzAFNGRb2vSQy6Yyjfy9uQO8XhLDv5FBwmP00Z4t3vSpc');
@@ -8,6 +10,11 @@ const stripePromise = loadStripe('pk_test_51O1YnuBIxhjYY7P2cloS3EG1c3Bv84hHkvSJz
 const SubscriptionComponent = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
 
   const handleCheckout = async (priceId) => {
     const stripe = await stripePromise;
@@ -34,6 +41,11 @@ const SubscriptionComponent = () => {
 
     const session = await response.json();
     window.location.href = session.url;  // Redirect to the customer portal URL
+
+    // After user returns from the customer portal, refresh the user data
+    window.addEventListener('focus', () => {
+      dispatch(fetchUserProfile());
+    }, { once: true });
   };
 
   return (
