@@ -18,6 +18,8 @@ class User(db.Model, UserMixin):
     salt = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(50), default='Creator', nullable=False)
     status = db.Column(db.String(50), default='Pre-Apply', nullable=False)
+    stripe_customer_id = db.Column(db.String(120), unique=True)
+    stripe_subscription_id = db.Column(db.String(120), unique=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -45,6 +47,8 @@ class User(db.Model, UserMixin):
             'email': self.email,
             'type': self.type,
             'status': self.status,
+            'stripe_customer_id': self.stripe_customer_id,
+            'stripe_subscription_id': self.stripe_subscription_id,
             # 'company_id': self.company_id,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),

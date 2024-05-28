@@ -71,6 +71,8 @@ def handle_checkout_session(session):
     if user:
         subscription = stripe.Subscription.retrieve(session['subscription'])
         price_id = subscription['items']['data'][0]['price']['id']
+        user.stripe_customer_id = session['customer']
+        user.stripe_subscription_id = subscription['id']
         if price_id == 'price_1PLVpIBIxhjYY7P2UNEsuWfr':  # Replace with your actual monthly price ID
             user.status = 'Premium Monthly'
         elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
@@ -92,7 +94,8 @@ def handle_subscription_deleted(subscription):
     customer_id = subscription['customer']
     user = User.query.filter_by(stripe_customer_id=customer_id).first()
     if user:
-        user.status = 'Basic'
+        user.status = 'Accepted'  # Set to 'Basic' or an appropriate status when subscription is canceled
+        user.stripe_subscription_id = None
         db.session.commit()
 
 def handle_subscription_updated(subscription):
@@ -100,6 +103,7 @@ def handle_subscription_updated(subscription):
     user = User.query.filter_by(stripe_customer_id=customer_id).first()
     if user:
         price_id = subscription['items']['data'][0]['price']['id']
+        user.stripe_subscription_id = subscription['id']
         if price_id == 'price_1PLVpIBIxhjYY7P2UNEsuWfr':  # Replace with your actual monthly price ID
             user.status = 'Premium Monthly'
         elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
