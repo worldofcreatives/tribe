@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useDispatch } from 'react-redux';
 import './SubscriptionComponent.css';
 
-const stripePromise = loadStripe('your_stripe_publishable_key');
+const stripePromise = loadStripe('pk_test_51O1YnuBIxhjYY7P2cloS3EG1c3Bv84hHkvSJz331km8OA1VmhhRH0BzAFNGRb2vSQy6Yyjfy9uQO8XhLDv5FBwmP00Z4t3vSpc');
 
 const SubscriptionComponent = () => {
   const dispatch = useDispatch();
