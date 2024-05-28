@@ -39,7 +39,7 @@ Migrate(app, db)
 
 # Application Security
 CORS(app, resources={
-    r"/api/stripe/*": {"origins": ["https://checkout.stripe.com", "https://api.stripe.com"]}
+    r"/api/stripe/*": {"origins": ["https://checkout.stripe.com", "https://api.stripe.com", "https://js.stripe.com"]}
 })
 
 # Ensure HTTPS in production
