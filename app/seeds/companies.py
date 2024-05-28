@@ -3,22 +3,31 @@ from sqlalchemy.sql import text
 
 def seed_companies():
     # Example companies
-    company1 = Company(
-        user_id=1,
-        name='Demo Corp',
-        bio='A demo company for demonstration purposes.',
-        logo='path/to/demo/logo.png',
-    )
+    companies = [
+        {
+            'user_id': 1,
+            'name': 'Demo Corp',
+            'bio': 'A demo company for demonstration purposes.',
+            'logo': 'path/to/demo/logo.png',
+        },
+        {
+            'user_id': 5,
+            'name': 'Tech Innovations',
+            'bio': 'Innovating the future of technology.',
+            'logo': 'path/to/tech/innovations/logo.png',
+        }
+    ]
 
-    company2 = Company(
-        user_id=5,
-        name='Tech Innovations',
-        bio='Innovating the future of technology.',
-        logo='path/to/tech/innovations/logo.png',
-    )
-
-    # Add companies to the session
-    db.session.add_all([company1, company2])
+    for company_data in companies:
+        existing_company = Company.query.filter_by(user_id=company_data['user_id']).first()
+        if not existing_company:
+            company = Company(
+                user_id=company_data['user_id'],
+                name=company_data['name'],
+                bio=company_data['bio'],
+                logo=company_data['logo']
+            )
+            db.session.add(company)
 
     db.session.commit()
 

@@ -1,15 +1,14 @@
 from app.models import db, Type, environment, SCHEMA
 from sqlalchemy.sql import text
 
-VALID_TYPES = [
-    "Songwriter", "Musician", "Producer", "Artist"
-]
-
 def seed_types():
-    for type_name in VALID_TYPES:
-        type_ = Type(name=type_name)
-        db.session.add(type_)
+    types = ['Songwriter', 'Composer', 'Producer', 'Singer']
 
+    for type_name in types:
+        existing_type = db.session.query(Type).filter_by(name=type_name).first()
+        if not existing_type:
+            new_type = Type(name=type_name)
+            db.session.add(new_type)
     db.session.commit()
 
 def undo_types():
