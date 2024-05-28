@@ -1,12 +1,14 @@
 import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './SubscriptionComponent.css';
 
 const stripePromise = loadStripe('pk_test_51O1YnuBIxhjYY7P2cloS3EG1c3Bv84hHkvSJz331km8OA1VmhhRH0BzAFNGRb2vSQy6Yyjfy9uQO8XhLDv5FBwmP00Z4t3vSpc');
 
 const SubscriptionComponent = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.session.user);
+
 
   const handleCheckout = async (priceId) => {
     const stripe = await stripePromise;
@@ -22,8 +24,26 @@ const SubscriptionComponent = () => {
     await stripe.redirectToCheckout({ sessionId: session.id });
   };
 
+  const handleManageSubscription = async () => {
+    const stripe = await stripePromise;
+    const response = await fetch('/api/stripe/create-portal-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ customer_id: user.stripe_customer_id }),
+    });
+
+    const session = await response.json();
+    stripe.redirectToCheckout({ sessionId: session.id });
+  };
+
   return (
     <div className="subscription-buttons">
+        <h1>Welcome, {user.username}</h1>
+      <p>Email: {user.email}</p>
+      <p>Status: {user.status}</p>
+      <button onClick={handleManageSubscription}>Manage Subscription</button>
       <button onClick={() => handleCheckout('price_1PLVpIBIxhjYY7P2UNEsuWfr')} className="subscribe-button">
         Subscribe Monthly ($77)
       </button>

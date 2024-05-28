@@ -109,3 +109,18 @@ def handle_subscription_updated(subscription):
         elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
             user.status = 'Premium Annual'
         db.session.commit()
+
+@stripe_routes.route('/create-portal-session', methods=['POST'])
+@login_required
+def create_portal_session():
+    data = request.get_json()
+    customer_id = data.get('customer_id')
+
+    try:
+        session = stripe.billing_portal.Session.create(
+            customer=customer_id,
+            return_url=request.host_url + 'profile'
+        )
+        return jsonify({'url': session.url})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
