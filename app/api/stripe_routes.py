@@ -1,8 +1,9 @@
-import os
+# stripe_routes.py
 from flask import Blueprint, request, jsonify
 import stripe
 from app.models import db, User
 from flask_login import login_required, current_user
+import os
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
@@ -50,27 +51,57 @@ def stripe_webhook():
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         handle_checkout_session(session)
-
-    if event['type'] == 'invoice.payment_failed':
-        session = event['data']['object']
-        handle_failed_payment(session)
+    elif event['type'] == 'invoice.payment_succeeded':
+        invoice = event['data']['object']
+        handle_payment_succeeded(invoice)
+    elif event['type'] == 'invoice.payment_failed':
+        invoice = event['data']['object']
+        handle_payment_failed(invoice)
+    elif event['type'] == 'customer.subscription.deleted':
+        subscription = event['data']['object']
+        handle_subscription_deleted(subscription)
+    elif event['type'] == 'customer.subscription.updated':
+        subscription = event['data']['object']
+        handle_subscription_updated(subscription)
 
     return jsonify({'status': 'success'}), 200
 
 def handle_checkout_session(session):
     user = User.query.filter_by(email=session['customer_email']).first()
     if user:
-        if session['mode'] == 'subscription':
-            subscription = stripe.Subscription.retrieve(session['subscription'])
-            price_id = subscription['items']['data'][0]['price']['id']
-            if price_id == 'price_1':
-                user.status = 'Premium Monthly'
-            elif price_id == 'price_2':
-                user.status = 'Premium Annual'
-            db.session.commit()
+        subscription = stripe.Subscription.retrieve(session['subscription'])
+        price_id = subscription['items']['data'][0]['price']['id']
+        if price_id == 'price_1PLVpIBIxhjYY7P2UNEsuWfr':  # Replace with your actual monthly price ID
+            user.status = 'Premium Monthly'
+        elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
+            user.status = 'Premium Annual'
+        db.session.commit()
 
-def handle_failed_payment(session):
-    user = User.query.filter_by(email=session['customer_email']).first()
+def handle_payment_succeeded(invoice):
+    # You can implement any additional logic if needed for successful payments
+    pass
+
+def handle_payment_failed(invoice):
+    customer_id = invoice['customer']
+    user = User.query.filter_by(stripe_customer_id=customer_id).first()
     if user:
         user.status = 'Basic'
+        db.session.commit()
+
+def handle_subscription_deleted(subscription):
+    customer_id = subscription['customer']
+    user = User.query.filter_by(stripe_customer_id=customer_id).first()
+    if user:
+        user.status = 'Basic'
+        db.session.commit()
+
+def handle_subscription_updated(subscription):
+    customer_id = subscription['customer']
+    user = User.query.filter_by(stripe_customer_id=customer_id).first()
+    if user:
+        price_id = subscription['items']['data'][0]['price']['id']
+        if price_id == 'price_1PLVpIBIxhjYY7P2UNEsuWfr':  # Replace with your actual monthly price ID
+            user.status = 'Premium Monthly'
+        elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
+            user.status = 'Premium Annual'
         db.session.commit()

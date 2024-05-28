@@ -24,10 +24,10 @@ const SubscriptionComponent = () => {
 
   return (
     <div className="subscription-buttons">
-      <button onClick={() => handleCheckout('price_1')} className="subscribe-button">
+      <button onClick={() => handleCheckout('price_1PLVpIBIxhjYY7P2UNEsuWfr')} className="subscribe-button">
         Subscribe Monthly ($77)
       </button>
-      <button onClick={() => handleCheckout('price_2')} className="subscribe-button">
+      <button onClick={() => handleCheckout('price_1PLVpbBIxhjYY7P2e7zv0EU2')} className="subscribe-button">
         Subscribe Annually ($777)
       </button>
     </div>
