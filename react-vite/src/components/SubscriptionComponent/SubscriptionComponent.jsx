@@ -9,7 +9,6 @@ const SubscriptionComponent = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
 
-
   const handleCheckout = async (priceId) => {
     const stripe = await stripePromise;
     const response = await fetch('/api/stripe/create-checkout-session', {
@@ -25,7 +24,6 @@ const SubscriptionComponent = () => {
   };
 
   const handleManageSubscription = async () => {
-    const stripe = await stripePromise;
     const response = await fetch('/api/stripe/create-portal-session', {
       method: 'POST',
       headers: {
@@ -35,12 +33,12 @@ const SubscriptionComponent = () => {
     });
 
     const session = await response.json();
-    stripe.redirectToCheckout({ sessionId: session.id });
+    window.location.href = session.url;  // Redirect to the customer portal URL
   };
 
   return (
     <div className="subscription-buttons">
-        <h1>Welcome, {user.username}</h1>
+      <h1>Welcome, {user.username}</h1>
       <p>Email: {user.email}</p>
       <p>Status: {user.status}</p>
       <button onClick={handleManageSubscription}>Manage Subscription</button>

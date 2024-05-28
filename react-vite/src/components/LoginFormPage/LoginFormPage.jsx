@@ -47,7 +47,7 @@ function LoginFormPage() {
   const demoLogin2 = async () => {
     await dispatch(
       thunkLogin({
-        email: "worldofcreatives.com@gmail.com",
+        email: "marnie@aa.io",
         password: "password",
       })
     ).catch((res) => {
