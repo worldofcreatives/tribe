@@ -1,5 +1,6 @@
 from app.models import db, Creator, environment, SCHEMA
 from sqlalchemy.sql import text
+from datetime import datetime
 
 def seed_creators():
     # Example creators
@@ -28,8 +29,8 @@ def seed_creators():
             'reference_email': None,
             'reference_phone': None,
             'reference_relationship': None,
-            'created_date': '2024-05-28 21:23:11.322576',
-            'updated_date': '2024-05-28 21:23:11.322579'
+            'created_date': datetime.utcnow(),
+            'updated_date': datetime.utcnow(),
         },
         {
             'user_id': 3,
@@ -55,8 +56,8 @@ def seed_creators():
             'reference_email': None,
             'reference_phone': None,
             'reference_relationship': None,
-            'created_date': '2024-05-28 21:23:11.322576',
-            'updated_date': '2024-05-28 21:23:11.322579'
+            'created_date': datetime.utcnow(),
+            'updated_date': datetime.utcnow(),
         },
         # Add more creators as needed
     ]
