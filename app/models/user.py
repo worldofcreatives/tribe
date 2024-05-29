@@ -1,9 +1,10 @@
-from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .db import db, environment, SCHEMA
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
 import os
 import binascii
+from app.utils.email_utils import send_email
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -17,7 +18,7 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(50), default='Creator', nullable=False)
-    status = db.Column(db.String(50), default='Pre-Apply', nullable=False)
+    _status = db.Column("status", db.String(50), default='Pre-Apply', nullable=False)
     stripe_customer_id = db.Column(db.String(120), unique=True)
     stripe_subscription_id = db.Column(db.String(120), unique=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -30,15 +31,37 @@ class User(db.Model, UserMixin):
     @password.setter
     def password(self, password):
         self.salt = binascii.hexlify(os.urandom(16)).decode()  # Generate a new salt
-        # mix in the the salt with the password before hashing
         self.hashed_password = generate_password_hash(password + self.salt)
 
     def check_password(self, password):
-        # check pw against the hashed password
         return check_password_hash(self.hashed_password, password + self.salt)
 
     def is_company(self):
         return self.type == 'Company'
+
+    @property
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, new_status):
+        if new_status != self._status:
+            self.send_status_change_email(new_status, self._status)
+            self._status = new_status
+
+    def send_status_change_email(self, new_status, old_status):
+        if new_status == 'Applied':
+            send_email(self.email, 'Application Received', 'Thank you for applying!')
+        elif new_status == 'Accepted':
+            # Check if the old status is not Premium Monthly or Premium Annual
+            if old_status not in ['Premium Monthly', 'Premium Annual']:
+                send_email(self.email, 'Application Accepted', 'Congratulations, your application has been accepted!')
+        elif new_status == 'Denied':
+            send_email(self.email, 'Application Denied', 'We regret to inform you that your application has been denied.')
+        elif new_status == 'Premium Monthly':
+            send_email(self.email, 'Subscription Upgraded', 'You have successfully upgraded to a Premium Monthly subscription.')
+        elif new_status == 'Premium Annual':
+            send_email(self.email, 'Subscription Upgraded', 'You have successfully upgraded to a Premium Annual subscription.')
 
     def to_dict(self):
         return {
@@ -49,7 +72,6 @@ class User(db.Model, UserMixin):
             'status': self.status,
             'stripe_customer_id': self.stripe_customer_id,
             'stripe_subscription_id': self.stripe_subscription_id,
-            # 'company_id': self.company_id,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }
