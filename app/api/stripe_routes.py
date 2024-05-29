@@ -1,4 +1,3 @@
-# stripe_routes.py
 from flask import Blueprint, request, jsonify
 import stripe
 from app.models import db, User
@@ -94,21 +93,24 @@ def handle_subscription_deleted(subscription):
     customer_id = subscription['customer']
     user = User.query.filter_by(stripe_customer_id=customer_id).first()
     if user:
-        user.status = 'Accepted'  # Set to 'Basic' or an appropriate status when subscription is canceled
+        user.status = 'Accepted'
         user.stripe_subscription_id = None
         db.session.commit()
 
 def handle_subscription_updated(subscription):
-    customer_id = subscription['customer']
-    user = User.query.filter_by(stripe_customer_id=customer_id).first()
-    if user:
-        price_id = subscription['items']['data'][0]['price']['id']
-        user.stripe_subscription_id = subscription['id']
-        if price_id == 'price_1PLVpIBIxhjYY7P2UNEsuWfr':  # Replace with your actual monthly price ID
-            user.status = 'Premium Monthly'
-        elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
-            user.status = 'Premium Annual'
-        db.session.commit()
+    if subscription['status'] == 'canceled':
+        handle_subscription_deleted(subscription)
+    else:
+        customer_id = subscription['customer']
+        user = User.query.filter_by(stripe_customer_id=customer_id).first()
+        if user:
+            price_id = subscription['items']['data'][0]['price']['id']
+            user.stripe_subscription_id = subscription['id']
+            if price_id == 'price_1PLVpIBIxhjYY7P2UNEsuWfr':  # Replace with your actual monthly price ID
+                user.status = 'Premium Monthly'
+            elif price_id == 'price_1PLVpbBIxhjYY7P2e7zv0EU2':  # Replace with your actual annual price ID
+                user.status = 'Premium Annual'
+            db.session.commit()
 
 @stripe_routes.route('/create-portal-session', methods=['POST'])
 @login_required
