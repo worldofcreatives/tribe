@@ -42,6 +42,10 @@ const SubscriptionComponent = () => {
     const session = await response.json();
     window.location.href = session.url;  // Redirect to the customer portal URL
 
+    // After user returns from the customer portal, refresh the user data
+    window.addEventListener('focus', () => {
+      dispatch(fetchUserProfile());
+    }, { once: true });
   };
 
   return (
