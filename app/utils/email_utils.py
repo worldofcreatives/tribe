@@ -7,7 +7,7 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 
 def send_email(to_email, subject, content):
     message = Mail(
-        from_email='info@7packs.com',
+        from_email='7PACKS <info@7packs.com>',
         to_emails=to_email,
         subject=subject,
         html_content=content)
