@@ -3,6 +3,7 @@ from app.models import User, db, Creator
 from app.forms import LoginForm
 from app.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
+from app.utils.email_utils import send_email
 
 auth_routes = Blueprint('auth', __name__)
 
@@ -65,6 +66,10 @@ def sign_up():
 
         # Log the user in
         login_user(user)
+
+         # Send welcome email
+        send_email(user.email, 'Welcome to 7packs', 'Thank you for signing up!')
+
         return jsonify(user.to_dict()), 201
     else:
         return jsonify({'errors': form.errors}), 401
