@@ -33,6 +33,8 @@ flask-uploads = "==0.2.1"
 email-validator = "==2.1.1"
 stripe = "==9.8.0"
 sendgrid = "==6.11.0"
+celery = "==5.4.0"
+redis = "==5.0.4"
 
 [dev-packages]
 
