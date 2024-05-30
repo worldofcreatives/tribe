@@ -19,6 +19,8 @@ import UsersChart from '../components/UsersChart';
 import UserInfo from '../components/UserInfo/UserInfo';
 import Unauthorized from '../components/Unauthorized';
 import SubscriptionComponent from '../components/SubscriptionComponent/SubscriptionComponent';
+import PasswordReset from '../components/PasswordReset/PasswordReset';
+import PasswordResetRequest from '../components/PasswordResetRequest/PasswordResetRequest';
 
 export const router = createBrowserRouter([
   {
@@ -106,6 +108,14 @@ export const router = createBrowserRouter([
       {
         path: "/cancel",
         element: <SubscriptionComponent />,
+      },
+      {
+        path: "/reset_password/:token",
+        element: <PasswordReset />,
+      },
+      {
+        path: "/password_reset_request",
+        element: <PasswordResetRequest />,
       },
     ],
   },

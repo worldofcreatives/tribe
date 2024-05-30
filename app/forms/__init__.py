@@ -6,3 +6,4 @@ from .opportunity_form import OpportunityForm
 from .profile_form import ProfileForm
 from .search_form import SearchForm
 from .submission_form import SubmissionForm
+from .password_reset_request_form import PasswordResetRequestForm
