@@ -11,6 +11,7 @@ from .api.profile_routes import profile_routes
 from .api.opportunity_routes import opportunity_routes
 from .api.aws_routes import aws_routes
 from .api.stripe_routes import stripe_routes
+from .api.contact_routes import contact_routes
 from .seeds import seed_commands
 from .config import Config
 
@@ -41,6 +42,7 @@ app.register_blueprint(profile_routes, url_prefix="/api/profiles")
 app.register_blueprint(opportunity_routes, url_prefix="/api/opportunities")
 app.register_blueprint(aws_routes, url_prefix="/api/aws")
 app.register_blueprint(stripe_routes, url_prefix="/api/stripe")
+app.register_blueprint(contact_routes, url_prefix="/api/contact")
 db.init_app(app)
 Migrate(app, db)
 
