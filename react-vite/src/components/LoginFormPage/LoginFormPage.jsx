@@ -85,6 +85,7 @@ function LoginFormPage() {
         {errors.password && <p className="error">{errors.password}</p>}
         <button type="submit" className="log-button">Log In</button>
         <div>
+        <button onClick={() => navigate("/password_reset_request")}>Reset Password</button>
         <button onClick={demoLogin1}>Demo User 1</button>
         <button onClick={demoLogin2}>Demo User 2</button>
         </div>
