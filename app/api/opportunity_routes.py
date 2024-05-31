@@ -140,49 +140,6 @@ def file_size_under_limit(file):
     file.seek(0)  # Reset the file position to the beginning
     return file_size <= MAX_FILE_SIZE
 
-# @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
-# @login_required
-# def create_submission(id):
-#     form = SubmissionForm()
-#     form['csrf_token'].data = request.cookies['csrf_token']
-#     opportunity = Opportunity.query.get(id)
-
-#     if form.validate_on_submit():
-#         file = form.file.data
-
-#         # Check both file type and file size
-#         if file and is_allowed_file(file.filename, {"mp3", "wav"}) and file_size_under_limit(file):
-#             file_name = get_unique_filename(file.filename)
-#             file_url_response = upload_file_to_s3(file, file_name)
-
-#             if "url" in file_url_response:
-#                 new_submission = Submission(
-#                     # creator_id=current_user.id,
-#                     opportunity_id=opportunity.id,
-#                     user_id=current_user.id,
-#                     username=current_user.username,
-#                     name=form.name.data,
-#                     notes=form.notes.data,
-#                     bpm=form.bpm.data,
-#                     collaborators=form.collaborators.data,
-#                     file_url=file_url_response["url"],
-#                 )
-#                 db.session.add(new_submission)
-#                 db.session.commit()
-#                 return jsonify(new_submission.to_dict()), 201
-#             else:
-#                 error_message = file_url_response.get("errors", "Unknown error during file upload.")
-#                 return jsonify({"errors": f"File upload failed: {error_message}"}), 500
-#         else:
-#             # Return an appropriate error message if the file type is not allowed or file size exceeds the limit
-#             if not is_allowed_file(file.filename, {"mp3", "wav"}):
-#                 return jsonify({"error": "File type not allowed"}), 400
-#             if not file_size_under_limit(file):
-#                 return jsonify({"error": "File size exceeds limit"}), 400
-
-#     else:
-#         return jsonify({'errors': form.errors}), 400
-
 @opportunity_routes.route('/<int:id>/submit', methods=['POST'])
 @login_required
 def create_submission(id):
@@ -190,16 +147,48 @@ def create_submission(id):
     form['csrf_token'].data = request.cookies['csrf_token']
     opportunity = Opportunity.query.get(id)
 
+    if not opportunity:
+        return jsonify({'error': 'Opportunity not found.'}), 404
+
     current_month = datetime.utcnow().month
     current_year = datetime.utcnow().year
-    submission_count = Submission.query.filter(
+
+    # Check the number of submissions the user has made in the current month
+    monthly_submission_count = Submission.query.filter(
         Submission.user_id == current_user.id,
         db.extract('month', Submission.created_date) == current_month,
         db.extract('year', Submission.created_date) == current_year
     ).count()
 
-    if current_user.status == 'Accepted' and submission_count >= 3:
-        return jsonify({'error': 'Submission limit reached for the current month.'}), 403
+    # Check if the user has already submitted to this opportunity
+    existing_submission = Submission.query.filter_by(
+        user_id=current_user.id,
+        opportunity_id=opportunity.id
+    ).first()
+
+    submission_limit_reached = False
+    submission_limit_per_opportunity_reached = False
+
+    if current_user.status == 'Accepted':
+        if monthly_submission_count >= 3:
+            submission_limit_reached = True
+        if existing_submission:
+            submission_limit_per_opportunity_reached = True
+    elif current_user.status in ['Premium Monthly', 'Premium Annual']:
+        if monthly_submission_count >= 30:
+            submission_limit_reached = True
+        if Submission.query.filter_by(user_id=current_user.id, opportunity_id=opportunity.id).count() >= 3:
+            submission_limit_per_opportunity_reached = True
+    elif current_user.status == 'Major7eague' or current_user.type == 'Company':
+        submission_limit_reached = False
+        submission_limit_per_opportunity_reached = False
+    else:
+        return jsonify({'error': 'You are not allowed to submit.'}), 403
+
+    if submission_limit_reached:
+        return jsonify({'error': 'Monthly submission limit reached.'}), 403
+    if submission_limit_per_opportunity_reached:
+        return jsonify({'error': f'You have reached the submission limit for this opportunity.'}), 403
 
     if form.validate_on_submit():
         file = form.file.data
@@ -211,7 +200,6 @@ def create_submission(id):
 
             if "url" in file_url_response:
                 new_submission = Submission(
-                    # creator_id=current_user.id,
                     opportunity_id=opportunity.id,
                     user_id=current_user.id,
                     username=current_user.username,
@@ -238,8 +226,6 @@ def create_submission(id):
         return jsonify({'errors': form.errors}), 400
 
 
-# GET /api/opportunities/:opportunity_id/submissions/count - Get the number of submissions made by the current user in the current month
-
 @opportunity_routes.route('/<int:opportunity_id>/submissions/count', methods=['GET'])
 @login_required
 def get_monthly_submission_count(opportunity_id):
@@ -255,6 +241,21 @@ def get_monthly_submission_count(opportunity_id):
     ).count()
 
     return jsonify({'submission_count': submission_count})
+
+
+@opportunity_routes.route('/<int:opportunity_id>/submissions/user', methods=['GET'])
+@login_required
+def check_user_submission(opportunity_id):
+    """
+    Check if the current user has already submitted to the specified opportunity.
+    """
+    existing_submission = Submission.query.filter_by(
+        user_id=current_user.id,
+        opportunity_id=opportunity_id
+    ).first()
+
+    return jsonify({'has_submitted': existing_submission is not None})
+
 
 
 # GET /api/opportunities/:id/submissions - Get all submissions for an opportunity
