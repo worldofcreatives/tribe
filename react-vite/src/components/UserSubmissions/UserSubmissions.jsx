@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './UserSubmissions.css';
 
 const UserSubmissions = () => {
@@ -58,9 +59,17 @@ const UserSubmissions = () => {
             {submissions.map((submission) => (
               <tr key={submission.id}>
                 <td>{submission.name}</td>
-                <td>{submission.opportunity_id}</td>
+                <td>
+                  <Link to={`/opportunities/${submission.opportunity_id}`}>
+                    {submission.opportunity_name}
+                  </Link>
+                </td>
                 <td>{submission.status}</td>
-                <td>{submission.notes}</td>
+                <td className="notes">
+                  <span title={submission.notes}>
+                    {submission.notes.length > 30 ? `${submission.notes.substring(0, 30)} ...(hover over to read the rest)` : submission.notes}
+                  </span>
+                </td>
                 <td>{submission.bpm}</td>
                 <td>{submission.collaborators}</td>
                 <td>{new Date(submission.created_date).toLocaleDateString()}</td>

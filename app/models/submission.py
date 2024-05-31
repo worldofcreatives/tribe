@@ -46,6 +46,7 @@ class Submission(db.Model):
         return {
             'id': self.id,
             'opportunity_id': self.opportunity_id,
+            'opportunity_name': self.opportunity.name,
             'user_id': self.user_id,
             'username': self.username,
             'name': self.name,
