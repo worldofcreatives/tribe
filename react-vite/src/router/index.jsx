@@ -22,6 +22,7 @@ import SubscriptionComponent from '../components/SubscriptionComponent/Subscript
 import PasswordReset from '../components/PasswordReset/PasswordReset';
 import PasswordResetRequest from '../components/PasswordResetRequest/PasswordResetRequest';
 import ContactUs from '../components/ContactUs';
+import UserSubmissions from '../components/UserSubmissions/UserSubmissions';
 
 export const router = createBrowserRouter([
   {
@@ -121,6 +122,10 @@ export const router = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactUs />,
+      },
+      {
+        path: "/submissions",
+        element: <UserSubmissions />,
       },
     ],
   },

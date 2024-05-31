@@ -38,7 +38,13 @@ function Navigation() {
 
               <li>
                 <NavLink to="/opps" activeClassName="active">
-                  <i className="fas fa-music"></i> Opps
+                  <i className="fas fa-key"></i> Opps
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink to="/submissions" activeClassName="active">
+                  <i className="fas fa-music"></i> Subs
                 </NavLink>
               </li>
 

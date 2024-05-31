@@ -257,6 +257,17 @@ def check_user_submission(opportunity_id):
     return jsonify({'has_submitted': existing_submission is not None})
 
 
+# GET /api/opportunities/submissions - Get all of a user's submissions
+
+@opportunity_routes.route('/submissions/user', methods=['GET'])
+@login_required
+def get_user_submissions():
+    """
+    Gets all submissions for the current user.
+    """
+    user_submissions = Submission.query.filter_by(user_id=current_user.id).all()
+    return jsonify([submission.to_dict() for submission in user_submissions]), 200
+
 
 # GET /api/opportunities/:id/submissions - Get all submissions for an opportunity
 
