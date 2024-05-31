@@ -9,6 +9,10 @@ const UserSubmissions = () => {
   const [error, setError] = useState('');
   const user = useSelector((state) => state.session.user);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [sortOrder, setSortOrder] = useState('desc');
+
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
@@ -29,6 +33,49 @@ const UserSubmissions = () => {
     fetchSubmissions();
   }, []);
 
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleFilterStatus = (e) => {
+    setFilterStatus(e.target.value);
+  };
+
+  const handleSortOrder = (e) => {
+    setSortOrder(e.target.value);
+  };
+
+  const filterAndSortSubmissions = (submissions) => {
+    let filteredSubmissions = submissions;
+
+    // Search
+    if (searchQuery) {
+      filteredSubmissions = filteredSubmissions.filter((submission) =>
+        submission.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        submission.opportunity_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        submission.notes.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        submission.collaborators.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        submission.bpm.toString().includes(searchQuery)
+      );
+    }
+
+    // Filter
+    if (filterStatus) {
+      filteredSubmissions = filteredSubmissions.filter(
+        (submission) => submission.status === filterStatus
+      );
+    }
+
+    // Sort
+    filteredSubmissions.sort((a, b) => {
+      const dateA = new Date(a.created_date);
+      const dateB = new Date(b.created_date);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    return filteredSubmissions;
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -37,10 +84,30 @@ const UserSubmissions = () => {
     return <div className="error">{error}</div>;
   }
 
+  const filteredSubmissions = filterAndSortSubmissions(submissions);
+
   return (
     <div className="user-submissions">
       <h1>Your Submissions</h1>
-      {submissions.length === 0 ? (
+      <div className="controls">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearch}
+        />
+        <select value={filterStatus} onChange={handleFilterStatus}>
+          <option value="">All Statuses</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Pending">Pending</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+        <select value={sortOrder} onChange={handleSortOrder}>
+          <option value="desc">Sort by Date: Newest First</option>
+          <option value="asc">Sort by Date: Oldest First</option>
+        </select>
+      </div>
+      {filteredSubmissions.length === 0 ? (
         <p>No submissions found.</p>
       ) : (
         <table>
@@ -56,7 +123,7 @@ const UserSubmissions = () => {
             </tr>
           </thead>
           <tbody>
-            {submissions.map((submission) => (
+            {filteredSubmissions.map((submission) => (
               <tr key={submission.id}>
                 <td>{submission.name}</td>
                 <td>

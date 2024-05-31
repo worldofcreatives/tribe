@@ -1,9 +1,22 @@
+/* UserSubmissions.css */
 .user-submissions {
   padding: 20px;
 }
 
 .user-submissions h1 {
   margin-bottom: 20px;
+}
+
+.user-submissions .controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.user-submissions .controls input,
+.user-submissions .controls select {
+  padding: 8px;
+  margin-right: 10px;
 }
 
 .user-submissions table {
