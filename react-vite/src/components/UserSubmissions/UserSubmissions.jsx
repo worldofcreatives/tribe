@@ -127,7 +127,7 @@ const UserSubmissions = () => {
               <tr key={submission.id}>
                 <td>{submission.name}</td>
                 <td>
-                  <Link to={`/opportunities/${submission.opportunity_id}`}>
+                  <Link to={`/opps/${submission.opportunity_id}`}>
                     {submission.opportunity_name}
                   </Link>
                 </td>
