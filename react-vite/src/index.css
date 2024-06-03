@@ -1,102 +1,38 @@
 body {
     margin: 0;
     padding: 0;
-    /* background-color: #121212; */
     color: #232323;
     font-family: 'Roboto', sans-serif;
-}
+ }
 
-a {
-    color: #81D4FA;
+
+ a {
+    color: #f2fa81;
     text-decoration: none;
-}
+ }
 
-.orbitron {
-    font-family: 'Orbitron', sans-serif;
-}
+/* Designing the scroll bar */
 
-.button {
-    background-color: #2979FF;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.neon {
-    color: #76FF03;
-    text-shadow: 0 0 5px #B2FF59, 0 0 10px #B2FF59, 0 0 20px #B2FF59, 0 0 40px #B2FF59;
-}
-
-.container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.section {
-    margin-bottom: 40px;
-}
-
-::-webkit-scrollbar {
+ ::-webkit-scrollbar {
     width: 12px;
+ }
 
-}
+ ::-webkit-scrollbar-thumb:hover {
+    background-color: #ffffff;
+ }
 
-::-webkit-scrollbar-track {
+ ::-webkit-scrollbar-track {
     background: #e6e6e6;
-}
+ }
 
-::-webkit-scrollbar-thumb {
+ ::-webkit-scrollbar-thumb {
     border-radius: 6px;
     border: 3px solid #333;
     background-color: #f4d600;
-}
+ }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: #448AFF;
-}
+/* ------------------- */
 
-form {
-    background-color: #1e1e1e;
-    color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    border: 3px solid #333;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
-textarea {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    outline: none;
-    padding: 10px;
-    margin: 5px 0;
-    width: calc(100% - 22px);
-    /* border-radius: 4px; */
-}
-
-select {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    margin: 5px 0;
-    width: 100%;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
 
 button {
     background-color: #000000;
@@ -106,79 +42,131 @@ button {
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s;
-    font-size: 16px;
-}
+ }
 
-button:hover {
+
+ button:hover {
     background-color: #f4d600;
     color:#000
-}
+ }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-textarea:focus {
-    /* width: 100%; */
+/* Form styling */
+
+ form {
+    background-color: #1e1e1e;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 3px solid #333;
+ }
+
+
+ input[type="text"],
+ input[type="password"],
+ input[type="email"],
+ input[type="number"],
+ textarea {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin: 5px 0;
+    width: calc(100% - 22px);
+ }
+
+
+ select {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+ }
+
+
+ label {
+    display: block;
+    margin-bottom: 5px;
+ }
+
+ input[type="text"]:focus,
+ input[type="password"]:focus,
+ input[type="email"]:focus,
+ textarea:focus {
     border-collapse: collapse;
     background-color: #333;
     color: #fff;
-    /* border-radius: 8px; */
     overflow: hidden;
-    /* margin-bottom: 20px; */
-}
+ }
 
-table {
+
+/* Table styling */
+
+ table {
     width: 100%;
     border-collapse: collapse;
     background-color: #333;
     color: #fff;
-    /* border-radius: 8px; */
     overflow: hidden;
     margin-bottom: 20px;
-}
+ }
 
-th {
+
+ th {
     background-color: #000000;
     color: #f4d600;
     text-align: left;
     padding: 10px;
     font-size: 16px;
-}
+ }
 
-tr {
+
+ tr {
     border-bottom: 1px solid #555;
-}
+ }
 
-td {
+
+ td {
     padding: 8px;
     font-size: 14px;
-}
+ }
 
-tr:hover {
+
+ tr:hover {
     background-color: #555;
-}
+ }
 
-tbody tr:nth-child(odd) {
+
+ tbody tr:nth-child(odd) {
     background-color: #383838;
-}
+ }
 
-@media (max-width: 768px) {
+
+ @media (max-width: 768px) {
     .table-responsive {
       overflow-x: auto;
     }
-}
-.error {
+ }
+ .error {
     color: red;
     font-size: 0.8rem;
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
-}
+ }
 
-.check-item {
+
+ .check-item {
     display: flex;
     align-items: center;
   }
 
-.check-item input[type="checkbox"] {
-    margin-right: 8px; /* Adjust space between checkbox and label as needed */
-}
+
+ .check-item input[type="checkbox"] {
+    margin-right: 8px;
+ }
+
+

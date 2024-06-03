@@ -9,7 +9,6 @@ const OpportunityBox = ({ opportunity }) => {
   const boxRef = useRef(null); // Add this line
 
   useEffect(() => {
-    // If the opportunity is selected, scroll it into view
     if (isSelected && boxRef.current) {
       boxRef.current.scrollIntoView({
         behavior: 'smooth',
@@ -23,11 +22,9 @@ const OpportunityBox = ({ opportunity }) => {
   };
 
   return (
-    // Add ref={boxRef} to the div to reference this component
     <div className={`opportunity-details ${isSelected ? 'selected' : ''}`} ref={boxRef}>
       <h3 className='opp-name'>{opportunity.name}</h3>
       <div className='bubble-box'>
-        {/* <p className='bubble'><strong>${opportunity.budget}</strong></p> */}
         <p className='bubble'><strong>Deadline: {new Date(opportunity.created_date).toLocaleDateString()}</strong></p>
       </div>
       <p className='description'>{opportunity.description}</p>
