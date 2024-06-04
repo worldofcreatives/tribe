@@ -44,12 +44,14 @@
 }
 
 .logout-button {
-  background-color: #fff; /* Lighter grey */
-  color: #bcbcbc;
+  background-color: #ffffff; /* Lighter grey */
+  color: #b9b9b9;
+  border: 2px solid #b9b9b9;
 }
 
 .logout-button:hover {
-  background-color: #575A5E; /* Darker shade for hover */
+  background-color: #efefef; /* Darker shade for hover */
+  color: #b9b9b9;
 }
 
 /* Styles for the log-in and sign-up links */
