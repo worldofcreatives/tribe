@@ -57,7 +57,12 @@
     transition: background-color 0.2s ease;
   }
 
-  .pricing-details, .standard-info, li {
+.standard-info li {
+    list-style: none;
+    padding-bottom: 15px;
+  }
+
+  .pricing-details li {
     list-style: none;
     padding-bottom: 15px;
   }
