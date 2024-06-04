@@ -43,6 +43,19 @@ const ProfilePage = () => {
             </div>
           </div>
 
+
+          {(user.status === 'Pre-Apply') ? (
+        <>
+          <div className='card'>
+            <h1>You need to apply to 7PACKS to apply to opportunities:</h1>
+            <button onClick={() => navigate('/apply')}>Apply to 7Packs for Free</button>
+          </div>
+        </>
+      ) : (
+        <>
+        </>
+      )}
+
           {(user.status === 'Premium Monthly' || user.status === 'Premium Annual' || user.status === 'Accepted') ? (
         <SubscriptionComponent />
       ) : (
