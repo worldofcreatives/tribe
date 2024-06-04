@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './UserSubmissions.css';
 
 const UserSubmissions = () => {
@@ -8,10 +8,23 @@ const UserSubmissions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const user = useSelector((state) => state.session.user);
+  const navigate = useNavigate(); // Use navigate for redirection
+
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
+  const { userStatus } = useSelector((state) => ({
+    userStatus: state.session.user.status
+  }));
+
+  useEffect(() => {
+    // Redirect to "/apply" if user status is "Pre-Apply"
+    if (userStatus === "Pre-Apply") {
+      navigate('/apply');
+    }
+  }, [userStatus, navigate]); // Depend on userStatus and navigate
+
 
   useEffect(() => {
     const fetchSubmissions = async () => {

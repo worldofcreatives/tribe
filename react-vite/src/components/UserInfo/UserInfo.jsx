@@ -36,7 +36,12 @@ const UserInfo = () => {
 
       <button onClick={() => handleStatusUpdate('Accepted')}>Accept</button>
       <button onClick={() => handleStatusUpdate('Denied')}>Deny</button>
+      <button onClick={() => handleStatusUpdate('Pre-Apply')}>Pre-Apply</button>
       <button onClick={() => handleStatusUpdate('Applied')}>Applied</button>
+      <button onClick={() => handleStatusUpdate('Premium Monthly')}>Premium Monthly</button>
+      <button onClick={() => handleStatusUpdate('Premium Annual')}>Premium Annual</button>
+
+
 
       <p><strong>Type:</strong> {user.type}</p>
       {user.creator && (

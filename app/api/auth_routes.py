@@ -105,7 +105,7 @@ def update_user_status(user_id):
 
     data = request.get_json()
     status = data.get('status')
-    if status not in ['Accepted', 'Denied', 'Applied']:
+    if status not in ['Accepted', 'Denied', 'Applied', 'Pre-Apply', 'Premium Monthly', 'Premium Annual']:
         return {'errors': ['Invalid status.']}, 400
 
     user = User.query.get(user_id)

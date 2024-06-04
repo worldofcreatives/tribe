@@ -356,7 +356,7 @@ const OnboardingApplication = () => {
   return (
     <div className="onboarding-application">
       <h1>Apply to 7Packs</h1>
-      <p>3 steps to your music goals.</p>
+      <p>The opportunity you've been waiting for is right around this corner.</p>
       <div className="step-indicator">
         <span className={currentStep === 1 ? 'active' : ''}>Step 1</span>
         <span className={currentStep === 2 ? 'active' : ''}>Step 2</span>
