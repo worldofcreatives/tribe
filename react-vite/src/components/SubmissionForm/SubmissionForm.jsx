@@ -120,7 +120,7 @@ const SubmissionForm = ({ opportunityId }) => {
     } else if (user.status === 'Applied') {
       return (
         <button className='submit-button' type="button" disabled onClick={() => navigate('/apply')}>
-          Want to submit your music? Your 7packs application is pending
+          Your 7packs application is pending. Only approved creators can apply to opps.
         </button>
       );
     }
