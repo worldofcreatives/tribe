@@ -102,15 +102,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/subscribe",
-        element: <SubscriptionComponent />,
+        element: <ProfilePage />,
       },
       {
         path: "/success",
-        element: <SubscriptionComponent />,
+        element: <ProfilePage />,
       },
       {
         path: "/cancel",
-        element: <SubscriptionComponent />,
+        element: <ProfilePage />,
       },
       {
         path: "/reset_password/:token",

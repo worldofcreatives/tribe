@@ -83,13 +83,17 @@ const SubscriptionComponent = () => {
 
   return (
     <div className="subscription-component">
-      <h1>Upgrade Your Account to Access More Features</h1>
+
       {(user.status === 'Premium Monthly' || user.status === 'Premium Annual') ? (
+        <>
+        <h1>Enjoy your premium access.</h1>
         <button onClick={handleManageSubscription} className="manage-subscription-button">
           Manage Subscription
         </button>
+        </>
       ) : (
         <>
+        <h1>Upgrade Your Account to Access More Features</h1>
           <div className="standard-info">
             <h2>Standard Creators</h2>
             <p>Free</p>
