@@ -9,6 +9,7 @@ const ProfilePage = () => {
   const userProfile = useSelector((state) => state.profile.userProfile);
   const user = useSelector((state) => state.session.user);
   const navigate = useNavigate();
+  const defaultProfilePic = 'https://uploads-ssl.webflow.com/5d6dde2cb8496e3f669a4b75/665e8d5f51c4aab200bca30f_profilepic.jpeg'; // Link to default profile image
 
   useEffect(() => {
     dispatch(fetchUserProfile());
@@ -25,8 +26,12 @@ const ProfilePage = () => {
       {userProfile.type === 'Creator' && creator && (
         <>
           <div className="header-section">
-            {creator.profile_pic && <img src={creator.profile_pic} alt="Profile" className="profile-pic" />}
-            <div className="header-info">
+          <img
+              src={creator.profile_pic || defaultProfilePic}
+              alt="Profile"
+              className="profile-pic"
+            />
+              <div className="header-info">
               <h2>{creator.stage_name}</h2>
               <p><strong>Status:</strong> {user.status}</p>
               <p>{creator.bio}</p>
