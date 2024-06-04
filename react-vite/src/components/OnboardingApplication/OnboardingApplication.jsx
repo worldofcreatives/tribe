@@ -172,7 +172,7 @@ const OnboardingApplication = () => {
       await dispatch(thunkUpdateUserStatus());
 
       // Navigate to profile or another page as needed after the update
-      navigate('/profile');
+      navigate('/welcome');
     } catch (error) {
       console.error("Failed to update profile or status:", error);
       // Handle error (e.g., show an error message to the user)

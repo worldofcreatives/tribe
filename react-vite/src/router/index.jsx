@@ -23,6 +23,7 @@ import PasswordReset from '../components/PasswordReset/PasswordReset';
 import PasswordResetRequest from '../components/PasswordResetRequest/PasswordResetRequest';
 import ContactUs from '../components/ContactUs';
 import UserSubmissions from '../components/UserSubmissions/UserSubmissions';
+import ApplicationComplete from '../components/ApplicationComplete/ApplicationComplete';
 
 export const router = createBrowserRouter([
   {
@@ -126,6 +127,10 @@ export const router = createBrowserRouter([
       {
         path: "/submissions",
         element: <UserSubmissions />,
+      },
+      {
+        path: "/welcome",
+        element: <ApplicationComplete />,
       },
     ],
   },
