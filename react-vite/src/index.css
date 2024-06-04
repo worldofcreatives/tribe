@@ -103,6 +103,10 @@ button {
     overflow: hidden;
  }
 
+ textarea {
+    font-family: Arial, Helvetica, sans-serif;
+ }
+
 
 /* Table styling */
 
