@@ -109,16 +109,15 @@ button {
  table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #333;
-    color: #fff;
+    /* background-color: #333;
+    color: #fff; */
     overflow: hidden;
     margin-bottom: 20px;
  }
 
 
  th {
-    background-color: #000000;
-    color: #f4d600;
+
     text-align: left;
     padding: 10px;
     font-size: 16px;
@@ -137,12 +136,12 @@ button {
 
 
  tr:hover {
-    background-color: #555;
+    background-color: #e3e3e3;
  }
 
 
  tbody tr:nth-child(odd) {
-    background-color: #383838;
+    background-color: #f4f4f4;
  }
 
 
