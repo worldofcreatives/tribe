@@ -1,4 +1,4 @@
-# Welcome to PackTune!
+# Welcome to Sparketh!
 
 Link to live site: https://packtune.onrender.com/
 
