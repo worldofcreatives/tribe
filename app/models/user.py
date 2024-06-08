@@ -26,8 +26,13 @@ class User(db.Model, UserMixin):
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def set_password(self, password):
-        self.salt = binascii.hexlify(os.urandom(16)).decode()
+    @property
+    def password(self):
+        return self.hashed_password
+
+    @password.setter
+    def password(self, password):
+        self.salt = binascii.hexlify(os.urandom(16)).decode()  # Generate a new salt
         self.hashed_password = generate_password_hash(password + self.salt)
 
     def check_password(self, password):
@@ -47,7 +52,6 @@ class User(db.Model, UserMixin):
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }
-
 
 #
 # from .db import db, environment, SCHEMA

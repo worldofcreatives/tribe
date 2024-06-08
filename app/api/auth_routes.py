@@ -45,41 +45,69 @@ def logout():
     logout_user()
     return {'message': 'User logged out'}
 
+# @auth_routes.route('/signup', methods=['POST'])
+# def sign_up():
+#     """
+#     Creates a new user, sets them as a creator, and logs them in.
+#     """
+#     form = SignUpForm()
+#     form['csrf_token'].data = request.cookies['csrf_token']
+#     if form.validate_on_submit():
+#         # Create and add new user
+#         user = User(
+#             username=form.data['username'],
+#             email=form.data['email'],
+#             password=form.data['password'],
+#             type='Creator',
+#             status='Pre-Apply'
+#         )
+#         db.session.add(user)
+#         db.session.commit()
+
+#         # Create and add new creator linked to the user
+#         creator = Creator(
+#             user_id=user.id,
+#         )
+#         db.session.add(creator)
+#         db.session.commit()
+
+#         # Log the user in
+#         login_user(user)
+
+#         # Send welcome email
+#         send_email(user.email, 'Welcome to 7packs', 'Thank you for signing up!')
+
+#         return jsonify(user.to_dict()), 201
+#     else:
+#         return jsonify({'errors': form.errors}), 401
+
 @auth_routes.route('/signup', methods=['POST'])
 def sign_up():
-    """
-    Creates a new user, sets them as a creator, and logs them in.
-    """
     form = SignUpForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        # Create and add new user
         user = User(
             username=form.data['username'],
-            email=form.data['email'],
-            password=form.data['password'],
-            type='Creator',
-            status='Pre-Apply'
+            email=form.data['email']
         )
+        user.password = form.data['password']  # Use the password property setter
         db.session.add(user)
         db.session.commit()
-
-        # Create and add new creator linked to the user
-        creator = Creator(
-            user_id=user.id,
-        )
-        db.session.add(creator)
-        db.session.commit()
-
-        # Log the user in
         login_user(user)
-
-        # Send welcome email
-        send_email(user.email, 'Welcome to 7packs', 'Thank you for signing up!')
-
         return jsonify(user.to_dict()), 201
+    return jsonify({'errors': form.errors}), 401
+
+
+@auth_routes.route('/current_user', methods=['GET'])
+@login_required
+def get_current_user():
+    """
+    Get the currently authenticated user's information.
+    """
+    if current_user.is_authenticated:
+        return jsonify(current_user.to_dict()), 200
     else:
-        return jsonify({'errors': form.errors}), 401
+        return jsonify({'error': 'Unauthorized'}), 401
 
 @auth_routes.route('/update_status', methods=['PUT'])
 @login_required
@@ -159,6 +187,10 @@ def reset_password(token):
             return {'message': 'Your password has been reset successfully.'}, 200
     return jsonify({'errors': form.errors}), 401
 
+@auth_routes.route('/profile', methods=['GET'])
+@login_required
+def profile():
+    return current_user.to_dict()
 
 # from flask import Blueprint, request, jsonify
 # from app.models import User, db, Creator

@@ -12,6 +12,12 @@ from .api.opportunity_routes import opportunity_routes
 from .api.aws_routes import aws_routes
 from .api.stripe_routes import stripe_routes
 from .api.contact_routes import contact_routes
+from .api.attendance_routes import attendance_routes
+from .api.notification_routes import notification_routes
+from .api.review_routes import review_routes
+from .api.event_routes import event_routes
+from .api.invite_routes import invite_routes
+from .api.report_routes import report_routes
 from .seeds import seed_commands
 from .config import Config
 
@@ -43,6 +49,12 @@ app.register_blueprint(opportunity_routes, url_prefix="/api/opportunities")
 app.register_blueprint(aws_routes, url_prefix="/api/aws")
 app.register_blueprint(stripe_routes, url_prefix="/api/stripe")
 app.register_blueprint(contact_routes, url_prefix="/api/contact")
+app.register_blueprint(attendance_routes, url_prefix="/api/attendances")
+app.register_blueprint(notification_routes, url_prefix="/api/notifications")
+app.register_blueprint(review_routes, url_prefix="/api/reviews")
+app.register_blueprint(event_routes, url_prefix="/api/events")
+app.register_blueprint(invite_routes, url_prefix="/api/invites")
+app.register_blueprint(report_routes, url_prefix="/api/reports")
 db.init_app(app)
 Migrate(app, db)
 
