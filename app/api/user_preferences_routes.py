@@ -63,54 +63,25 @@ def get_availability():
         return jsonify(availability.to_dict())
     return jsonify({'message': 'No availability found'}), 404
 
-# @preferences_routes.route('/availability', methods=['POST'])
-# @login_required
-# def set_availability():
-#     data = request.get_json()
-#     print("🚀🚀🚀", data)
-
-#     # Assuming you send the CSRF token in the JSON body
-#     form = AvailabilityForm(csrf_token=data.get('csrf_token'))
-
-#     # Populate the form with the request data
-#     for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
-#         day_data = data.get(day, {})
-#         for slot in ['early_morning', 'morning', 'afternoon', 'night', 'late_night']:
-#             getattr(form, day).append_entry(slot)
-#             getattr(form, day)[-1].process(None, day_data.get(slot, False))
-
-#     print("🔥🔥🔥🔥", form.data)
-
-#     if form.validate():
-#         availability = UserAvailability.query.filter_by(user_id=current_user.id).first()
-#         if availability:
-#             for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
-#                 setattr(availability, day, json.dumps(getattr(form, day).data))
-#         else:
-#             availability = UserAvailability(
-#                 user_id=current_user.id,
-#                 monday=json.dumps(form.monday.data),
-#                 tuesday=json.dumps(form.tuesday.data),
-#                 wednesday=json.dumps(form.wednesday.data),
-#                 thursday=json.dumps(form.thursday.data),
-#                 friday=json.dumps(form.friday.data),
-#                 saturday=json.dumps(form.saturday.data),
-#                 sunday=json.dumps(form.sunday.data)
-#             )
-#             db.session.add(availability)
-#         db.session.commit()
-#         return jsonify(availability.to_dict()), 201
-#     return jsonify({'errors': form.errors}), 400
 @preferences_routes.route('/availability', methods=['POST'])
 @login_required
 def set_availability():
     data = request.get_json()
     csrf_token = request.cookies.get('csrf_token')
 
-    form = AvailabilityForm(data=data, csrf_token=csrf_token)
+    form = AvailabilityForm(csrf_token=csrf_token)
 
-    print("🚀🚀🚀", data)
-    print("🔥🔥🔥🔥", form.data)
+    # Manually process form data
+    for day, values in data.items():
+        if hasattr(form, day):
+            day_form = getattr(form, day)
+            for time_period, value in values.items():
+                if hasattr(day_form, time_period):
+                    field = getattr(day_form, time_period)
+                    field.data = value
+
+    print("🚀 Incoming JSON Data: ", data)
+    print("🔥 Form Data: ", form.data)
 
     if form.validate():
         availability = UserAvailability.query.filter_by(user_id=current_user.id).first()
