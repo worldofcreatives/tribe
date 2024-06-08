@@ -4,13 +4,13 @@ from app.models import Attendance, db
 
 checkin_routes = Blueprint('checkin', __name__)
 
-@checkin_routes.route('/checkin/<int:event_id>', methods=['POST'])
+@checkin_routes.route('/<int:event_id>', methods=['POST'])
 @login_required
 def checkin(event_id):
     # Assuming a function generate_qr_code() that generates and returns a QR code
-    # qr_code = generate_qr_code(current_user.id, event_id)
-    # return jsonify({'qr_code': qr_code}), 201
-    return {'feature not built yet': event_id}, 400
+    qr_code = generate_qr_code(current_user.id, event_id)
+    return jsonify({'qr_code': qr_code}), 201
+    # return {'feature not built yet': event_id}, 400
 
 @checkin_routes.route('/verify', methods=['POST'])
 @login_required
