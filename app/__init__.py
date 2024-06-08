@@ -18,6 +18,8 @@ from .api.review_routes import review_routes
 from .api.event_routes import event_routes
 from .api.invite_routes import invite_routes
 from .api.report_routes import report_routes
+from .api.qr_checkin_routes import checkin_routes
+from .api.user_preferences_routes import preferences_routes
 from .seeds import seed_commands
 from .config import Config
 
@@ -55,6 +57,8 @@ app.register_blueprint(review_routes, url_prefix="/api/reviews")
 app.register_blueprint(event_routes, url_prefix="/api/events")
 app.register_blueprint(invite_routes, url_prefix="/api/invites")
 app.register_blueprint(report_routes, url_prefix="/api/reports")
+app.register_blueprint(checkin_routes, url_prefix="/api/checkin")
+app.register_blueprint(preferences_routes, url_prefix="/api/user_preferences")
 db.init_app(app)
 Migrate(app, db)
 

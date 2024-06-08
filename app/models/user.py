@@ -21,10 +21,14 @@ class User(db.Model, UserMixin):
     salt = db.Column(db.String(255), nullable=False)
     profile_picture = db.Column(db.String(255), nullable=True)
     bio = db.Column(db.Text, nullable=True)
-    preferences = db.Column(db.JSON, default=dict)
-    availability = db.Column(db.JSON, default=dict)
+    # preferences = db.Column(db.JSON, default=dict)
+    # availability = db.Column(db.JSON, default=dict)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    preferences = db.relationship('UserPreferences', uselist=False, back_populates='user', cascade="all, delete-orphan")
+    availability = db.relationship('UserAvailability', uselist=False, back_populates='user', cascade="all, delete-orphan")
+
 
     @property
     def password(self):
@@ -47,8 +51,10 @@ class User(db.Model, UserMixin):
             'status': self.status,
             'profile_picture': self.profile_picture,
             'bio': self.bio,
-            'preferences': self.preferences,
-            'availability': self.availability,
+            # 'preferences': self.preferences,
+            # 'availability': self.availability,
+            'preferences': self.preferences.to_dict() if self.preferences else None,
+            'availability': self.availability.to_dict() if self.availability else None,
             'created_date': self.created_date.isoformat(),
             'updated_date': self.updated_date.isoformat(),
         }

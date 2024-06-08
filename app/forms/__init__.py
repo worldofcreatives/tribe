@@ -13,3 +13,5 @@ from .attendance_form import AttendanceForm
 from .review_form import ReviewForm
 from .notification_form import NotificationForm
 from .report_form import ReportForm
+from .preferences_form import PreferencesForm
+from .availability_form import AvailabilityForm

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import Notification, db
-from app.forms import NotificationForm
+from app.models import Notification, Event, db
+# from app.utils import send_spontaneous_notifications
 
 notification_routes = Blueprint('notifications', __name__)
 
@@ -21,3 +21,15 @@ def mark_as_read(id):
     notification.read = True
     db.session.commit()
     return jsonify(notification.to_dict())
+
+@notification_routes.route('/generate', methods=['POST'])
+@login_required
+def generate_notifications():
+    event_id = request.json.get('event_id')
+    event = Event.query.get(event_id)
+    if not event:
+        return {'error': 'Event not found'}, 404
+
+    # Generate and send notifications based on event criteria 👇
+    # send_spontaneous_notifications(event)
+    return {'message': 'Notifications sent successfully'}, 200

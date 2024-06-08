@@ -42,4 +42,5 @@ from .report import Report
 from .notification import Notification
 from .availability import Availability
 from .invite import Invite
-
+from .user_preferences import UserPreferences
+from .user_availability import UserAvailability
