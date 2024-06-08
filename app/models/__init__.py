@@ -35,3 +35,11 @@ from .submission import Submission
 from .feedback import Feedback
 from .genre import Genre
 from .type import Type
+from .event import Event
+from .attendance import Attendance
+from .review import Review
+from .report import Report
+from .notification import Notification
+from .availability import Availability
+from .invite import Invite
+
