@@ -13,13 +13,6 @@ class UserPreferences(db.Model):
 
     user = db.relationship('User', back_populates='preferences')
 
-    def __init__(self, user_id, event_types, activity_types, restaurant_types, group_size):
-        self.user_id = user_id
-        self.event_types = json.dumps(event_types)
-        self.activity_types = json.dumps(activity_types)
-        self.restaurant_types = json.dumps(restaurant_types)
-        self.group_size = group_size
-
     def to_dict(self):
         return {
             'id': self.id,

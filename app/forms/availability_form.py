@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, FormField
+from wtforms import BooleanField, FormField, FieldList, Form, StringField
 from wtforms.validators import DataRequired
 
-class DayAvailabilityForm(FlaskForm):
+class DayAvailabilityForm(Form):
     early_morning = BooleanField('early_morning', default=False)
     morning = BooleanField('morning', default=False)
     afternoon = BooleanField('afternoon', default=False)
@@ -17,6 +17,8 @@ class AvailabilityForm(FlaskForm):
     friday = FormField(DayAvailabilityForm)
     saturday = FormField(DayAvailabilityForm)
     sunday = FormField(DayAvailabilityForm)
+    csrf_token = StringField('csrf_token', validators=[DataRequired()])
+
 
 
 # from flask_wtf import FlaskForm
