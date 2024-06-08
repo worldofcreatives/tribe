@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
+from datetime import datetime
 from app.models import Attendance, db
 from app.forms import AttendanceForm
 
@@ -14,7 +15,8 @@ def check_in():
         attendance = Attendance(
             event_id=form.data['event_id'],
             user_id=current_user.id,
-            checked_in=True
+            checked_in=True,
+            checked_in_at=datetime.utcnow()  # Set the checked_in_at to the current date and time
         )
         db.session.add(attendance)
         db.session.commit()

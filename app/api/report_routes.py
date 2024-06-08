@@ -13,7 +13,7 @@ def submit_report():
     if form.validate_on_submit():
         report = Report(
             reported_by=current_user.id,
-            reported_user_id=form.data['reported_user_id'],
+            reported_user=form.data['reported_user'],
             event_id=form.data['event_id'],
             description=form.data['description'],
             status='pending'
@@ -26,7 +26,7 @@ def submit_report():
 @report_routes.route('', methods=['GET'])
 @login_required
 def get_reports():
-    if current_user.type != 'admin':
+    if current_user.type != 'Creator': # this needs to be admin
         return {'errors': ['Unauthorized']}, 403
 
     reports = Report.query.all()
