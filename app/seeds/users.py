@@ -1,9 +1,10 @@
-from app.models import db, User, environment, SCHEMA
+from app.models import db, User, UserPreferences, UserAvailability, environment, SCHEMA
 from werkzeug.security import generate_password_hash
 from sqlalchemy.sql import text
 import os
 import binascii
 from datetime import datetime
+import json
 
 def seed_users():
     users = [
@@ -111,12 +112,31 @@ def seed_users():
                 type=user_data['type'],
                 status=user_data['status'],
                 bio=user_data['bio'],
-                preferences=user_data['preferences'],
-                availability=user_data['availability'],
                 created_date=datetime.utcnow(),
                 updated_date=datetime.utcnow()
             )
             db.session.add(user)
+            db.session.commit()
+
+            preferences = UserPreferences(
+                user_id=user.id,
+                event_types=user_data['preferences']['activities'],
+                activity_types=[],
+                restaurant_types=[],
+                group_size=user_data['preferences']['group_size']
+            )
+            db.session.add(preferences)
+
+            availability = UserAvailability(
+                user_id=user.id,
+                early_morning='early_morning' in user_data['availability'],
+                morning='morning' in user_data['availability'],
+                afternoon='afternoon' in user_data['availability'],
+                night='night' in user_data['availability'],
+                late_night='late_night' in user_data['availability'],
+                days_of_week=json.dumps(list(user_data['availability'].keys()))
+            )
+            db.session.add(availability)
 
     db.session.commit()
 
@@ -127,6 +147,7 @@ def undo_users():
         db.session.execute(text("DELETE FROM users"))
 
     db.session.commit()
+
 
 
 # from app.models import db, User, environment, SCHEMA

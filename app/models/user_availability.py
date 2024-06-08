@@ -1,4 +1,5 @@
 from .db import db
+import json
 
 class UserAvailability(db.Model):
     __tablename__ = 'user_availability'
@@ -11,6 +12,8 @@ class UserAvailability(db.Model):
     night = db.Column(db.Boolean, nullable=False)
     late_night = db.Column(db.Boolean, nullable=False)
     days_of_week = db.Column(db.String, nullable=False)  # JSON encoded list
+
+    user = db.relationship('User', back_populates='availability')
 
     def __init__(self, user_id, early_morning, morning, afternoon, night, late_night, days_of_week):
         self.user_id = user_id
@@ -32,6 +35,7 @@ class UserAvailability(db.Model):
             'late_night': self.late_night,
             'days_of_week': json.loads(self.days_of_week)
         }
+
 
 
 

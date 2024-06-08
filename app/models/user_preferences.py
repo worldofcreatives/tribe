@@ -1,4 +1,5 @@
 from .db import db
+import json
 
 class UserPreferences(db.Model):
     __tablename__ = 'user_preferences'
@@ -9,6 +10,8 @@ class UserPreferences(db.Model):
     activity_types = db.Column(db.String, nullable=False)  # JSON encoded list
     restaurant_types = db.Column(db.String, nullable=False)  # JSON encoded list
     group_size = db.Column(db.String, nullable=False)
+
+    user = db.relationship('User', back_populates='preferences')
 
     def __init__(self, user_id, event_types, activity_types, restaurant_types, group_size):
         self.user_id = user_id
@@ -26,6 +29,7 @@ class UserPreferences(db.Model):
             'restaurant_types': json.loads(self.restaurant_types),
             'group_size': self.group_size
         }
+
 
 
 
