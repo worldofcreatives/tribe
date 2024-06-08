@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired
 import json
 
 class PreferencesForm(FlaskForm):
-    csrf_token = HiddenField('csrf_token')
     event_types = FieldList(StringField('event_type'), min_entries=1, validators=[DataRequired()])
     activity_types = FieldList(StringField('activity_type'), min_entries=1, validators=[DataRequired()])
     restaurant_types = FieldList(StringField('restaurant_type'), min_entries=1, validators=[DataRequired()])

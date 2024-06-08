@@ -67,19 +67,32 @@ def get_availability():
 @preferences_routes.route('/availability', methods=['POST'])
 @login_required
 def set_availability():
-    form = AvailabilityForm()
-    form['csrf_token'].data = request.cookies['csrf_token']
+    data = request.get_json()
+    print("🚀🚀🚀", data)
+    form = AvailabilityForm(csrf_token=request.cookies['csrf_token'])
+
+    # Populate the form with the request data
+    form.early_morning.process(None, data.get('early_morning', False))
+    form.morning.process(None, data.get('morning', False))
+    form.afternoon.process(None, data.get('afternoon', False))
+    form.night.process(None, data.get('night', False))
+    form.late_night.process(None, data.get('late_night', False))
+    form.days_of_week.process(None, data.get('days_of_week', []))
+
+    print("🔥🔥🔥🔥", form.data)
+
     if form.validate_on_submit():
         availability = UserAvailability(
             user_id=current_user.id,
-            early_morning=form.data['early_morning'],
-            morning=form.data['morning'],
-            afternoon=form.data['afternoon'],
-            night=form.data['night'],
-            late_night=form.data['late_night'],
-            days_of_week=form.data['days_of_week']
+            early_morning=form.early_morning.data,
+            morning=form.morning.data,
+            afternoon=form.afternoon.data,
+            night=form.night.data,
+            late_night=form.late_night.data,
+            days_of_week=form.days_of_week.data
         )
         db.session.add(availability)
         db.session.commit()
         return jsonify(availability.to_dict()), 201
     return jsonify({'errors': form.errors}), 400
+
