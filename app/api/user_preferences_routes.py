@@ -68,31 +68,30 @@ def get_availability():
 @login_required
 def set_availability():
     data = request.get_json()
-    print("🚀🚀🚀", data)
     form = AvailabilityForm(csrf_token=request.cookies['csrf_token'])
 
     # Populate the form with the request data
-    form.early_morning.process(None, data.get('early_morning', False))
-    form.morning.process(None, data.get('morning', False))
-    form.afternoon.process(None, data.get('afternoon', False))
-    form.night.process(None, data.get('night', False))
-    form.late_night.process(None, data.get('late_night', False))
-    form.days_of_week.process(None, data.get('days_of_week', []))
-
-    print("🔥🔥🔥🔥", form.data)
+    for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
+        for slot in ['early_morning', 'morning', 'afternoon', 'night', 'late_night']:
+            form[day][slot].process(None, data.get(day, {}).get(slot, False))
 
     if form.validate_on_submit():
-        availability = UserAvailability(
-            user_id=current_user.id,
-            early_morning=form.early_morning.data,
-            morning=form.morning.data,
-            afternoon=form.afternoon.data,
-            night=form.night.data,
-            late_night=form.late_night.data,
-            days_of_week=form.days_of_week.data
-        )
-        db.session.add(availability)
+        availability = UserAvailability.query.filter_by(user_id=current_user.id).first()
+        if availability:
+            for day in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
+                setattr(availability, day, json.dumps(form[day].data))
+        else:
+            availability = UserAvailability(
+                user_id=current_user.id,
+                monday=json.dumps(form.monday.data),
+                tuesday=json.dumps(form.tuesday.data),
+                wednesday=json.dumps(form.wednesday.data),
+                thursday=json.dumps(form.thursday.data),
+                friday=json.dumps(form.friday.data),
+                saturday=json.dumps(form.saturday.data),
+                sunday=json.dumps(form.sunday.data)
+            )
+            db.session.add(availability)
         db.session.commit()
         return jsonify(availability.to_dict()), 201
     return jsonify({'errors': form.errors}), 400
-

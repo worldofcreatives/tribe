@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 01dce532a642
+Revision ID: 40bb5b3bffd3
 Revises: 
-Create Date: 2024-06-08 11:35:52.190727
+Create Date: 2024-06-08 12:31:43.502388
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '01dce532a642'
+revision = '40bb5b3bffd3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -142,12 +142,13 @@ def upgrade():
     op.create_table('user_availability',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('early_morning', sa.Boolean(), nullable=False),
-    sa.Column('morning', sa.Boolean(), nullable=False),
-    sa.Column('afternoon', sa.Boolean(), nullable=False),
-    sa.Column('night', sa.Boolean(), nullable=False),
-    sa.Column('late_night', sa.Boolean(), nullable=False),
-    sa.Column('days_of_week', sa.String(), nullable=False),
+    sa.Column('monday', sa.JSON(), nullable=False),
+    sa.Column('tuesday', sa.JSON(), nullable=False),
+    sa.Column('wednesday', sa.JSON(), nullable=False),
+    sa.Column('thursday', sa.JSON(), nullable=False),
+    sa.Column('friday', sa.JSON(), nullable=False),
+    sa.Column('saturday', sa.JSON(), nullable=False),
+    sa.Column('sunday', sa.JSON(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

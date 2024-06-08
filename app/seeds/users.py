@@ -17,7 +17,10 @@ def seed_users():
             'status': 'Accepted',
             'bio': 'Demo user for testing.',
             'preferences': {'activities': ['hiking', 'dining'], 'group_size': 'small'},
-            'availability': {'monday': ['morning', 'afternoon'], 'tuesday': ['night']}
+            'availability': {
+                'monday': {'early_morning': False, 'morning': True, 'afternoon': True, 'night': False, 'late_night': False},
+                'tuesday': {'early_morning': False, 'morning': False, 'afternoon': False, 'night': True, 'late_night': False}
+            }
         },
         {
             'username': 'marnie',
@@ -28,7 +31,10 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Creator Marnie.',
             'preferences': {'activities': ['music', 'reading'], 'group_size': 'large'},
-            'availability': {'wednesday': ['morning'], 'thursday': ['night']}
+            'availability': {
+                'wednesday': {'early_morning': False, 'morning': True, 'afternoon': False, 'night': False, 'late_night': False},
+                'thursday': {'early_morning': False, 'morning': False, 'afternoon': False, 'night': True, 'late_night': False}
+            }
         },
         {
             'username': 'bobbie',
@@ -39,7 +45,10 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Creator Bobbie.',
             'preferences': {'activities': ['sports', 'movies'], 'group_size': 'medium'},
-            'availability': {'friday': ['afternoon'], 'saturday': ['night']}
+            'availability': {
+                'friday': {'early_morning': False, 'morning': False, 'afternoon': True, 'night': False, 'late_night': False},
+                'saturday': {'early_morning': False, 'morning': False, 'afternoon': False, 'night': True, 'late_night': False}
+            }
         },
         {
             'username': 'alice',
@@ -50,7 +59,9 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Company Alice.',
             'preferences': {'activities': ['networking', 'dining'], 'group_size': 'small'},
-            'availability': {'sunday': ['morning', 'night']}
+            'availability': {
+                'sunday': {'early_morning': False, 'morning': True, 'afternoon': False, 'night': True, 'late_night': False}
+            }
         },
         {
             'username': 'charlie',
@@ -61,7 +72,10 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Company Charlie.',
             'preferences': {'activities': ['tech', 'gaming'], 'group_size': 'large'},
-            'availability': {'monday': ['night'], 'tuesday': ['afternoon']}
+            'availability': {
+                'monday': {'early_morning': False, 'morning': False, 'afternoon': False, 'night': True, 'late_night': False},
+                'tuesday': {'early_morning': False, 'morning': False, 'afternoon': True, 'night': False, 'late_night': False}
+            }
         },
         {
             'username': 'dana',
@@ -72,7 +86,9 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Creator Dana.',
             'preferences': {'activities': ['art', 'travel'], 'group_size': 'medium'},
-            'availability': {'wednesday': ['morning', 'night']}
+            'availability': {
+                'wednesday': {'early_morning': False, 'morning': True, 'afternoon': False, 'night': True, 'late_night': False}
+            }
         },
         {
             'username': 'evan',
@@ -83,7 +99,10 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Company Evan.',
             'preferences': {'activities': ['finance', 'dining'], 'group_size': 'small'},
-            'availability': {'thursday': ['morning'], 'friday': ['night']}
+            'availability': {
+                'thursday': {'early_morning': False, 'morning': True, 'afternoon': False, 'night': False, 'late_night': False},
+                'friday': {'early_morning': False, 'morning': False, 'afternoon': False, 'night': True, 'late_night': False}
+            }
         },
         {
             'username': 'fiona',
@@ -94,7 +113,9 @@ def seed_users():
             'status': 'Pre-Apply',
             'bio': 'Creator Fiona.',
             'preferences': {'activities': ['music', 'movies'], 'group_size': 'large'},
-            'availability': {'saturday': ['morning', 'afternoon']}
+            'availability': {
+                'saturday': {'early_morning': False, 'morning': True, 'afternoon': True, 'night': False, 'late_night': False}
+            }
         }
     ]
 
@@ -127,14 +148,16 @@ def seed_users():
             )
             db.session.add(preferences)
 
+            availability_data = user_data['availability']
             availability = UserAvailability(
                 user_id=user.id,
-                early_morning='early_morning' in user_data['availability'],
-                morning='morning' in user_data['availability'],
-                afternoon='afternoon' in user_data['availability'],
-                night='night' in user_data['availability'],
-                late_night='late_night' in user_data['availability'],
-                days_of_week=json.dumps(list(user_data['availability'].keys()))
+                monday=json.dumps(availability_data.get('monday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False})),
+                tuesday=json.dumps(availability_data.get('tuesday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False})),
+                wednesday=json.dumps(availability_data.get('wednesday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False})),
+                thursday=json.dumps(availability_data.get('thursday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False})),
+                friday=json.dumps(availability_data.get('friday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False})),
+                saturday=json.dumps(availability_data.get('saturday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False})),
+                sunday=json.dumps(availability_data.get('sunday', {'early_morning': False, 'morning': False, 'afternoon': False, 'night': False, 'late_night': False}))
             )
             db.session.add(availability)
 
@@ -147,6 +170,7 @@ def undo_users():
         db.session.execute(text("DELETE FROM users"))
 
     db.session.commit()
+
 
 
 
